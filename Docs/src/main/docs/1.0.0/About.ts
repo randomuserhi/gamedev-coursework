@@ -4,7 +4,7 @@ RHU.require(new Error(), {
     docs, rhuDocuscript,
 }) {
     docs.jit = (version, path) => docuscript<RHUDocuscript.Language, RHUDocuscript.FuncMap>(({
-        p, frag, br, link
+        h, p, frag, br, link
     }) => {
         frag(
             p(
@@ -12,5 +12,7 @@ RHU.require(new Error(), {
                 link("https://github.com/randomuserhi/gamedev-coursework", "here"), "."
             )
         );
+
+        h(1, "test");
     }, rhuDocuscript);
 });

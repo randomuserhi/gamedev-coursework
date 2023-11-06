@@ -15,6 +15,7 @@ declare namespace RHU {
                 align: Style.ClassName;
             }>;
             dropdown: Style.ClassName;
+            hide: Style.ClassName;
         };
     }
 }
@@ -150,12 +151,17 @@ RHU.module(new Error(), "components/molecules/filterlist/style",
             }
             `;
 
+            const hide = style.class`
+            display: none !important;
+            `
+
             return {
                 wrapper,
                 content,
                 path,
                 filteritem,
                 dropdown,
+                hide
             };
         });
 

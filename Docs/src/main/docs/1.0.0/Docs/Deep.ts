@@ -4,7 +4,7 @@ RHU.require(new Error(), {
     docs, rhuDocuscript,
 }) {
     docs.jit = (version, path) => docuscript<RHUDocuscript.Language, RHUDocuscript.FuncMap>(({
-        p, frag, br, link, t
+        p, frag, br, link, ot
     }) => {
         frag(
             p(
@@ -12,9 +12,13 @@ RHU.require(new Error(), {
             )
         );
 
-        t(["33%"], 
-            ["item", "item"],
-            ["item", "item"]
+        ot({widths: [], headings: ["a", "b", "c"]}, 
+            ["params", (a) => a.boomer, "content"],
+            {
+                params: "bruhs1",
+                boomer: "bruhs2",
+                content: "bruhs3"
+            }
         );
     }, rhuDocuscript);
 });

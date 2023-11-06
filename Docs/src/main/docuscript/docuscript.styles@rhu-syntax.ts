@@ -4,6 +4,7 @@ declare namespace RHU {
             body: Style.ClassName;
             desmos: Style.ClassName;
             inlineCode: Style.ClassName;
+            block: Style.ClassName;
         };
     }
 }
@@ -15,6 +16,10 @@ RHU.module(new Error(), "docuscript/style",
         const style = Style(({ style }) => {
             const body = style.class`
             `;
+
+            const block = style.class`
+            width: 100%;
+            `
 
             // TABLES
             style`
@@ -35,7 +40,7 @@ RHU.module(new Error(), "docuscript/style",
                 font-style: italic;
             }
             ${body} b {
-                font-style: bold;
+                font-weight: bold;
             }
             `
 
@@ -130,6 +135,7 @@ RHU.module(new Error(), "docuscript/style",
                 body,
                 desmos,
                 inlineCode,
+                block
             };
         });
 

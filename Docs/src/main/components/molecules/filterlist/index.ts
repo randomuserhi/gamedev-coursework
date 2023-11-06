@@ -16,6 +16,9 @@ declare namespace Atoms {
         set(page: Page): void;
     
         page?: Page;
+        path: string;
+        name: string;
+        owner: Molecules.Filterlist;
 
         body: HTMLDivElement;
         label: HTMLDivElement;
@@ -30,6 +33,8 @@ declare namespace Molecules {
         setPath(path?: string): void;
         setActive(path: string, seek?: boolean): void;
         
+        items: Atoms.Filteritem[];
+        fuse: any; // Fuse object but no typing for Fuse kekw
         activePath?: string;
         lastActive?: Atoms.Filteritem;
         root?: string;
@@ -77,10 +82,13 @@ RHU.module(new Error(), "components/molecules/filterlist", {
             this.label.setAttribute("href", url.toString());
 
             this.page = page;
+            this.path = this.page.fullPath();
+            this.name = this.page.name;
 
             const fragment = new DocumentFragment();
             for (const p of page.sortedKeys()) {
                 const item = document.createMacro("atoms/filteritem");
+                this.owner.items.push(item);
                 item.set(page.subDirectories.get(p)!);
                 item.addEventListener("view", (e) => {
                     this.dispatchEvent(RHU.CustomEvent("view", e.detail));
@@ -125,6 +133,31 @@ RHU.module(new Error(), "components/molecules/filterlist", {
                 this.load(this.version.value);
             });
 
+            this.search.addEventListener("input", () => {
+                const match = this.search.value.trim();
+                if (match !== "") {
+                    for (const item of this.items) {
+                        item.classList.toggle(`${style.hide}`, true);
+                    }
+                    for (const result of this.fuse.search(match)) {
+                        const item: Atoms.Filteritem = result.item;
+                        item.classList.toggle(`${style.hide}`, false);
+                        let page = item.page!.parent as Page;
+                        while (page) {
+                            if (page!.dom) {
+                                page.dom.classList.toggle(`${style.hide}`, false);
+                                page.dom.classList.toggle(`${style.filteritem.expanded}`, true);
+                            }
+                            page = page.parent as Page;
+                        }
+                    }
+                } else {
+                    for (const item of this.items) {
+                        item.classList.toggle(`${style.hide}`, false);
+                    }
+                }
+            })
+
             this.lastActive = undefined;
             this.root = undefined;
             this.setPath(this.root);
@@ -133,6 +166,7 @@ RHU.module(new Error(), "components/molecules/filterlist", {
         } as RHU.Macro.Constructor<Molecules.Filterlist>;
 
         filterlist.prototype.load = function(versionStr) {
+            this.items = [];
             this.currentVersion = versionStr;
             const version = docs.get(versionStr);
             if (!RHU.exists(version)) {
@@ -147,6 +181,8 @@ RHU.module(new Error(), "components/molecules/filterlist", {
             }
             for (const page of root.sortedKeys()) {
                 const item = document.createMacro(filteritem);
+                item.owner = this;
+                this.items.push(item);
                 const view = root.subDirectories.get(page)!;
                 item.addEventListener("view", (e) => {
                     //this.setPath(e.detail.page.fullPath()); // -> TODO(randomuserhi): Add a button (similar to dropdown button) on right side that sets path instead of every click.
@@ -161,6 +197,11 @@ RHU.module(new Error(), "components/molecules/filterlist", {
             if (this.activePath) {
                 this.setActive(this.activePath);
             }
+
+            const Fuse = (window as any).Fuse;
+            this.fuse = new Fuse(this.items, {
+                keys: ["path", "name"]
+            });
         };
 
         // TODO(randomuserhi): Path functionality is the exact same as the path displayed above page title, only difference is styles
@@ -279,10 +320,14 @@ RHU.module(new Error(), "components/molecules/filterlist", {
             <div style="font-weight: 800; font-size: 1.125rem;">Version</div>
             <rhu-macro rhu-id="version" rhu-type="${dropdown}" style="
                 width: 100%;
+                border: solid 1px #eee;
+                padding: 0.125rem 0.3rem;
             "></rhu-macro>
-            <!--<input rhu-id="search" type="text" style="
+            <input rhu-id="search" type="text" style="
                 width: 100%;
-            "/>-->
+                border: solid 1px #eee;
+                padding: 0.125rem 0.3rem;
+            "/>
             <div style="
                 width: 100%;
                 overflow-x: auto;

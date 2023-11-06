@@ -47,11 +47,12 @@ declare namespace RHUDocuscript {
         i: {};
         b: {};
         table: {
-            widths: string[];
+            widths?: string[];
         };
         tr: {};
         td: {};
-        t: {};
+        t: never;
+        ot: never;
     }
     type Language = keyof NodeMap;
 
@@ -79,8 +80,12 @@ declare namespace RHUDocuscript {
         code: (params: [language?: string], ...content: (string)[]) => Node<"code">;
         icode: (params: [language?: string], ...content: (string)[]) => Node<"icode">;
 
-        t: (widths: string[], ...content: (string | Node)[][]) => Node<"table">;
-        table: (widths: string[], ...content: (string | Node<"tr">)[]) => Node<"table">;
+        ot: <T>( options: { 
+            widths?: string[],
+            headings?: string[]
+        }, headings: (string | ((i: T) => any))[], ...objects: T[]) => Node<"table">;
+        t: (widths: string[] | undefined, ...content: (string | Node)[][]) => Node<"table">;
+        table: (widths: string[] | undefined, ...content: (string | Node<"tr">)[]) => Node<"table">;
         tr: (...content: (string | Node<"td">)[]) => Node<"tr">;
         td: (...content: (string | Node)[]) => Node<"td">;
 
@@ -122,6 +127,34 @@ RHU.module(new Error(), "docuscript", {
     }
 
     return {
+        ot: {
+            create: function<T>(this: context, options: { 
+                widths?: string[],
+                headings?: string[],
+                default?: string
+            }, headings: (string | ((i: T) => any))[], ...objects: T[]): node<"table"> {
+                let node: node<"table"> = {
+                    __type__: "table",
+                    widths: options.widths
+                };
+
+                const { td, tr, b, i } = this.nodes;
+                if (options.headings) {
+                    this.remount(tr(...options.headings.map(h => td(b(i(h))))), node);
+                }
+                for (const obj of objects) {
+                    this.remount(tr(...headings.map(h => {
+                        if (typeof h === "string") {
+                            return td((obj as any)[h] === undefined ? options.default ? options.default : (obj as any)[h] : (obj as any)[h]);
+                        } else {
+                            return td(h(obj));
+                        }
+                    })), node);
+                }
+
+                return node;
+            },
+        },
         t: {
             create: function(this: context, widths, ...content) {
                 let node: node<"table"> = {
@@ -150,12 +183,17 @@ RHU.module(new Error(), "docuscript", {
             },
             parse: function(children, node) {
                 for (const row of children) {
-                    for (let i = 0; i < node.widths.length && i < row.childNodes.length; ++i) {
-                        (row.childNodes[i] as HTMLElement).style.width = node.widths[i];
+                    if (node.widths) {
+                        for (let i = 0; i < node.widths.length && i < row.childNodes.length; ++i) {
+                            (row.childNodes[i] as HTMLElement).style.width = node.widths[i];
+                        }
                     }
                 }
 
                 let wrapper = document.createElement("table");
+                if (node.widths) {
+                    wrapper.classList.toggle(`${style.block}`, true);
+                }
                 let dom = document.createElement("tbody");
                 dom.append(...children);
                 wrapper.append(dom);
@@ -253,9 +291,12 @@ RHU.module(new Error(), "docuscript", {
             },
             parse: function(children) {
                 const dom = document.createElement("ul");
+                dom.classList.toggle(`${style.block}`, true);
                 for (const child of children) {
                     const li = document.createElement("li");
+                    li.classList.toggle(`${style.block}`, true);
                     const wrapper = document.createElement("div");
+                    wrapper.classList.toggle(`${style.block}`, true);
                     wrapper.append(child);
                     li.append(wrapper);
                     dom.append(li);
@@ -275,9 +316,12 @@ RHU.module(new Error(), "docuscript", {
             },
             parse: function(children) {
                 const dom = document.createElement("ol");
+                dom.classList.toggle(`${style.block}`, true);
                 for (const child of children) {
                     const li = document.createElement("li");
+                    li.classList.toggle(`${style.block}`, true);
                     const wrapper = document.createElement("div");
+                    wrapper.classList.toggle(`${style.block}`, true);
                     wrapper.append(child);
                     li.append(wrapper);
                     dom.append(li);
@@ -358,6 +402,7 @@ RHU.module(new Error(), "docuscript", {
             },
             parse: function(children, node) {
                 const dom = document.createMacro(codeblock);
+                dom.classList.toggle(`${style.block}`, true);
                 dom.append(...children);
                 dom.setLanguage(node.language);
                 return dom;
@@ -413,7 +458,7 @@ RHU.module(new Error(), "docuscript", {
             create: function(text) {
                 return {
                     __type__: "text",
-                    text: text,
+                    text: text.toString(),
                 };
             },
             parse: function(_, node) {
@@ -426,9 +471,8 @@ RHU.module(new Error(), "docuscript", {
                     __type__: "br",
                 };
             },
-            parse: function(children) {
+            parse: function() {
                 let dom = document.createElement("br");
-                dom.append(...children);
                 return dom;
             }
         },
@@ -444,6 +488,7 @@ RHU.module(new Error(), "docuscript", {
             },
             parse: function(children) {
                 let dom = document.createElement("p");
+                dom.classList.toggle(`${style.block}`, true);
                 dom.append(...children);
                 return dom;
             }
@@ -470,6 +515,7 @@ RHU.module(new Error(), "docuscript", {
                 dom.style.display = "flex";
                 dom.style.gap = "8px";
                 dom.style.alignItems = "center";
+                dom.classList.toggle(`${style.block}`, true);
                 if (h.link) {
                     const wrapper = document.createElement("div");
                     wrapper.style.alignSelf = "stretch";
@@ -508,6 +554,7 @@ RHU.module(new Error(), "docuscript", {
             },
             parse: function(children) {
                 let dom = document.createElement("div");
+                dom.classList.toggle(`${style.block}`, true);
                 dom.append(...children);
                 return dom;
             }
