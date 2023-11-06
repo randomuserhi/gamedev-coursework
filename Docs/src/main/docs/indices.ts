@@ -36,6 +36,14 @@ declare namespace RHU {
             };
 
             docs.set("About", "About.js", 0);
+            docs.set("About/cringe", undefined, 0);
+            docs.set("About/cringe/bruh", undefined, 0);
+            docs.set("About/bruh", undefined, 0);
+            docs.set("About/bruh/cringe", undefined, 0);
+            docs.set("Docs/cringe", undefined, 0);
+            docs.set("Docs/cringe/bruh", undefined, 0);
+            docs.set("Docs/bruh", undefined, 0);
+            docs.set("Docs/bruh/cringe", undefined, 0);
             docs.set(`Docs`, undefined, 1);
             dir("Docs", (set) => {
                 set(`Deep`, `Docs/Deep.js`, 0);
