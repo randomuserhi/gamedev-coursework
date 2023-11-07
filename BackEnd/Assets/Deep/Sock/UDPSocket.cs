@@ -1,6 +1,7 @@
 using System;
 using System.Net.Sockets;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Deep.Sock
 {
@@ -10,12 +11,12 @@ namespace Deep.Sock
         private EndPoint endPoint = new IPEndPoint(IPAddress.Any, 0);
         private Socket socket;
 
-        public AsyncCallback onreceive;
+        public delegate void onreceive_delegate(int bytesReceived, EndPoint endpoint);
+        public onreceive_delegate onreceive;
 
-        public UDPSocket(byte[] buffer, AsyncCallback onreceive)
+        public UDPSocket(byte[] buffer)
         {
             this.buffer = buffer;
-            this.onreceive = onreceive;
         }
 
         public void Open()
@@ -38,9 +39,9 @@ namespace Deep.Sock
             BeginReceive();
         }
 
-        public void Connect(IPAddress address, int port)
+        public async Task Connect(IPAddress address, int port)
         {
-            socket.Connect(address, port);
+            await socket.ConnectAsync(address, port);
             BeginReceive();
         }
 
@@ -63,12 +64,9 @@ namespace Deep.Sock
 
         private void ReceiveCallback(IAsyncResult result)
         {
-            onreceive.Invoke(result);
+            onreceive(socket.EndReceiveFrom(result, ref endPoint), endPoint);
             socket.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref endPoint, ReceiveCallback, null);
         }
-
-        public int EndReceiveFrom(IAsyncResult asyncResult, ref EndPoint endPoint)
-            => socket.EndReceiveFrom(asyncResult, ref endPoint);
 
         public void Send(byte[] data)
         {
