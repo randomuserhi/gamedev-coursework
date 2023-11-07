@@ -25,20 +25,30 @@ declare namespace RHU {
         
         ((docs: Docs) => {
             const stack: string[] = [];
-            const dir = (dir: string, func: (docs: (path: string, page?: string, index?: number) => void) => void) => {
+            const dir = (dir: string, func: (docs: (path: string, page?: string, index?: number) => string) => void) => {
                 stack.push(dir);
                 const current = [...stack];
-                const d = (path: string, page?: string, index?: number) => {
-                    docs.set(`${[...current, ...path.split("/")].join("/")}`, page, index);
+                let prio = 0;
+                const d = (path: string, page?: string) => {
+                    docs.set(`${[...current, ...path.split("/")].join("/")}`, page, prio++);
+                    return path;
                 };
                 func(d);
                 stack.pop();
             };
+            let prio = 0;
+            const set = (path: string, page?: string) => {
+                docs.set(path, page, prio++);
+                return path;
+            };
 
-            docs.set("About", "About.js", 0);
-            docs.set(`Docs`, undefined, 1);
-            dir("Docs", (set) => {
-                set(`Deep`, `Docs/Deep.js`, 0);
+            set("About", "About.js");
+            dir(set("Deep", "Docs/Deep.js"), (set) => {
+                dir(set("Net", "Docs/Deep/Net.js"), (set) => {
+                });
+                
+                dir(set("Sock", "Docs/Deep/Sock.js"), (set) => {
+                });
             });
         })(docs.create("1.0.0", "About"));
 
