@@ -1,27 +1,24 @@
 using System;
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Deep.Sock
-{
-    // rewrite using https://stackoverflow.com/questions/9915101/performance-of-receiveasync-vs-beginreceive
-    public class UDPSocket
-    {
-        private byte[] buffer;
-        private EndPoint endPoint = new IPEndPoint(IPAddress.Any, 0);
+namespace Deep.Sock {
+    // TODO(randomuserhi): https://web.archive.org/web/20160728022524/http://blog.dickinsons.co.za/tips/2015/06/01/Net-Sockets-and-You/
+    //                     - better memory allocation strategy with ArraySegment<byte> to prevent fragmentation
+    public class UDPSocket {
+        private ArraySegment<byte> buffer;
+        private EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
         private Socket socket;
 
         public delegate void onreceive_delegate(int bytesReceived, EndPoint endpoint);
         public onreceive_delegate onreceive;
 
-        public UDPSocket(byte[] buffer)
-        {
+        public UDPSocket(ArraySegment<byte> buffer) {
             this.buffer = buffer;
         }
 
-        public void Open()
-        {
+        private void Open() {
             if (socket != null) socket.Dispose();
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
@@ -34,49 +31,43 @@ namespace Deep.Sock
             );
         }
 
-        public void Bind(IPEndPoint address)
-        {
+        public void Bind(IPEndPoint address) {
+            Open();
             socket.Bind(address);
-            BeginReceive();
+            _ = Listen(); // NOTE(randomuserhi): Start listen loop, not sure if `Bind` should automatically start the listen loop
         }
 
-        public async Task Connect(IPAddress address, int port)
-        {
+        public async Task Connect(IPAddress address, int port) {
+            Open();
             await socket.ConnectAsync(address, port);
-            BeginReceive();
+            _ = Listen(); // NOTE(randomuserhi): Start listen loop, not sure if `Connect` should automatically start the listen loop
         }
 
-        public void Disconnect()
-        {
+        public void Disconnect() {
             socket.Dispose();
             socket = null;
         }
 
-        public void Dispose()
-        {
+        public void Dispose() {
             socket.Dispose();
             socket = null;
         }
 
-        private void BeginReceive()
-        {
-            socket.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref endPoint, ReceiveCallback, null);
+        private async Task Listen() {
+            // NOTE(randomuserhi): remote end point passed in here is the endpoint we expect data to be from.
+            //                     by default we expect any, hence `remoteEndPoint = new IPEndPoint(IPAddress.Any, 0)`
+            SocketReceiveFromResult result = await socket.ReceiveFromAsync(buffer, SocketFlags.None, remoteEndPoint);
+            onreceive(result.ReceivedBytes, result.RemoteEndPoint);
+
+            _ = Listen(); // Start new listen task => async loop
         }
 
-        private void ReceiveCallback(IAsyncResult result)
-        {
-            onreceive(socket.EndReceiveFrom(result, ref endPoint), endPoint);
-            socket.BeginReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref endPoint, ReceiveCallback, null);
+        public async Task<int> Send(byte[] data) {
+            return await socket.SendAsync(data, SocketFlags.None);
         }
 
-        public void Send(byte[] data)
-        {
-            socket.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
-        }
-
-        public void SendTo(byte[] data, IPEndPoint destination)
-        {
-            socket.BeginSendTo(data, 0, data.Length, SocketFlags.None, destination, null, null);
+        public async Task<int> SendTo(byte[] data, IPEndPoint destination) {
+            return await socket.SendToAsync(data, SocketFlags.None, destination);
         }
     }
 }
