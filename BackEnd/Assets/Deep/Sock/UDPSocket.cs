@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Deep.Sock
 {
+    // rewrite using https://stackoverflow.com/questions/9915101/performance-of-receiveasync-vs-beginreceive
     public class UDPSocket
     {
         private byte[] buffer;
