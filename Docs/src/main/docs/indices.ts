@@ -45,10 +45,13 @@ declare namespace RHU {
             set("About", "About.js");
             dir(set("Deep", "Docs/Deep.js"), (set) => {
                 dir(set("Net", "Docs/Deep/Net.js"), (set) => {
+                    set("UDPServer", "Docs/Deep/Net/UDPServer.js");
+                    set("UDPClient", "Docs/Deep/Net/UDPClient.js");
+                    set("TCPServer", "Docs/Deep/Net/TCPServer.js");
+                    set("TCPClient", "Docs/Deep/Net/TCPClient.js");
+                    set("aosdijaosidjaoid");
                 });
-                
-                dir(set("Sock", "Docs/Deep/Sock.js"), (set) => {
-                });
+                set("hjtyjhtyj");
             });
         })(docs.create("1.0.0", "About"));
 

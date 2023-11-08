@@ -38,6 +38,7 @@ declare namespace Molecules {
         items: Atoms.Filteritem[];
         fuse: any; // Fuse object but no typing for Fuse kekw
         fuseall: any; // Fuse object but no typing for Fuse kekw
+        fuseallname: any; // Fuse object but no typing for Fuse kekw
         activePath?: string;
         lastActive?: Atoms.Filteritem;
         root?: string;
@@ -158,8 +159,7 @@ RHU.module(new Error(), "components/molecules/filterlist", {
                     item.classList.toggle(`${style.hide}`, true);
                 }
                 if (matches.length === 1) {
-                    const match = matches[0];
-                    for (const result of this.fuseall.search(match)) {
+                    for (const result of this.fuseall.search(matches[0])) {
                         const item: Atoms.Filteritem = result.item;
                         item.classList.toggle(`${style.hide}`, false);
                         let page = item.page!.parent as Page;
@@ -185,9 +185,19 @@ RHU.module(new Error(), "components/molecules/filterlist", {
                             recursive(item, index + 1);
                         }
                     }
-                    for (const result of this.fuse.search(matches[0])) {
+
+                    for (const result of this.fuseallname.search(matches[0])) {
                         const item: Atoms.Filteritem = result.item;
                         item.classList.toggle(`${style.hide}`, false);
+                        let page = item.page!.parent as Page;
+                        while (page) {
+                            if (page!.dom) {
+                                page.dom.classList.toggle(`${style.hide}`, false);
+                                page.dom.classList.toggle(`${style.filteritem.expanded}`, true);
+                            }
+                            page = page.parent as Page;
+                        }
+
                         recursive(item, 1);
                     }
                 }
@@ -238,6 +248,10 @@ RHU.module(new Error(), "components/molecules/filterlist", {
             const Fuse = (window as any).Fuse;
             this.fuseall = new Fuse(this.items, {
                 keys: ["path", "name"],
+                threshold: 0.4,
+            });
+            this.fuseallname = new Fuse(this.items, {
+                keys: ["name"],
                 threshold: 0.4,
             });
             this.fuse = new Fuse(subitems, {
