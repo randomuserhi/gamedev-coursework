@@ -1,20 +1,22 @@
+﻿#nullable enable
+
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Deep.Sock {
+namespace Deep.Net {
     // TODO(randomuserhi): https://web.archive.org/web/20160728022524/http://blog.dickinsons.co.za/tips/2015/06/01/Net-Sockets-and-You/
     //                     - better memory allocation strategy with ArraySegment<byte> to prevent fragmentation
-    public class UDPSocket {
+    public class UDPClient {
         private ArraySegment<byte> buffer;
         private EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-        private Socket socket;
+        private Socket? socket;
 
         public delegate void onreceive_delegate(int bytesReceived, EndPoint endpoint);
-        public onreceive_delegate onreceive;
+        public onreceive_delegate? onreceive;
 
-        public UDPSocket(ArraySegment<byte> buffer) {
+        public UDPClient(ArraySegment<byte> buffer) {
             this.buffer = buffer;
         }
 
@@ -31,24 +33,19 @@ namespace Deep.Sock {
             );
         }
 
-        public void Bind(IPEndPoint address) {
-            Open();
-            socket.Bind(address);
-            _ = Listen(); // NOTE(randomuserhi): Start listen loop, not sure if `Bind` should automatically start the listen loop
-        }
-
         public async Task Connect(IPAddress address, int port) {
             Open();
-            await socket.ConnectAsync(address, port);
+            await socket!.ConnectAsync(address, port);
             _ = Listen(); // NOTE(randomuserhi): Start listen loop, not sure if `Connect` should automatically start the listen loop
         }
 
         public void Disconnect() {
-            socket.Dispose();
-            socket = null;
+            Dispose();
         }
 
         public void Dispose() {
+            if (socket == null) return;
+
             socket.Dispose();
             socket = null;
         }
@@ -57,7 +54,7 @@ namespace Deep.Sock {
             // NOTE(randomuserhi): remote end point passed in here is the endpoint we expect data to be from.
             //                     by default we expect any, hence `remoteEndPoint = new IPEndPoint(IPAddress.Any, 0)`
             SocketReceiveFromResult result = await socket.ReceiveFromAsync(buffer, SocketFlags.None, remoteEndPoint);
-            onreceive(result.ReceivedBytes, result.RemoteEndPoint);
+            onreceive?.Invoke(result.ReceivedBytes, result.RemoteEndPoint);
 
             _ = Listen(); // Start new listen task => async loop
         }
