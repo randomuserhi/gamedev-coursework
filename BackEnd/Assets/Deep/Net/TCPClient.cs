@@ -1,9 +1,10 @@
 ﻿#nullable enable
-
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+
+// TODO(randomuserhi): CancellationTokens on connect
 
 namespace Deep.Net {
 
@@ -11,8 +12,8 @@ namespace Deep.Net {
         private ArraySegment<byte> buffer;
         private Socket? socket;
 
-        public delegate void onreceive_delegate(int bytesReceived, EndPoint endpoint);
-        public onreceive_delegate? onreceive;
+        public delegate void onReceive_delegate(int bytesReceived, EndPoint endpoint);
+        public onReceive_delegate? onReceive;
 
         public TCPClient(ArraySegment<byte> buffer) {
             this.buffer = buffer;
@@ -24,9 +25,9 @@ namespace Deep.Net {
             socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
         }
 
-        public async Task Connect(IPEndPoint endPoint) {
+        public async Task Connect(EndPoint remoteEP) {
             Open();
-            await socket.ConnectAsync(endPoint);
+            await socket!.ConnectAsync(remoteEP).ConfigureAwait(false);
             _ = Listen(); // NOTE(randomuserhi): Start listen loop, not sure if `Connect` should automatically start the listen loop
         }
 
@@ -34,7 +35,7 @@ namespace Deep.Net {
             if (socket == null) return;
 
             int receivedBytes = await socket.ReceiveAsync(buffer, SocketFlags.None);
-            onreceive?.Invoke(receivedBytes, socket.RemoteEndPoint);
+            onReceive?.Invoke(receivedBytes, socket.RemoteEndPoint!);
 
             _ = Listen(); // Start new listen task => async loop
         }

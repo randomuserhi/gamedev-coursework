@@ -1,5 +1,4 @@
 ﻿#nullable enable
-
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -13,8 +12,8 @@ namespace Deep.Net {
         private EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
         private Socket? socket;
 
-        public delegate void onreceive_delegate(int bytesReceived, EndPoint endpoint);
-        public onreceive_delegate? onreceive;
+        public delegate void onReceive_delegate(int bytesReceived, EndPoint endpoint);
+        public onReceive_delegate? onReceive;
 
         public UDPServer(ArraySegment<byte> buffer) {
             this.buffer = buffer;
@@ -33,10 +32,11 @@ namespace Deep.Net {
             );
         }
 
-        public void Bind(IPEndPoint address) {
+        public EndPoint Bind(EndPoint remoteEP) {
             Open();
-            socket!.Bind(address);
+            socket!.Bind(remoteEP);
             _ = Listen(); // NOTE(randomuserhi): Start listen loop, not sure if `Bind` should automatically start the listen loop
+            return socket.LocalEndPoint!;
         }
 
         public void Disconnect() {
@@ -51,20 +51,24 @@ namespace Deep.Net {
         }
 
         private async Task Listen() {
+            if (socket == null) return;
+
             // NOTE(randomuserhi): remote end point passed in here is the endpoint we expect data to be from.
             //                     by default we expect any, hence `remoteEndPoint = new IPEndPoint(IPAddress.Any, 0)`
-            SocketReceiveFromResult result = await socket.ReceiveFromAsync(buffer, SocketFlags.None, remoteEndPoint);
-            onreceive?.Invoke(result.ReceivedBytes, result.RemoteEndPoint);
+            SocketReceiveFromResult result = await socket!.ReceiveFromAsync(buffer, SocketFlags.None, remoteEndPoint).ConfigureAwait(false);
+            onReceive?.Invoke(result.ReceivedBytes, result.RemoteEndPoint);
 
             _ = Listen(); // Start new listen task => async loop
         }
 
         public async Task<int> Send(byte[] data) {
-            return await socket.SendAsync(data, SocketFlags.None);
+            if (socket == null) return 0;
+            return await socket.SendAsync(data, SocketFlags.None).ConfigureAwait(false);
         }
 
         public async Task<int> SendTo(byte[] data, IPEndPoint destination) {
-            return await socket.SendToAsync(data, SocketFlags.None, destination);
+            if (socket == null) return 0;
+            return await socket.SendToAsync(data, SocketFlags.None, destination).ConfigureAwait(false);
         }
     }
 }
