@@ -379,7 +379,7 @@ RHU.module(new Error(), "components/molecules/filterlist", {
                 border: solid 1px #eee;
                 padding: 0.125rem 0.3rem;
             "></rhu-macro>
-            <input rhu-id="search" type="text" style="
+            <input spellcheck="false" rhu-id="search" type="text" style="
                 width: 100%;
                 border: solid 1px #eee;
                 padding: 0.125rem 0.3rem;

@@ -49,9 +49,7 @@ declare namespace RHU {
                     set("UDPClient", "Docs/Deep/Net/UDPClient.js");
                     set("TCPServer", "Docs/Deep/Net/TCPServer.js");
                     set("TCPClient", "Docs/Deep/Net/TCPClient.js");
-                    set("aosdijaosidjaoid");
                 });
-                set("hjtyjhtyj");
             });
         })(docs.create("1.0.0", "About"));
 

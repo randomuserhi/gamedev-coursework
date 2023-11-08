@@ -4,7 +4,7 @@ RHU.require(new Error(), {
     docs, rhuDocuscript,
 }) {
     docs.jit = (version, path) => docuscript<RHUDocuscript.Language, RHUDocuscript.FuncMap>(({
-        h, p, frag, br, link
+        h, p, frag, br, link, img
     }) => {
         frag(
             p(
@@ -14,5 +14,6 @@ RHU.require(new Error(), {
         );
 
         h(1, "test");
+        img("toolkits0.png");
     }, rhuDocuscript);
 });
