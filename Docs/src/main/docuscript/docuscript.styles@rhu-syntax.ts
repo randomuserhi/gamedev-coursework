@@ -24,6 +24,7 @@ RHU.module(new Error(), "docuscript/style",
             // TABLES
             style`
             ${body} table {
+                word-wrap: break-word;
                 border: 1px solid #333;
                 border-collapse: collapse;
             }

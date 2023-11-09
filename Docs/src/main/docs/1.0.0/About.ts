@@ -6,14 +6,9 @@ RHU.require(new Error(), {
     docs.jit = (version, path) => docuscript<RHUDocuscript.Language, RHUDocuscript.FuncMap>(({
         h, p, frag, br, link, img
     }) => {
-        frag(
-            p(
-                "This is the Docuscript document for my Multimedia and Game Development coursework. The Github rep can be found ",
-                link("https://github.com/randomuserhi/gamedev-coursework", "here"), "."
-            )
+        p(
+            "This is the Docuscript document for my Multimedia and Game Development coursework. The Github rep can be found ",
+            link("https://github.com/randomuserhi/gamedev-coursework", "here"), "."
         );
-
-        h(1, "test");
-        img("toolkits0.png");
     }, rhuDocuscript);
 });
