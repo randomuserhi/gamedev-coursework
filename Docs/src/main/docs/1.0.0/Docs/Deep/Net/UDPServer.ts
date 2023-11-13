@@ -4,7 +4,7 @@ RHU.require(new Error(), {
     docs, rhuDocuscript,
 }) {
     docs.jit = (version, path) => docuscript<RHUDocuscript.Language, RHUDocuscript.FuncMap>(({
-        p, h, frag, br, icode, code, link, pl, ot
+        p, h, br, icode, code, link, pl, ot
     }) => {
         h(1, "Definition");
         p("Namespace: ", icode([], "Deep"));
@@ -26,14 +26,22 @@ RHU.require(new Error(), {
             ["signature", "summary"],
             {
                 signature: pl([`${path}/Bind`], "Bind(EndPoint)"),
-                summary: "Binds a socket to a remote end point.",
+                summary: "Binds to a local end point.",
+            },
+            {
+                signature: pl([`${path}/Send`], "Send(byte[])"),
+                summary: "Sends bytes to all remote endpoints.",
+            },
+            {
+                signature: pl([`${path}/SendTo`], "SendTo(byte[], IPEndPoint)"),
+                summary: "Sends bytes to a specfic endpoint.",
             },
             {
                 signature: pl([`${path}/Disconnect`], "Disconnect()"),
                 summary: "Disconnects and disposes of the server and its internal socket.",
             },
             {
-                signature: pl([`${path}/Disconnect`], "Dispose()"),
+                signature: pl([`${path}/Dispose`], "Dispose()"),
                 summary: "Disconnects and disposes of the server and its internal socket.",
             },
         );

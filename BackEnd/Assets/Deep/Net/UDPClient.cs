@@ -67,10 +67,5 @@ namespace Deep.Net {
             if (socket == null) return 0;
             return await socket.SendAsync(data, SocketFlags.None).ConfigureAwait(false);
         }
-
-        public async Task<int> SendTo(byte[] data, IPEndPoint destination) {
-            if (socket == null) return 0;
-            return await socket.SendToAsync(data, SocketFlags.None, destination).ConfigureAwait(false);
-        }
     }
 }
