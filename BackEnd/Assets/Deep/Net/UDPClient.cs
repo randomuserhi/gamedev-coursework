@@ -14,8 +14,7 @@ namespace Deep.Net {
         private EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
         private Socket? socket;
 
-        public delegate void onReceive_delegate(int bytesReceived, EndPoint endpoint);
-        public onReceive_delegate? onReceive;
+        public Net.onReceive? onReceive;
 
         public UDPClient(ArraySegment<byte> buffer) {
             this.buffer = buffer;
@@ -36,6 +35,7 @@ namespace Deep.Net {
 
         public async Task Connect(EndPoint remoteEP) {
             Open();
+            remoteEndPoint = remoteEP;
             await socket!.ConnectAsync(remoteEP).ConfigureAwait(false);
             _ = Listen(); // NOTE(randomuserhi): Start listen loop, not sure if `Connect` should automatically start the listen loop
         }
@@ -55,7 +55,8 @@ namespace Deep.Net {
             if (socket == null) return;
 
             // NOTE(randomuserhi): remote end point passed in here is the endpoint we expect data to be from.
-            //                     by default we expect any, hence `remoteEndPoint = new IPEndPoint(IPAddress.Any, 0)`
+            //                     by default we expect to only receive data from the connected endpoint, thus
+            //                     `remoteEndPoint = remoteEP` from `this.Connect`
             SocketReceiveFromResult result = await socket.ReceiveFromAsync(buffer, SocketFlags.None, remoteEndPoint).ConfigureAwait(false);
             onReceive?.Invoke(result.ReceivedBytes, result.RemoteEndPoint);
 

@@ -12,8 +12,9 @@ namespace Deep.Net {
         private ArraySegment<byte> buffer;
         private Socket? socket;
 
-        public delegate void onReceive_delegate(int bytesReceived, EndPoint endpoint);
-        public onReceive_delegate? onReceive;
+        public Net.onConnect? onConnect;
+        public Net.onReceive? onReceive;
+        public Net.onDisconnect? onDisconnect;
 
         public TCPClient(ArraySegment<byte> buffer) {
             this.buffer = buffer;
@@ -28,16 +29,34 @@ namespace Deep.Net {
         public async Task Connect(EndPoint remoteEP) {
             Open();
             await socket!.ConnectAsync(remoteEP).ConfigureAwait(false);
+            onConnect?.Invoke(remoteEP);
             _ = Listen(); // NOTE(randomuserhi): Start listen loop, not sure if `Connect` should automatically start the listen loop
         }
 
         private async Task Listen() {
             if (socket == null) return;
+            try {
+                int receivedBytes = await socket.ReceiveAsync(buffer, SocketFlags.None).ConfigureAwait(false);
+                EndPoint remoteEP = socket.RemoteEndPoint!;
+                if (receivedBytes > 0) {
+                    onReceive?.Invoke(receivedBytes, remoteEP);
+                    _ = Listen(); // Start new listen task => async loop
+                } else {
+                    Dispose();
+                    onDisconnect?.Invoke(remoteEP);
+                }
+            } catch (ObjectDisposedException) {
+                // NOTE(randomuserhi): Socket was disposed during ReceiveAsync
+            }
+        }
 
-            int receivedBytes = await socket.ReceiveAsync(buffer, SocketFlags.None);
-            onReceive?.Invoke(receivedBytes, socket.RemoteEndPoint!);
-
-            _ = Listen(); // Start new listen task => async loop
+        public async Task<int> Send(byte[] data) {
+            if (socket == null) return 0;
+            try {
+                return await socket.SendAsync(data, SocketFlags.None).ConfigureAwait(false);
+            } catch (SocketException) {
+                return 0;
+            }
         }
 
         public void Disconnect() {

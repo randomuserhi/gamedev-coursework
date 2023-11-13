@@ -12,8 +12,8 @@ namespace Deep.Net {
         private EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
         private Socket? socket;
 
-        public delegate void onReceive_delegate(int bytesReceived, EndPoint endpoint);
-        public onReceive_delegate? onReceive;
+
+        public Net.onReceive? onReceive;
 
         public UDPServer(ArraySegment<byte> buffer) {
             this.buffer = buffer;
