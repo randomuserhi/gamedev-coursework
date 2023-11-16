@@ -5,7 +5,7 @@
 
 declare namespace RHU {
     interface Modules {
-        "components/organisms/docpages": "organisms/docpages";
+        "components/organisms/docpages": Macro.Template<"organisms/docpages">;
     }
 
     namespace Macro {
@@ -491,7 +491,7 @@ RHU.module(new Error(), "components/organisms/docpages", {
     })(), "organisms/docpages", //html
         `
         <div class="${style.margin}">
-            <rhu-macro rhu-id="filterlist" class="${style.sidebar}" rhu-type="${filterlist}"></rhu-macro>
+            ${filterlist`rhu-id="filterlist" class="${style.sidebar}"`}
             <div class="${style.page}">
                 <div class="${style.content}">
                     <div style="

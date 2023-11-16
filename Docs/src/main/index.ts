@@ -75,7 +75,7 @@ interface App extends HTMLDivElement {
             return appmount
         })(), "App", //html
             `
-            <rhu-macro rhu-type="${navbar}"></rhu-macro>
+            ${navbar}
             <div class="${style.spacer}"></div>
             <div rhu-id="body">
             </div>

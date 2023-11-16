@@ -1,6 +1,6 @@
 declare namespace RHU {
     interface Modules {
-        "docuscript/components/molecules/codeblock": "docuscript/molecules/codeblock";
+        "docuscript/components/molecules/codeblock": Macro.Template<"docuscript/molecules/codeblock">;
     }
 
     namespace Macro {

@@ -1,6 +1,6 @@
 declare namespace RHU {
     interface Modules {
-        "components/molecules/filterlist": "molecules/filterlist";
+        "components/molecules/filterlist": Macro.Template<"molecules/filterlist">;
     }
 
     namespace Macro {
@@ -374,11 +374,11 @@ RHU.module(new Error(), "components/molecules/filterlist", {
         `
         <div rhu-id="body" class="${style.content}">
             <div style="font-weight: 800; font-size: 1.125rem;">Version</div>
-            <rhu-macro rhu-id="version" rhu-type="${dropdown}" style="
+            ${dropdown`rhu-id="version" style="
                 width: 100%;
                 border: solid 1px #eee;
                 padding: 0.125rem 0.3rem;
-            "></rhu-macro>
+            "`}
             <input spellcheck="false" rhu-id="search" type="text" style="
                 width: 100%;
                 border: solid 1px #eee;
