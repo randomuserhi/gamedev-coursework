@@ -81,7 +81,7 @@ MonoBehaviour:
   canJump: 1
   isAirborneTimer: 0
   floatHeight: 0.7
-  speed: 6
+  speed: 10
   friction: 0.6
 --- !u!1 &1876676365089306569
 GameObject:
