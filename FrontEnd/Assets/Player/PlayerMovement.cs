@@ -32,16 +32,19 @@ namespace Player {
     }
 
     public class PlayerMovement : MonoBehaviour {
-        private Rigidbody2D rb;
+        [System.NonSerialized]
+        public Rigidbody2D rb;
 
         public Vector2 gravity = new Vector2(0, -1);
+
+        public bool facingRight = true;
 
         public bool sticky;
         private bool prevGrounded;
         private bool groundedTransition;
         public bool grounded;
         public bool isAirborne;
-        private SecondOrderDynamics groundSpring = new SecondOrderDynamics(3f, 0.5f, 0f, 0f);
+        private SecondOrderDynamics groundSpring = new SecondOrderDynamics(5f, 0.5f, 0f, 0f);
 
         public bool canJump = true;
         public float isAirborneTimer = 0;
@@ -71,7 +74,7 @@ namespace Player {
                     gravity,
                     1f + floatHeight * 1.5f,
                     LayerMask.GetMask("surface")
-                );
+                    );
                 if (hit.collider == null || (groundHits[i].collider != null && groundHits[i].distance > 0 && groundHits[i].distance < hit.distance && Vector3.Dot(gravity, groundHits[i].normal) < 0)) {
                     hit = groundHits[i];
                 }
@@ -79,7 +82,7 @@ namespace Player {
             sticky = hit.collider != null;
 
             if (sticky) {
-                grounded = hit.distance <= 1f + floatHeight;
+                grounded = hit.distance <= 1f + floatHeight + 0.2f;
             } else {
                 grounded = false;
             }
@@ -102,11 +105,17 @@ namespace Player {
             Movement();
 
             if (sticky && !isAirborne) {
-                rb.velocity += new Vector2(0, groundSpring.Solve(Time.fixedDeltaTime, hit.distance, rb.velocity.y, 1f + floatHeight - 0.1f));
+                rb.velocity += new Vector2(0, groundSpring.Solve(Time.fixedDeltaTime, hit.distance, rb.velocity.y, 1f + floatHeight - 0.2f));
             }
         }
 
         void Movement() {
+            if (Input.GetAxis("Horizontal") > 0) {
+                facingRight = true;
+            } else if (Input.GetAxis("Horizontal") < 0) {
+                facingRight = false;
+            }
+
             float s = speed;
             if (Mathf.Sign(Input.GetAxis("Horizontal")) != Mathf.Sign(rb.velocity.x)) {
                 s *= 1 + Mathf.Clamp(Mathf.Abs(rb.velocity.x) / 3, 0, 2);
@@ -118,8 +127,8 @@ namespace Player {
                 canJump = true;
             }
             if (Input.GetAxis("Vertical") != 0 && grounded && canJump) {
-                //rb.velocity *= new Vector2(1, 0);
-                rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, 0));
+                rb.velocity *= new Vector2(1, 0);
+                //rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, 0));
                 rb.velocity += 20 * -gravity.normalized;
                 canJump = false;
                 isAirborneTimer = 0;
