@@ -116,6 +116,7 @@ namespace Player {
                 facingRight = false;
             }
 
+            // TODO(randomuserhi): make velocity be parallel to surface player is standing on (i have its normal from the ray cast hit)
             float s = speed;
             if (Mathf.Sign(Input.GetAxis("Horizontal")) != Mathf.Sign(rb.velocity.x)) {
                 s *= 1 + Mathf.Clamp(Mathf.Abs(rb.velocity.x) / 3, 0, 2);
