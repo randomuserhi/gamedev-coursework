@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: Run
+  m_EditorClassIdentifier: 
+  frameRate: 10
+  offset: {x: 0, y: -0.8, z: 0}
+  sprites:
+  - {fileID: 21300000, guid: f05a12b4b9877a14182648fac30e2da3, type: 3}
+  - {fileID: 21300000, guid: fde794d95bfb7e444a03bbcf58165fc2, type: 3}
+  - {fileID: 21300000, guid: 162836a18d320984790e3c19be4077f5, type: 3}
+  - {fileID: 21300000, guid: 4fdf9b7377cec5f4f886483f8557b959, type: 3}
+  - {fileID: 21300000, guid: 19ef2b98941d2b1419b49cdc88f021d7, type: 3}
