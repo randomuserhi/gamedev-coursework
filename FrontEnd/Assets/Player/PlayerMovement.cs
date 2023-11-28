@@ -93,6 +93,11 @@ namespace Player {
             // TODO(randomuserhi): Scale acceleration by change in velocity (going left, then right is fast transition)
             // TODO(randomuserhi): cayote time
             // TODO(randomuserhi): Update all calculations that assume gravity is down in negative y direction
+            // TODO(randomuserhi): Attack hitbox
+            //                     - on hit, bounce off (u cant dash through enemies with an attack)
+            //                     - on successful hit of enemy (doesnt count if enemy blocks), cancel recovery (can immediately attack again)
+            //                     - dash towards, hit, bounce off repeat with cancelled recovery
+            // TODO(randomuserhi): refactor code
 
             float width = 1f;
             RaycastHit2D hit = new RaycastHit2D();
