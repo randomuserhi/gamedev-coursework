@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: JumpFallThrowStance
+  m_EditorClassIdentifier: 
+  frameRate: 10
+  offset: {x: 0, y: 0, z: 0}
+  sprites:
+  - {fileID: 21300000, guid: 537c1997295419546885c55490c6cc0e, type: 3}
+  - {fileID: 21300000, guid: fa4cae4fd2529494ca0ea749ff3da190, type: 3}
+  - {fileID: 21300000, guid: b0981c889e2fdcb45a8f80c4fb0f05c6, type: 3}
+  - {fileID: 21300000, guid: 487d961eee95c184a847a5430a4d7dfe, type: 3}
