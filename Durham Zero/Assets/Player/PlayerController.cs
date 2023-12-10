@@ -5,23 +5,40 @@ namespace Player {
     [RequireComponent(typeof(PlayerInputSystem))]
     public class PlayerController : MonoBehaviour {
         public enum LocomotionState {
-            Grounded,
-            Airborne,
+            Default,
             Crouch
         }
 
         private PlayerInputSystem inputSystem;
         private CharacterController2D controller;
-        private LocomotionState state = LocomotionState.Grounded;
+        private Rigidbody2D rb;
+
+        private LocomotionState state = LocomotionState.Default;
 
         private void Start() {
             controller = GetComponent<CharacterController2D>();
             inputSystem = GetComponent<PlayerInputSystem>();
+            rb = GetComponent<Rigidbody2D>();
         }
 
+        private float dt;
         private void FixedUpdate() {
-            Rigidbody2D rb = controller.rb;
+            dt = Time.fixedDeltaTime;
 
+            switch (state) {
+                case LocomotionState.Default:
+                    UpdateState_Default();
+                    break;
+            }
+        }
+
+        #region Default State
+
+        [SerializeField] private float maxSpeed = 5f;
+        [SerializeField] private float acceleration;
+        [SerializeField] private float maxAcceleration;
+
+        private void UpdateState_Default() {
             Vector2 input = inputSystem.movement.ReadValue<Vector2>();
 
             float s = 10;
@@ -31,5 +48,7 @@ namespace Player {
             rb.velocity -= input.x * s * Vector2.Perpendicular(controller.SurfaceNormal);
             rb.velocity *= new Vector2(0.7f, 1);
         }
+
+        #endregion
     }
 }

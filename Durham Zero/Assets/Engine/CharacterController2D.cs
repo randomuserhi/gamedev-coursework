@@ -1,10 +1,11 @@
 using Deep.Math;
+using Deep.Physics;
 using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
-public class CharacterController2D : MonoBehaviour {
+public class CharacterController2D : DeepMonoBehaviour {
     [NonSerialized] public Rigidbody2D rb;
     private BoxCollider2D box;
 
@@ -72,7 +73,9 @@ public class CharacterController2D : MonoBehaviour {
 
     public Vector2 center { get => _bottom + new Vector2(0, size.y / 2f); }
 
-    private void Start() {
+    protected override void Start() {
+        base.Start();
+
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0;
         rb.freezeRotation = true;
@@ -170,7 +173,7 @@ public class CharacterController2D : MonoBehaviour {
     }
 
     private float dt;
-    private void FixedUpdate() {
+    public override void LateFixedUpdate() {
         dt = Time.fixedDeltaTime;
 
         HandleGrounded();
@@ -186,10 +189,8 @@ public class CharacterController2D : MonoBehaviour {
         // Calculate bottom relative to ground
         _bottom = transform.position + new Vector3(0, -hit.distance);
 
-        /*
-        Debug.DrawLine(_bottom, _bottom + new Vector3(0, size.y), Color.red);
-        Debug.DrawLine(_bottom + new Vector3(-0.5f, 0), _bottom + new Vector3(0.5f, 0), Color.red);
-        */
+        Debug.DrawLine(_bottom, _bottom + new Vector2(0, size.y), Color.red);
+        Debug.DrawLine(_bottom + new Vector2(-0.5f, 0), _bottom + new Vector2(0.5f, 0), Color.red);
 
         if (!grounded) {
             rb.velocity += Vector2.down * gravity * dt;
