@@ -105,7 +105,7 @@ public class CharacterController2D : MonoBehaviour {
         for (int i = 0; i < groundHits.Length; ++i) {
             Vector3 point = transform.position + new Vector3(
                 -width / 2f + width / Mathf.Max(2, groundHits.Length - 1) * i,
-                -0.05f
+                0f
                 );
             groundHits[i] = Physics2D.Raycast(point, gravity, stickyHeight, surfaceLayerMask);
             if (hit.collider == null || (

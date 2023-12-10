@@ -5,12 +5,14 @@ namespace Player {
     [RequireComponent(typeof(PlayerInputSystem))]
     public class PlayerController : MonoBehaviour {
         public enum LocomotionState {
-            Walk
+            Grounded,
+            Airborne,
+            Crouch
         }
 
         private PlayerInputSystem inputSystem;
         private CharacterController2D controller;
-        private LocomotionState state;
+        private LocomotionState state = LocomotionState.Grounded;
 
         private void Start() {
             controller = GetComponent<CharacterController2D>();
