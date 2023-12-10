@@ -1,14 +1,21 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController2D))]
-public class PlayerController : MonoBehaviour {
-    CharacterController2D controller;
+namespace Player {
+    [RequireComponent(typeof(CharacterController2D))]
+    public class PlayerController : MonoBehaviour {
+        public enum State {
+            Walk
+        }
 
-    private void Start() {
-        controller = GetComponent<CharacterController2D>();
-    }
+        private CharacterController2D controller;
+        private State state;
 
-    private void FixedUpdate() {
+        private void Start() {
+            controller = GetComponent<CharacterController2D>();
+        }
 
+        private void FixedUpdate() {
+
+        }
     }
 }
