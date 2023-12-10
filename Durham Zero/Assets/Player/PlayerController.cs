@@ -20,7 +20,7 @@ namespace Player {
         private void FixedUpdate() {
             Rigidbody2D rb = controller.rb;
 
-            Vector2 input = inputSystem.map.FindAction("Movement").ReadValue<Vector2>();
+            Vector2 input = inputSystem.movement.ReadValue<Vector2>();
 
             float s = 10;
             if (Mathf.Sign(input.x) != Mathf.Sign(rb.velocity.x)) {

@@ -67,8 +67,10 @@ public class CharacterController2D : MonoBehaviour {
     private Vector3 surfaceNormal = Vector3.zero;
     public Vector3 SurfaceNormal { get => surfaceNormal; }
 
-    private Vector3 _bottom = Vector3.zero;
-    public Vector3 bottom { get => _bottom; }
+    private Vector2 _bottom = Vector2.zero;
+    public Vector2 bottom { get => _bottom; }
+
+    public Vector2 center { get => _bottom + new Vector2(0, size.y / 2f); }
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
