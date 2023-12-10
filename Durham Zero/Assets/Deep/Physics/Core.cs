@@ -10,6 +10,7 @@ namespace Deep.Physics {
             if (instance != null) return;
 
             GameObject go = new GameObject();
+            go.name = "Core";
             go.AddComponent<Core>();
         }
 

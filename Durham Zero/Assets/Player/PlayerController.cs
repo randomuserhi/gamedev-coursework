@@ -35,18 +35,40 @@ namespace Player {
         #region Default State
 
         [SerializeField] private float maxSpeed = 5f;
-        [SerializeField] private float acceleration;
-        [SerializeField] private float maxAcceleration;
+        [SerializeField] private float acceleration = 1f;
+        [SerializeField] private float maxAcceleration = 1f;
+
+        // TODO(randomuserhi): Tie friction to a surface
+        [SerializeField] private float friction = 1f;
+        [SerializeField] private Vector2 drag = new Vector2(1f, 1f);
 
         private void UpdateState_Default() {
             Vector2 input = inputSystem.movement.ReadValue<Vector2>();
+            Vector2 perp = Vector2.Perpendicular(controller.SurfaceNormal).normalized;
 
+            if (controller.Grounded) {
+                // friction
+                float speed = Vector3.Project(rb.velocity, perp).magnitude;
+                if (speed != 0f) {
+                    float drop = speed * friction * Time.fixedDeltaTime;
+                    rb.velocity *= Mathf.Max(speed - drop, 0f) / speed; // Scale the velocity based on friction.
+                }
+            } else {
+                // drag
+                Vector2 speed = new Vector2(Mathf.Abs(rb.velocity.x), Mathf.Abs(rb.velocity.y));
+                Vector2 drop = speed * drag * Time.fixedDeltaTime;
+                rb.velocity *= new Vector2(
+                    rb.velocity.x != 0f ? Mathf.Max(speed.x - drop.x, 0) / speed.x : 1f,
+                    rb.velocity.y != 0f ? Mathf.Max(speed.y - drop.y, 0) / speed.y : 1f
+                );
+            }
+
+            // horizontal movement
             float s = 10;
             if (Mathf.Sign(input.x) != Mathf.Sign(rb.velocity.x)) {
                 s *= 1 + Mathf.Clamp(Mathf.Abs(rb.velocity.x) / 16, 0, 2);
             }
-            rb.velocity -= input.x * s * Vector2.Perpendicular(controller.SurfaceNormal);
-            rb.velocity *= new Vector2(0.7f, 1);
+            rb.velocity -= input.x * s * perp;
         }
 
         #endregion

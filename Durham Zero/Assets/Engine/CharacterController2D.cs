@@ -187,7 +187,10 @@ public class CharacterController2D : DeepMonoBehaviour {
         box.offset = new Vector2(0, _size.y / 2f);
 
         // Calculate bottom relative to ground
-        _bottom = transform.position + new Vector3(0, -hit.distance);
+        _bottom = transform.position;
+        if (grounded) {
+            _bottom.y -= hit.distance;
+        }
 
         Debug.DrawLine(_bottom, _bottom + new Vector2(0, size.y), Color.red);
         Debug.DrawLine(_bottom + new Vector2(-0.5f, 0), _bottom + new Vector2(0.5f, 0), Color.red);
