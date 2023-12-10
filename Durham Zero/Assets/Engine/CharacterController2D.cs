@@ -1,15 +1,19 @@
 using Deep.Math;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class CharacterController2D : MonoBehaviour {
-    private Rigidbody2D rb;
+    [NonSerialized] public Rigidbody2D rb;
+    private BoxCollider2D box;
 
     // TODO(randomuserhi): Documentation on character controller:
     //                     - Sticky state -> character region below where they try to keep themselves stuck to the ground
     //                     - How sticky state and grounded state differ
     //                     - Management of slopes
     //                     - Sticky and Airborne state -> whilst airborne, character won't attempt to stick to surfaces
+    //                     - Bottom and collider accounts for hover height
 
     // Height at which controller hovers above ground
     public float hoverHeight = 0.25f;
@@ -17,7 +21,7 @@ public class CharacterController2D : MonoBehaviour {
     // Size of controller (including hover height)
     public Vector2 size = new Vector2(1, 2);
     // Gravity of controller
-    public float gravity = 1;
+    public float gravity = 10;
     // Layer mask for surfaces controller can stand on
     public LayerMask surfaceLayerMask = Physics2D.AllLayers;
 
@@ -53,23 +57,28 @@ public class CharacterController2D : MonoBehaviour {
         get => airborne;
         set {
             airborne = value;
+            grounded = !value;
             if (value) {
                 airborneTimer = 0;
             }
         }
     }
 
-
     private Vector3 surfaceNormal = Vector3.zero;
     public Vector3 SurfaceNormal { get => surfaceNormal; }
 
+    private Vector3 _bottom = Vector3.zero;
+    public Vector3 bottom { get => _bottom; }
+
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
-
         rb.gravityScale = 0;
         rb.freezeRotation = true;
+
+        box = GetComponent<BoxCollider2D>();
     }
 
+    private RaycastHit2D hit;
     private RaycastHit2D[] groundHits = new RaycastHit2D[5];
     private void HandleGrounded() {
         Vector2 gravity = Vector2.down * this.gravity;
@@ -84,19 +93,17 @@ public class CharacterController2D : MonoBehaviour {
             return;
         }
 
-        float width = size.x;
-        float height = size.y;
-
         if (hoverHeight > stickyHeight) {
             Debug.LogWarning("hoverHeight should not be larger than the stickyHeight of the controller.");
         }
 
-        // Cast rays along base of character downward to detect ground surfaces within sticky range
-        RaycastHit2D hit = new RaycastHit2D();
+        float width = size.x;
+
+        hit = new RaycastHit2D();
         for (int i = 0; i < groundHits.Length; ++i) {
             Vector3 point = transform.position + new Vector3(
                 -width / 2f + width / Mathf.Max(2, groundHits.Length - 1) * i,
-                0
+                -0.05f
                 );
             groundHits[i] = Physics2D.Raycast(point, gravity, stickyHeight, surfaceLayerMask);
             if (hit.collider == null || (
@@ -115,8 +122,14 @@ public class CharacterController2D : MonoBehaviour {
 
         // Check grounded state given sticky state
         if (sticky) {
-            grounded = hit.distance <= hoverHeight + 0.05f;
+            surfaceNormal = hit.normal;
+
+            if (!grounded) {
+                grounded = hit.distance <= hoverHeight + 0.05f;
+            }
         } else {
+            surfaceNormal = Vector2.up;
+
             grounded = false;
             airborne = true;
         }
@@ -124,8 +137,6 @@ public class CharacterController2D : MonoBehaviour {
         prevGrounded = grounded;
 
         if (grounded) {
-            surfaceNormal = hit.normal;
-
             if (groundedTransition || Vector3.Dot(rb.velocity, gravity) > 0) {
                 airborne = false;
             }
@@ -152,7 +163,7 @@ public class CharacterController2D : MonoBehaviour {
         }
 
         if (sticky && !airborne) {
-            rb.velocity += new Vector2(0, hoverSpring.Solve(dt, hit.distance, rb.velocity.y, hoverHeight));
+            rb.velocity += new Vector2(0, hoverSpring.Solve(dt, hit.distance, rb.velocity.y, hoverHeight - 0.05f));
         }
     }
 
@@ -161,6 +172,22 @@ public class CharacterController2D : MonoBehaviour {
         dt = Time.fixedDeltaTime;
 
         HandleGrounded();
+
+        // Calcuate bounding box size relative to ground
+        Vector2 _size = size;
+        if (grounded) {
+            _size.y -= hit.distance;
+        }
+        box.size = _size;
+        box.offset = new Vector2(0, _size.y / 2f);
+
+        // Calculate bottom relative to ground
+        _bottom = transform.position + new Vector3(0, -hit.distance);
+
+        /*
+        Debug.DrawLine(_bottom, _bottom + new Vector3(0, size.y), Color.red);
+        Debug.DrawLine(_bottom + new Vector3(-0.5f, 0), _bottom + new Vector3(0.5f, 0), Color.red);
+        */
 
         if (!grounded) {
             rb.velocity += Vector2.down * gravity * dt;

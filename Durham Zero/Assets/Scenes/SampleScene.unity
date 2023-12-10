@@ -353,7 +353,7 @@ GameObject:
   - component: {fileID: 663224028}
   - component: {fileID: 663224027}
   - component: {fileID: 663224029}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -483,7 +483,7 @@ GameObject:
   - component: {fileID: 1736101522}
   - component: {fileID: 1736101521}
   - component: {fileID: 1736101520}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Slope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,8 +596,8 @@ Transform:
   m_GameObject: {fileID: 1736101519}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 1, z: 1}
+  m_LocalPosition: {x: 3.64, y: 3.48, z: 0}
+  m_LocalScale: {x: 10, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -610,13 +610,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1566763693346139139, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1566763693346139139, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: m_Offset.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.94
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.42
+      value: 4.02
       objectReference: {fileID: 0}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.z
@@ -649,14 +657,6 @@ PrefabInstance:
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4821892516537288300, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: isAirborne
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7454592366359809816, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: m_Offset.y
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8504293235514421217, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_Name

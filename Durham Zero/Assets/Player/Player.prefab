@@ -93,9 +93,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1801370067085503593}
-  - component: {fileID: 8175133073282508511}
-  - component: {fileID: 7454592366359809816}
   - component: {fileID: 4821892516537288300}
+  - component: {fileID: 5377496912845498384}
+  - component: {fileID: 6607812126351882411}
+  - component: {fileID: 619100368487661899}
+  - component: {fileID: 1566763693346139139}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -119,7 +121,107 @@ Transform:
   - {fileID: 1166310330590272963}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &8175133073282508511
+--- !u!114 &4821892516537288300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8504293235514421217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92df8c1fa9e019949b9f79e194b32f7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverHeight: 0.25
+  stickyHeight: 1
+  size: {x: 1, y: 2}
+  gravity: 10
+  surfaceLayerMask:
+    serializedVersion: 2
+    m_Bits: 2147483648
+  grounded: 0
+  sticky: 0
+  airborne: 0
+--- !u!114 &5377496912845498384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8504293235514421217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7fd3c1a8940a1043b4b8b7f571d0c72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  map:
+    m_Name: Map
+    m_Id: a59686fe-7176-4328-9021-3300e6fa1521
+    m_Asset: {fileID: 0}
+    m_Actions:
+    - m_Name: Movement
+      m_Type: 0
+      m_ExpectedControlType: Vector2
+      m_Id: b3787608-f123-4ea1-8aae-9d8a56003c84
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Bindings:
+    - m_Name: 2D Vector
+      m_Id: 1e373b4f-b70e-46c4-a885-96fa11102d63
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Movement
+      m_Flags: 4
+    - m_Name: up
+      m_Id: 81e54924-582a-4544-a997-928c18b0166e
+      m_Path: <Keyboard>/w
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Movement
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 8fccc04b-ebde-4c92-8117-3f200eff9b3e
+      m_Path: <Keyboard>/s
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Movement
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 497f7781-7733-405e-a107-49add86cdc5c
+      m_Path: <Keyboard>/A
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Movement
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 21c6420d-ecba-4185-ae14-38a45103bd3d
+      m_Path: <Keyboard>/D
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Movement
+      m_Flags: 8
+--- !u!114 &6607812126351882411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8504293235514421217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ec1b93f9631686488456c66c88c6c26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!50 &619100368487661899
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -133,8 +235,8 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -145,8 +247,8 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!61 &7454592366359809816
+  m_Constraints: 0
+--- !u!61 &1566763693346139139
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,18 +293,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 2}
   m_EdgeRadius: 0
---- !u!114 &4821892516537288300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8504293235514421217}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92df8c1fa9e019949b9f79e194b32f7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  size: {x: 1, y: 2}
-  gravity: {x: 0, y: -1}
-  grounded: 0
