@@ -9,6 +9,7 @@ public class CharacterController2D : MonoBehaviour {
     //                     - Sticky state -> character region below where they try to keep themselves stuck to the ground
     //                     - How sticky state and grounded state differ
     //                     - Management of slopes
+    //                     - Sticky and Airborne state -> whilst airborne, character won't attempt to stick to surfaces
 
     // Height at which controller hovers above ground
     public float hoverHeight = 0.25f;
@@ -16,7 +17,7 @@ public class CharacterController2D : MonoBehaviour {
     // Size of controller (including hover height)
     public Vector2 size = new Vector2(1, 2);
     // Gravity of controller
-    public Vector2 gravity = Vector2.down;
+    public float gravity = 1;
     // Layer mask for surfaces controller can stand on
     public LayerMask surfaceLayerMask = Physics2D.AllLayers;
 
@@ -43,10 +44,21 @@ public class CharacterController2D : MonoBehaviour {
     private bool stickyTransition = false;
 
 #if UNITY_EDITOR
-    [SerializeField] private bool isAirborne = false;
+    [SerializeField] private bool airborne = false;
 #else
-    private bool isAirborne = false;
+    private bool airborne = false;
 #endif
+    private float airborneTimer = 0f;
+    public bool Airborne {
+        get => airborne;
+        set {
+            airborne = value;
+            if (value) {
+                airborneTimer = 0;
+            }
+        }
+    }
+
 
     private Vector3 surfaceNormal = Vector3.zero;
     public Vector3 SurfaceNormal { get => surfaceNormal; }
@@ -58,8 +70,9 @@ public class CharacterController2D : MonoBehaviour {
         rb.freezeRotation = true;
     }
 
-    private RaycastHit2D[] groundHits = new RaycastHit2D[3];
+    private RaycastHit2D[] groundHits = new RaycastHit2D[5];
     private void HandleGrounded() {
+        Vector2 gravity = Vector2.down * this.gravity;
         if (gravity == Vector2.zero) {
             grounded = false;
             prevGrounded = false;
@@ -105,7 +118,7 @@ public class CharacterController2D : MonoBehaviour {
             grounded = hit.distance <= hoverHeight + 0.05f;
         } else {
             grounded = false;
-            isAirborne = false;
+            airborne = true;
         }
         groundedTransition = prevGrounded != grounded;
         prevGrounded = grounded;
@@ -113,8 +126,17 @@ public class CharacterController2D : MonoBehaviour {
         if (grounded) {
             surfaceNormal = hit.normal;
 
-            if (groundedTransition) {
-                isAirborne = false;
+            if (groundedTransition || Vector3.Dot(rb.velocity, gravity) > 0) {
+                airborne = false;
+            }
+            if (airborne) {
+                // Reset airborne state if we have been grounded for a long time 
+                // -> safety precaution if airborne fails to reset.
+                if (airborneTimer < 1f) {
+                    airborneTimer += Time.fixedDeltaTime;
+                } else {
+                    airborne = false;
+                }
             }
         }
 
@@ -129,7 +151,7 @@ public class CharacterController2D : MonoBehaviour {
             rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -1f, Mathf.Infinity));
         }
 
-        if (sticky && !isAirborne) {
+        if (sticky && !airborne) {
             rb.velocity += new Vector2(0, hoverSpring.Solve(dt, hit.distance, rb.velocity.y, hoverHeight));
         }
     }
@@ -141,7 +163,7 @@ public class CharacterController2D : MonoBehaviour {
         HandleGrounded();
 
         if (!grounded) {
-            rb.velocity += gravity * dt;
+            rb.velocity += Vector2.down * gravity * dt;
         }
     }
 }
