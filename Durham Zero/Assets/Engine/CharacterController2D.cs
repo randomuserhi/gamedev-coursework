@@ -127,14 +127,10 @@ public class CharacterController2D : DeepMonoBehaviour {
 
         // Check grounded state given sticky state
         if (sticky) {
-            surfaceNormal = hit.normal;
-
             if (!grounded) {
                 grounded = hit.distance <= hoverHeight + 0.05f && Vector3.Dot(rb.velocity, gravity) > 0;
             }
         } else {
-            surfaceNormal = Vector2.up;
-
             grounded = false;
             airborne = true;
         }
@@ -142,6 +138,8 @@ public class CharacterController2D : DeepMonoBehaviour {
         prevGrounded = grounded;
 
         if (grounded) {
+            surfaceNormal = hit.normal;
+
             if (groundedTransition || Vector3.Dot(rb.velocity, gravity) > 0) {
                 airborne = false;
             }
@@ -154,6 +152,8 @@ public class CharacterController2D : DeepMonoBehaviour {
                     airborne = false;
                 }
             }
+        } else {
+            surfaceNormal = Vector2.up;
         }
 
         // When transitioning out of sticky state, clamp the Y-Velocity to prevent velocity from the
@@ -163,7 +163,7 @@ public class CharacterController2D : DeepMonoBehaviour {
         // 1) Downward slope pulls character downwards to maintain hover height
         // 2) When falling off slope, character maintains downward velocity from the aforementioned pull
         // 3) Character is launched downwards
-        if (!sticky && stickyTransition) {
+        if (!sticky && stickyTransition && Vector3.Dot(rb.velocity, gravity) > 0) {
             rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -1f, Mathf.Infinity));
         }
 
