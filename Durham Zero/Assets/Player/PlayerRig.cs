@@ -30,6 +30,7 @@ namespace Player {
             RunFlip,
             WalkFlip,
             Dash,
+            Stance,
         }
         [SerializeField] private AnimState _state = AnimState.Idle;
         private AnimState prevState = AnimState.Idle;
@@ -627,7 +628,8 @@ namespace Player {
 
         private void Update_Dash() {
             if (player.state != PlayerController.LocomotionState.Dash) {
-                Enter_Airborne();
+                if (isChill) Enter_IdleChill();
+                else Enter_Idle();
                 return;
             }
 

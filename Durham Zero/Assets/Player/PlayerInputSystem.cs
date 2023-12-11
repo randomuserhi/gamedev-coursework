@@ -15,7 +15,7 @@ namespace Player {
             map = new InputActionMap("Player Gameplay");
 
             movement = map.AddAction("Movement");
-            movement.AddCompositeBinding("2DVector(mode=0)")
+            movement.AddCompositeBinding("2DVector(mode=1)")
                 .With("Up", "<Keyboard>/w")
                 .With("Down", "<Keyboard>/s")
                 .With("Left", "<Keyboard>/a")

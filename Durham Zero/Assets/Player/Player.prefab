@@ -52,7 +52,7 @@ MonoBehaviour:
   active: 1
   hoverHeight: 0.25
   stickyHeight: 1
-  size: {x: 1, y: 1.6}
+  size: {x: 0.7, y: 1.5}
   gravity: 10
   maxSlopeCosAngle: 0.5
   surfaceLayerMask:
@@ -99,6 +99,7 @@ MonoBehaviour:
   maxSlopeCosAngle: 0.8
   maxDashSlopeCosAngle: -0.8
   dashCooldown: 0.7
+  superDashCooldown: 1.5
   dashDuration: 0.17
   dashSpeed: 20
   maxAirSpeed: 13
@@ -106,6 +107,7 @@ MonoBehaviour:
   canJump: 0
   jumpReleased: 1
   wallNormal: {x: 0, y: 0}
+  superDashTimer: 0
   dashDir: {x: 0, y: 0}
   canDash: 0
   dashGrounded: 0
@@ -117,6 +119,7 @@ MonoBehaviour:
   input: {x: 0, y: 0}
   jump: 0
   dash: 0
+  attack: 0
 --- !u!50 &619100368487661899
 Rigidbody2D:
   serializedVersion: 4
@@ -187,7 +190,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.7, y: 2}
   m_EdgeRadius: 0
 --- !u!114 &223595009703136872
 MonoBehaviour:

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: JumpFall
   m_EditorClassIdentifier: 
   frameRate: 10
-  offset: {x: 0, y: 0.9}
+  offset: {x: 0, y: 0.7}
   sprites:
   - {fileID: 21300000, guid: b0226ac39c189194bb2cadec54bf8b4c, type: 3}
   - {fileID: 21300000, guid: d3e2ae22cd5018746b9bd680dbabe4e3, type: 3}

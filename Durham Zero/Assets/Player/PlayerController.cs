@@ -9,7 +9,6 @@ namespace Player {
             Grounded,
             Airborne,
             Slide,
-            Crouch,
             WallSlide,
             Dash
         }
@@ -74,6 +73,12 @@ namespace Player {
             }
             prevDashGrounded = dashGrounded;
 
+            // Check super dash cooldown
+            if (state != LocomotionState.Dash && superDashTimer > 0) {
+                superDashTimer -= dt;
+            }
+
+            // Can enter dash state from any state
             if (state != LocomotionState.Dash && dash != 0 && canDash <= 0 && dashReleased) {
                 EnterState(LocomotionState.Dash);
                 canDash = dashCooldown;
@@ -90,8 +95,6 @@ namespace Player {
             switch (state) {
                 case LocomotionState.Grounded:
                 case LocomotionState.Airborne:
-                case LocomotionState.Crouch:
-                    Vector2 input = inputSystem.movement.ReadValue<Vector2>();
                     if (input.x < 0f) {
                         facingRight = false;
                     } else if (input.x > 0f) {
@@ -103,7 +106,6 @@ namespace Player {
             switch (state) {
                 case LocomotionState.Grounded:
                 case LocomotionState.Airborne:
-                case LocomotionState.Crouch:
                 case LocomotionState.Slide:
                     if (controller.Grounded) {
                         EnterState(LocomotionState.Grounded);
@@ -144,15 +146,19 @@ namespace Player {
 
         [SerializeField] private float maxDashSlopeCosAngle = -0.5f;
         [SerializeField] private float dashCooldown = 0.7f;
+        [SerializeField] private float superDashCooldown = 0.3f;
         [SerializeField] private float dashDuration = 0.17f;
         [SerializeField] private float dashSpeed = 5f;
         [SerializeField] private float maxAirSpeed = 13f;
+
 
         [Header("State")]
         [SerializeField] private bool fromJump = false;
         [SerializeField] private float canJump = 0;
         [SerializeField] private bool jumpReleased = true;
         [SerializeField] private Vector2 wallNormal = Vector2.zero;
+
+        [SerializeField] private float superDashTimer = 0f;
         [SerializeField] private Vector2 dashDir = Vector2.zero;
         [SerializeField] private float canDash = 0;
         [SerializeField] private bool dashGrounded = false;
@@ -160,12 +166,14 @@ namespace Player {
         [SerializeField] private bool canSuperDash = false;
         [SerializeField] private bool dashReleased = true;
         [SerializeField] private float dashTimer = 0;
+
         [SerializeField] private float decelerationTimer = 0;
 
         [Header("Inputs")]
         [SerializeField] private Vector2 input;
         [SerializeField] private float jump;
         [SerializeField] private float dash;
+        [SerializeField] private float attack;
 
         private void ExitState() {
             switch (state) {
@@ -192,9 +200,11 @@ namespace Player {
         #region Dash State
 
         private void Enter_Dash() {
+            controller.size.y = 1.3f; // TODO(randomuserhi): Make a setting variable
+
             canDash = dashCooldown;
             dashTimer = dashDuration;
-            dashDir = input;
+            dashDir = input.normalized;
             if (dashDir == Vector2.zero) {
                 if (facingRight) {
                     dashDir = Vector2.right;
@@ -210,7 +220,7 @@ namespace Player {
             }
 
             // Verify velocity doesnt clip
-            canSuperDash = (controller.Grounded && dashDir.y < 0) || !controller.Grounded;
+            canSuperDash = superDashTimer <= 0 && ((controller.Grounded && dashDir.y < 0) || !controller.Grounded);
             if (controller.Grounded && dashDir.y < 0) {
                 if (dashDir.x > 0) {
                     dashDir = Vector2.right;
@@ -246,8 +256,11 @@ namespace Player {
 
                 if (jump != 0 && canJump > 0 && jumpReleased) {
                     if (canSuperDash) {
+                        superDashTimer = superDashCooldown;
                         decelerationTimer = 0;
                         rb.velocity *= new Vector3(0.8f + 0.5f * (1f - dashTimer / dashDuration), 1f);
+                    } else {
+                        canDash = dashCooldown;
                     }
 
                     Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
@@ -270,6 +283,7 @@ namespace Player {
         }
 
         private void Exit_Dash() {
+            controller.size.y = 1.5f;
             controller.gravity = fallGravity;
             controller.active = true;
             if (decelerationTimer < 0) {
