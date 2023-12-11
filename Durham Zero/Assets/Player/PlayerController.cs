@@ -125,7 +125,7 @@ namespace Player {
                 controller.Airborne = true;
                 fromJump = true;
                 canJump = false;
-                rb.position = controller.center;
+                rb.position = controller.bottom;
             }
         }
 
