@@ -192,7 +192,6 @@ namespace Player {
         #region Dash State
 
         private void Enter_Dash() {
-            decelerationTimer = -1;
             canDash = dashCooldown;
             dashTimer = dashDuration;
             dashDir = input;
@@ -202,6 +201,12 @@ namespace Player {
                 } else {
                     dashDir = Vector2.left;
                 }
+            }
+
+            if (rb.velocity.x < maxAirSpeed) {
+                decelerationTimer = -1;
+            } else {
+                decelerationTimer = 0;
             }
 
             // Verify velocity doesnt clip
