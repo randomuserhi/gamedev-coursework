@@ -23,10 +23,13 @@ public class CharacterController2D : DeepMonoBehaviour {
     public Vector2 size = new Vector2(1, 2);
     // Gravity of controller
     public float gravity = 10;
+    public float maxSlopeCosAngle = 0.5f;
     // Layer mask for surfaces controller can stand on
     public LayerMask surfaceLayerMask = Physics2D.AllLayers;
 
     private SecondOrderDynamics hoverSpring = new SecondOrderDynamics(5f, 0.5f, 0f, 0f);
+
+    public bool slip = false;
 
 # if UNITY_EDITOR
     [SerializeField] private bool grounded = false;
@@ -83,6 +86,7 @@ public class CharacterController2D : DeepMonoBehaviour {
         box = GetComponent<BoxCollider2D>();
     }
 
+    private RaycastHit2D slipHit;
     private RaycastHit2D hit;
     private RaycastHit2D[] groundHits = new RaycastHit2D[5];
     private void HandleGrounded() {
@@ -104,6 +108,7 @@ public class CharacterController2D : DeepMonoBehaviour {
 
         float width = size.x;
 
+        slipHit = new RaycastHit2D();
         hit = new RaycastHit2D();
         for (int i = 0; i < groundHits.Length; ++i) {
             Vector3 point = transform.position + new Vector3(
@@ -111,13 +116,32 @@ public class CharacterController2D : DeepMonoBehaviour {
                 0f
                 );
             groundHits[i] = Physics2D.Raycast(point, gravity, stickyHeight, surfaceLayerMask);
-            if (hit.collider == null || (
-                groundHits[i].collider != null &&
-                groundHits[i].distance < hit.distance &&
-                Vector3.Dot(gravity, groundHits[i].normal) < 0)
-            ) {
-                hit = groundHits[i];
+            if (Vector3.Dot(Vector2.up, groundHits[i].normal) >= maxSlopeCosAngle) {
+                if (hit.collider == null || (
+                    groundHits[i].collider != null &&
+                    groundHits[i].distance < hit.distance &&
+                    Vector3.Dot(gravity, groundHits[i].normal) < 0)
+                ) {
+                    hit = groundHits[i];
+                }
+            } else {
+                if (slipHit.collider == null || (
+                    groundHits[i].collider != null &&
+                    groundHits[i].distance < slipHit.distance &&
+                    Vector3.Dot(gravity, groundHits[i].normal) < 0)
+                ) {
+                    slipHit = groundHits[i];
+                }
             }
+        }
+
+        // Update slip
+        if (slipHit.collider != null && slipHit.distance <= hoverHeight + 0.05f) {
+            if (!slip) {
+                slip = Vector3.Dot(rb.velocity, slipHit.normal) <= 0;
+            }
+        } else {
+            slip = false;
         }
 
         // Update sticky state
@@ -128,7 +152,10 @@ public class CharacterController2D : DeepMonoBehaviour {
         // Check grounded state given sticky state
         if (sticky) {
             if (!grounded) {
-                grounded = hit.distance <= hoverHeight + 0.05f && Vector3.Dot(rb.velocity, gravity) > 0;
+                grounded =
+                    hit.distance <= hoverHeight + 0.05f &&
+                    Vector3.Dot(rb.velocity, surfaceNormal) <= 0
+                    ;
             }
         } else {
             grounded = false;
@@ -137,23 +164,26 @@ public class CharacterController2D : DeepMonoBehaviour {
         groundedTransition = prevGrounded != grounded;
         prevGrounded = grounded;
 
-        if (grounded) {
-            surfaceNormal = hit.normal;
+        // Update normals
+        if (slip || sticky) {
+            surfaceNormal = slip ? slipHit.normal : hit.normal;
+        } else {
+            surfaceNormal = Vector2.up;
+        }
 
+        if (grounded) {
             if (groundedTransition || Vector3.Dot(rb.velocity, gravity) > 0) {
                 airborne = false;
             }
             if (airborne) {
                 // Reset airborne state if we have been grounded for a long time 
                 // -> safety precaution if airborne fails to reset.
-                if (airborneTimer < 1f) {
+                if (airborneTimer < 0.5f) {
                     airborneTimer += Time.fixedDeltaTime;
                 } else {
                     airborne = false;
                 }
             }
-        } else {
-            surfaceNormal = Vector2.up;
         }
 
         // When transitioning out of sticky state, clamp the Y-Velocity to prevent velocity from the
@@ -163,7 +193,7 @@ public class CharacterController2D : DeepMonoBehaviour {
         // 1) Downward slope pulls character downwards to maintain hover height
         // 2) When falling off slope, character maintains downward velocity from the aforementioned pull
         // 3) Character is launched downwards
-        if (!sticky && stickyTransition && Vector3.Dot(rb.velocity, gravity) > 0) {
+        if ((!sticky && stickyTransition && Vector3.Dot(rb.velocity, gravity) > 0)) {
             rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -1f, Mathf.Infinity));
         }
 

@@ -26,7 +26,7 @@ namespace Deep.Anim {
         }
 
         public Sprite sprite {
-            get { return anim != null ? anim.sprites[frame % _anim.sprites.Length] : null; }
+            get { return anim != null ? anim.sprites[Mathf.Abs(frame % _anim.sprites.Length)] : null; }
         }
 
         public static implicit operator AnimDriver(Anim anim) {
