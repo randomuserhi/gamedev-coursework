@@ -321,7 +321,8 @@ namespace Player {
             Vector2 velocity = controller.rb.velocity;
             float speed = Mathf.Abs(velocity.x);
             if (speed < moveThresh) {
-                Enter_IdleChill();
+                if (isChill) Enter_IdleChill();
+                else Enter_Idle();
                 return;
             }
             if (primaryAnim.AutoIncrement()) {
