@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: WallSlide
   m_EditorClassIdentifier: 
   frameRate: 10
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0.1, y: 0.9}
   sprites:
   - {fileID: 21300000, guid: 5a5fda50b661cfe469f2fd635348b9f1, type: 3}

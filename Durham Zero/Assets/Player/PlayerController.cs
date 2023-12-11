@@ -56,6 +56,13 @@ namespace Player {
                 facingRight = true;
             }
 
+            // horizontal movement
+            float a = acceleration;
+            if (input.x != 0 && Mathf.Sign(input.x) != Mathf.Sign(rb.velocity.x)) {
+                a *= 2;
+            }
+            rb.velocity += input.x * a * perp;
+
             if (controller.Grounded) {
                 // friction
                 float speed = Vector3.Project(rb.velocity, perp).magnitude;
@@ -72,13 +79,6 @@ namespace Player {
                     rb.velocity.y != 0f ? Mathf.Max(speed.y - drop.y, 0) / speed.y : 1f
                 );
             }
-
-            // horizontal movement
-            float a = acceleration;
-            if (Mathf.Sign(input.x) != Mathf.Sign(rb.velocity.x)) {
-                a *= 2;
-            }
-            rb.velocity += input.x * a * perp;
         }
 
         #endregion

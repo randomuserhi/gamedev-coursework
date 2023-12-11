@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ThrowStance
   m_EditorClassIdentifier: 
   frameRate: 10
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: 0.77}
   sprites:
   - {fileID: 21300000, guid: 4cd97cd442eddec41b18c9e63ce967e6, type: 3}
   - {fileID: 21300000, guid: bd81dfa1ce1c248459b25059504593d3, type: 3}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StanceFromIdleChill
   m_EditorClassIdentifier: 
   frameRate: 10
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: 0.96}
   sprites:
   - {fileID: 21300000, guid: 2b8d319af5102a64fbc09fc2555b8963, type: 3}
   - {fileID: 21300000, guid: bd8d65503da092448a62d8a5296a4307, type: 3}

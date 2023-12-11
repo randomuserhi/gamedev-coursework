@@ -10,9 +10,13 @@ namespace Deep.Anim {
         private Anim _anim = null;
         public Anim anim {
             get { return _anim; }
-            set { _anim = value; frame = 0; }
+            set { _anim = value; }
         }
-        public void Set(Anim anim, int frame = 0) {
+        public int Length {
+            get => _anim.sprites.Length;
+        }
+
+        public void Set(Anim anim, int frame = -1) {
             this.anim = anim;
             this.frame = frame;
         }
@@ -40,9 +44,28 @@ namespace Deep.Anim {
         public bool AutoIncrement() {
             if (_anim == null) return false;
             bool reset = false;
+            bool start = _frame == -1;
             if (frameTimer <= 0) {
-                frame = (frame + 1) % _anim.sprites.Length;
-                if (frame == 0) {
+                _frame = (_frame + 1) % _anim.sprites.Length;
+                if (_frame == 0 && !start) {
+                    reset = true;
+                }
+                frameTimer = 1f / _anim.frameRate;
+            } else {
+                frameTimer -= Time.deltaTime;
+            }
+            return reset;
+        }
+
+        public bool AutoDecrement() {
+            if (_anim == null) return false;
+            int last = _anim.sprites.Length - 1;
+            bool reset = false;
+            bool start = _frame == _anim.sprites.Length;
+            if (frameTimer <= 0) {
+                _frame = _frame - 1;
+                if (_frame == -1) _frame = last;
+                if (_frame == last && !start) {
                     reset = true;
                 }
                 frameTimer = 1f / _anim.frameRate;

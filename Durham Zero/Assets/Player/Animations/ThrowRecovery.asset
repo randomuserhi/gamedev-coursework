@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ThrowRecovery
   m_EditorClassIdentifier: 
   frameRate: 10
-  offset: {x: 0, y: 0}
+  offset: {x: 0, y: 0.77}
   sprites:
   - {fileID: 21300000, guid: 38c5a8c25f6f9b54198bf4c764268b8d, type: 3}
   - {fileID: 21300000, guid: e7091606b14fca5448c0c2786aad6ca0, type: 3}

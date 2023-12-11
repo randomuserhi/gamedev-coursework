@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Walk
   m_EditorClassIdentifier: 
   frameRate: 10
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: 0.96}
   sprites:
   - {fileID: 21300000, guid: 91ad0da7145d97f4a9235d37d64c704a, type: 3}
   - {fileID: 21300000, guid: 2e43eaff9b448ff44b865a884948a730, type: 3}

@@ -741,28 +741,44 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: IdleAnim
+      propertyPath: test
       value: 
-      objectReference: {fileID: 11400000, guid: 0c22f852984a3a940a4f193c5bf61ba1, type: 2}
+      objectReference: {fileID: 11400000, guid: e0420a6f4de625442acc2b99024aa5cf, type: 2}
     - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: JumpFallAnim
+      propertyPath: RunAnim
       value: 
-      objectReference: {fileID: 11400000, guid: 359f5b9c569770e41aa0515bb53944c3, type: 2}
+      objectReference: {fileID: 11400000, guid: 38f9b59a791e97f4e925026f91fa869c, type: 2}
     - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: IdleChillAnim
+      propertyPath: RunFlip
       value: 
-      objectReference: {fileID: 11400000, guid: f7be1a6aba815e1459e4fdfe5ccb99c3, type: 2}
+      objectReference: {fileID: 11400000, guid: 5cf7bc982de3cd140be0f9a84d8be801, type: 2}
     - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: IdleToChillAnim
+      propertyPath: LandAnim
       value: 
-      objectReference: {fileID: 11400000, guid: f84e0d0d2acec294aa74fe148dc45667, type: 2}
+      objectReference: {fileID: 11400000, guid: 7a428b94291e502449eda96da4dc48d8, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: WalkAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: e0420a6f4de625442acc2b99024aa5cf, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: WalkFlip
+      value: 
+      objectReference: {fileID: 11400000, guid: 97def52dad31acd42bed477086ecedcd, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: walkThresh
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ToWalkRunAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: 2dead531fb2cec747ae7913d071de222, type: 2}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.8
+      value: -2.35
       objectReference: {fileID: 0}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.02
+      value: 7.77
       objectReference: {fileID: 0}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.z
