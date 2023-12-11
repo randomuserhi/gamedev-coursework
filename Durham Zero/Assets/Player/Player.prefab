@@ -51,7 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverHeight: 0.25
   stickyHeight: 1
-  size: {x: 1, y: 2}
+  size: {x: 1, y: 1.6}
   gravity: 10
   maxSlopeCosAngle: 0.5
   surfaceLayerMask:

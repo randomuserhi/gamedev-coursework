@@ -9,7 +9,8 @@ namespace Player {
             Grounded,
             Airborne,
             Slide,
-            Crouch
+            Crouch,
+            WallSlide
         }
 
         private PlayerInputSystem inputSystem;
@@ -25,6 +26,8 @@ namespace Player {
 
             controller.gravity = gravity;
         }
+
+        private ContactPoint2D[] contacts = new ContactPoint2D[16];
 
         private float dt;
         private void FixedUpdate() {
@@ -64,15 +67,10 @@ namespace Player {
             }
 
             switch (state) {
-                case LocomotionState.Grounded:
-                    Update_Grounded();
-                    break;
-                case LocomotionState.Airborne:
-                    Update_Airborne();
-                    break;
-                case LocomotionState.Slide:
-                    Update_Slide();
-                    break;
+                case LocomotionState.Grounded: Update_Grounded(); break;
+                case LocomotionState.Airborne: Update_Airborne(); break;
+                case LocomotionState.Slide: Update_Slide(); break;
+                case LocomotionState.WallSlide: Update_WallSlide(); break;
             }
         }
 
@@ -87,12 +85,13 @@ namespace Player {
         [SerializeField] private float gravity = 15f;
         [SerializeField] private float fallGravity = 20f;
         [SerializeField] private float jumpVel = 7.5f;
+        [SerializeField] private float cayoteTime = 0.2f;
         [SerializeField] private float maxJumpCosAngle = 0.17364f;
         [SerializeField] private float maxSlopeCosAngle = 0.5f;
 
         [Header("State")]
         [SerializeField] private bool fromJump = false;
-        [SerializeField] private bool canJump = false;
+        [SerializeField] private float canJump = 0;
 
         [Header("Inputs")]
         [SerializeField] private Vector2 input;
@@ -113,9 +112,8 @@ namespace Player {
             this.state = state;
 
             switch (state) {
-                case LocomotionState.Grounded:
-                    Enter_Grounded();
-                    break;
+                case LocomotionState.Grounded: Enter_Grounded(); break;
+                case LocomotionState.WallSlide: Enter_WallSlide(); break;
             }
         }
 
@@ -139,7 +137,7 @@ namespace Player {
         #region Grounded State
 
         private void Enter_Grounded() {
-            canJump = true;
+            canJump = cayoteTime;
         }
 
         private void Update_Grounded() {
@@ -165,17 +163,54 @@ namespace Player {
             }
 
             // Jumping
-            jump = inputSystem.jump.ReadValue<float>();
-            if (jump != 0 && canJump) {
+            if (jump != 0 && canJump > 0) {
                 Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
                 if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
                     rb.velocity *= new Vector2(1, 0);
                     rb.velocity += jumpVel * Vector2.up;
                     controller.Airborne = true;
                     fromJump = true;
-                    canJump = false;
+                    canJump = 0;
                     rb.position = controller.bottom;
                 }
+            }
+        }
+
+        #endregion
+
+        #region WallSlide State
+
+        private void Enter_WallSlide() {
+            canJump = cayoteTime;
+        }
+
+        private void Update_WallSlide() {
+            // wall slide
+            ContactFilter2D filter = new ContactFilter2D();
+            filter.SetLayerMask(controller.surfaceLayerMask);
+            int numberOfContacts = rb.GetContacts(filter, contacts);
+            bool inWallSlide = false;
+            Vector2 normal = new Vector2(-input.x, 0).normalized;
+            for (var i = 0; i < numberOfContacts; i++) {
+                ContactPoint2D contact = contacts[i];
+
+                if (Vector2.Dot(new Vector2(input.x, 0).normalized, contact.normal) == -1) {
+                    inWallSlide = true;
+                    normal = contact.normal;
+                    break;
+                }
+            }
+
+            if (!inWallSlide) {
+                EnterState(LocomotionState.Airborne);
+                return;
+            }
+
+            // friction
+            float speed = rb.velocity.y;
+            if (speed != 0f) {
+                float drop = speed * friction * Time.fixedDeltaTime;
+                rb.velocity *= Mathf.Max(speed - drop, 0f) / speed;
             }
         }
 
@@ -184,6 +219,26 @@ namespace Player {
         #region Airborne State
 
         private void Update_Airborne() {
+            if (canJump > 0) {
+                canJump -= dt;
+            }
+
+            // wall slide
+            if (input.x != 0) {
+                ContactFilter2D filter = new ContactFilter2D();
+                filter.SetLayerMask(controller.surfaceLayerMask);
+                int numberOfContacts = rb.GetContacts(filter, contacts);
+                for (var i = 0; i < numberOfContacts; i++) {
+                    ContactPoint2D contact = contacts[i];
+
+                    Debug.DrawLine(contact.point, contact.point + contact.normal, Color.red);
+
+                    if (Vector2.Dot(new Vector2(input.x, 0).normalized, contact.normal) == -1) {
+                        EnterState(LocomotionState.WallSlide);
+                    }
+                }
+            }
+
             // horizontal movement
             float a = acceleration;
             if (input.x != 0 && Mathf.Sign(input.x) != Mathf.Sign(rb.velocity.x)) {
@@ -199,7 +254,7 @@ namespace Player {
                 rb.velocity.y != 0f ? Mathf.Max(speed.y - drop.y, 0) / speed.y : 1f
             );
 
-            jump = inputSystem.jump.ReadValue<float>();
+            // extend jump
             if (rb.velocity.y > 0f && jump != 0 && fromJump) {
                 controller.gravity = gravity;
             } else {
@@ -207,6 +262,19 @@ namespace Player {
                 if (fromJump) {
                     rb.velocity *= new Vector2(1f, 0.5f);
                     fromJump = false;
+                }
+            }
+
+            // cayote jump
+            if (jump != 0 && canJump > 0 && !fromJump) {
+                Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
+                if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
+                    rb.velocity *= new Vector2(1, 0);
+                    rb.velocity += jumpVel * Vector2.up;
+                    controller.Airborne = true;
+                    fromJump = true;
+                    canJump = 0;
+                    rb.position = controller.bottom;
                 }
             }
         }
