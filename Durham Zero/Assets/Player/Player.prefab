@@ -53,9 +53,11 @@ MonoBehaviour:
   stickyHeight: 1
   size: {x: 1, y: 2}
   gravity: 10
+  maxSlopeCosAngle: 0.5
   surfaceLayerMask:
     serializedVersion: 2
     m_Bits: 2147483648
+  slip: 0
   grounded: 0
   sticky: 0
   airborne: 0
@@ -83,9 +85,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ec1b93f9631686488456c66c88c6c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 1
   acceleration: 5
   friction: 20
   drag: {x: 20, y: 0}
+  gravity: 15
+  fallGravity: 20
+  jumpVel: 10
+  maxJumpCosAngle: 0.17364
+  maxSlopeCosAngle: 0.5
+  fromJump: 0
+  canJump: 0
+  input: {x: 0, y: 0}
+  jump: 0
 --- !u!50 &619100368487661899
 Rigidbody2D:
   serializedVersion: 4
@@ -170,6 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09017e541a33ef3459a6bfe187456a94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _state: 2
   test: {fileID: 11400000, guid: e0420a6f4de625442acc2b99024aa5cf, type: 2}
   moveThresh: 0.5
   walkThresh: 4
