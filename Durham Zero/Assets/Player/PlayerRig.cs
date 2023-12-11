@@ -28,7 +28,7 @@ namespace Player {
             RunFlip,
             WalkFlip,
         }
-        private AnimState _state = AnimState.Idle;
+        [SerializeField] private AnimState _state = AnimState.Idle;
         private AnimState prevState = AnimState.Idle;
         private AnimState state {
             get => _state;
@@ -131,10 +131,12 @@ namespace Player {
                                 }
                             }
                         }
-                    } else {
-                        Enter_Airborne();
                     }
                     break;
+            }
+
+            if (!controller.Grounded) {
+                Enter_Airborne();
             }
 
             Vector2 position = controller.bottom;
@@ -158,11 +160,11 @@ namespace Player {
             }
         }
 
-        #region Global State
-
         [Header("Settings")]
         public float moveThresh = 0.5f;
         public float walkThresh = 2f;
+
+        #region Global State
 
         [Header("State")]
         [SerializeField] private bool isChill = true;
@@ -293,7 +295,8 @@ namespace Player {
 
         private void Update_Land() {
             if (primaryAnim.AutoIncrement()) {
-                Enter_Idle();
+                if (isChill) Enter_IdleChill();
+                else Enter_Idle();
                 return;
             }
             character.sprite = primaryAnim.sprite;
@@ -393,6 +396,16 @@ namespace Player {
                 Enter_Idle();
                 return;
             }
+            if (speed < moveThresh) {
+                Enter_Idle();
+                return;
+            }
+            if (input.x != 0) {
+                if (Mathf.Sign(input.x) != Mathf.Sign(velocity.x)) {
+                    Enter_WalkFlip();
+                    return;
+                }
+            }
             if (primaryAnim.AutoIncrement()) {
                 Enter_Walk();
                 return;
@@ -460,6 +473,12 @@ namespace Player {
             if (speed < moveThresh) {
                 Enter_Idle();
                 return;
+            }
+            if (input.x != 0) {
+                if (Mathf.Sign(input.x) != Mathf.Sign(velocity.x)) {
+                    Enter_RunFlip();
+                    return;
+                }
             }
             if (primaryAnim.AutoIncrement()) {
                 Enter_Run();

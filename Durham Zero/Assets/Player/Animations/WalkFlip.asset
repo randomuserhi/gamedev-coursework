@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
   m_Name: WalkFlip
   m_EditorClassIdentifier: 
-  frameRate: 30
+  frameRate: 15
   offset: {x: 0, y: 0.95}
   sprites:
   - {fileID: 21300000, guid: 6399650768eb4cd4da3112a79ec9f740, type: 3}

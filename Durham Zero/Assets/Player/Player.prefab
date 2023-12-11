@@ -85,7 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 5
   friction: 20
-  drag: {x: 5, y: 0}
+  drag: {x: 20, y: 0}
 --- !u!50 &619100368487661899
 Rigidbody2D:
   serializedVersion: 4
@@ -181,4 +181,6 @@ MonoBehaviour:
   LandAnim: {fileID: 11400000, guid: 7a428b94291e502449eda96da4dc48d8, type: 2}
   ToWalkRunAnim: {fileID: 11400000, guid: 2dead531fb2cec747ae7913d071de222, type: 2}
   WalkAnim: {fileID: 11400000, guid: e0420a6f4de625442acc2b99024aa5cf, type: 2}
+  WalkFlip: {fileID: 11400000, guid: 97def52dad31acd42bed477086ecedcd, type: 2}
   RunAnim: {fileID: 11400000, guid: 38f9b59a791e97f4e925026f91fa869c, type: 2}
+  RunFlip: {fileID: 11400000, guid: 5cf7bc982de3cd140be0f9a84d8be801, type: 2}

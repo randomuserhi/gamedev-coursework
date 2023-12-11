@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
   m_Name: RunFlip
   m_EditorClassIdentifier: 
-  frameRate: 10
+  frameRate: 15
   offset: {x: 0, y: 0.76}
   sprites:
   - {fileID: 21300000, guid: 159f9f1d07151e24fa6e30574d9c0f75, type: 3}

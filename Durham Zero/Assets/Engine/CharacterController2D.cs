@@ -130,7 +130,7 @@ public class CharacterController2D : DeepMonoBehaviour {
             surfaceNormal = hit.normal;
 
             if (!grounded) {
-                grounded = hit.distance <= hoverHeight + 0.05f;
+                grounded = hit.distance <= hoverHeight + 0.05f && Vector3.Dot(rb.velocity, gravity) > 0;
             }
         } else {
             surfaceNormal = Vector2.up;
