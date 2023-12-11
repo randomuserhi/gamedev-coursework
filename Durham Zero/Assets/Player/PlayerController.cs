@@ -131,6 +131,8 @@ namespace Player {
         [Header("Settings")]
         [SerializeField] private float acceleration = 5f;
 
+        [SerializeField] private float crouchHeight = 0.7f;
+
         // TODO(randomuserhi): Tie friction to a surface
         [SerializeField] private float friction = 1f;
         [SerializeField] private Vector2 drag = new Vector2(1f, 1f);
@@ -150,7 +152,6 @@ namespace Player {
         [SerializeField] private float dashDuration = 0.17f;
         [SerializeField] private float dashSpeed = 5f;
         [SerializeField] private float maxAirSpeed = 13f;
-
 
         [Header("State")]
         [SerializeField] private bool fromJump = false;
@@ -304,7 +305,7 @@ namespace Player {
 
             // horizontal movement
             if (Vector3.Dot(new Vector2(input.x, 0), controller.SurfaceNormal) >= 0) {
-                rb.velocity += input.x * acceleration * Vector2.right;
+                EnterState(LocomotionState.Airborne);
             }
         }
 
