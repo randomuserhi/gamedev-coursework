@@ -6,10 +6,57 @@ using UnityEditor;
 using UnityEngine;
 
 namespace Deep.Anim {
+    public class AnimDriver {
+        private Anim _anim = null;
+        public Anim anim {
+            get { return _anim; }
+            set { _anim = value; frame = 0; }
+        }
+        public void Set(Anim anim, int frame = 0) {
+            this.anim = anim;
+            this.frame = frame;
+        }
+
+        public Vector2 offset {
+            get => anim != null ? anim.offset : Vector2.zero;
+        }
+
+        public Sprite sprite {
+            get { return anim != null ? anim.sprites[frame % _anim.sprites.Length] : null; }
+        }
+
+        public static implicit operator AnimDriver(Anim anim) {
+            AnimDriver driver = new AnimDriver();
+            driver.anim = anim;
+            return driver;
+        }
+
+        private int _frame = 0;
+        public int frame {
+            get { return _frame; }
+            set { _frame = value; frameTimer = 0; }
+        }
+        private float frameTimer = 0;
+        public bool AutoIncrement() {
+            if (_anim == null) return false;
+            bool reset = false;
+            if (frameTimer <= 0) {
+                frame = (frame + 1) % _anim.sprites.Length;
+                if (frame == 0) {
+                    reset = true;
+                }
+                frameTimer = 1f / _anim.frameRate;
+            } else {
+                frameTimer -= Time.deltaTime;
+            }
+            return reset;
+        }
+    }
+
     [CreateAssetMenu(fileName = "Animation", menuName = "Deep/Animation")]
     public class Anim : ScriptableObject {
         public int frameRate = 10;
-        public Vector3 offset = Vector3.zero;
+        public Vector2 offset = Vector2.zero;
         public Sprite[] sprites = new Sprite[0];
 
         public static Anim Create(Sprite[] frames) {

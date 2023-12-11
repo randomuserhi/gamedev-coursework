@@ -436,7 +436,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 663224026}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: f8e8455e351228b4592ab4f7e55122ed, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -499,7 +499,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1736101519}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: f8e8455e351228b4592ab4f7e55122ed, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -629,7 +629,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 2142794600}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: f8e8455e351228b4592ab4f7e55122ed, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -740,14 +740,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1566763693346139139, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: m_Size.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1566763693346139139, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: m_Offset.y
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: IdleAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: 0c22f852984a3a940a4f193c5bf61ba1, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: JumpFallAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: 359f5b9c569770e41aa0515bb53944c3, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: IdleChillAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: f7be1a6aba815e1459e4fdfe5ccb99c3, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: IdleToChillAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: f84e0d0d2acec294aa74fe148dc45667, type: 2}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.8
@@ -788,25 +796,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: drag.x
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: drag.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: friction
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 8504293235514421217, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8504293235514421217, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: m_Layer
-      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

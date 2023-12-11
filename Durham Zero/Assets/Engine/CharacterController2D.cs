@@ -192,8 +192,8 @@ public class CharacterController2D : DeepMonoBehaviour {
             _bottom.y -= hit.distance;
         }
 
-        Debug.DrawLine(_bottom, _bottom + new Vector2(0, size.y), Color.red);
-        Debug.DrawLine(_bottom + new Vector2(-0.5f, 0), _bottom + new Vector2(0.5f, 0), Color.red);
+        /*Debug.DrawLine(_bottom, _bottom + new Vector2(0, size.y), Color.red);
+        Debug.DrawLine(_bottom + new Vector2(-0.5f, 0), _bottom + new Vector2(0.5f, 0), Color.red);*/
 
         if (!grounded) {
             rb.velocity += Vector2.down * gravity * dt;

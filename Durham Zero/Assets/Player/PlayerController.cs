@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Player {
@@ -27,24 +28,33 @@ namespace Player {
 
             switch (state) {
                 case LocomotionState.Default:
-                    UpdateState_Default();
+                    Update_Default();
                     break;
             }
         }
 
         #region Default State
 
-        [SerializeField] private float maxSpeed = 5f;
-        [SerializeField] private float acceleration = 1f;
-        [SerializeField] private float maxAcceleration = 1f;
+        [SerializeField] private float acceleration = 5f;
 
         // TODO(randomuserhi): Tie friction to a surface
         [SerializeField] private float friction = 1f;
         [SerializeField] private Vector2 drag = new Vector2(1f, 1f);
+        [NonSerialized] public bool facingRight = true;
 
-        private void UpdateState_Default() {
+        private void Enter_Default() {
+            state = LocomotionState.Default;
+        }
+
+        private void Update_Default() {
             Vector2 input = inputSystem.movement.ReadValue<Vector2>();
-            Vector2 perp = Vector2.Perpendicular(controller.SurfaceNormal).normalized;
+            Vector2 perp = -Vector2.Perpendicular(controller.SurfaceNormal).normalized;
+
+            if (input.x < 0f) {
+                facingRight = false;
+            } else if (input.x > 0f) {
+                facingRight = true;
+            }
 
             if (controller.Grounded) {
                 // friction
@@ -64,11 +74,11 @@ namespace Player {
             }
 
             // horizontal movement
-            float s = 10;
+            float a = acceleration;
             if (Mathf.Sign(input.x) != Mathf.Sign(rb.velocity.x)) {
-                s *= 1 + Mathf.Clamp(Mathf.Abs(rb.velocity.x) / 16, 0, 2);
+                a *= 2;
             }
-            rb.velocity -= input.x * s * perp;
+            rb.velocity += input.x * a * perp;
         }
 
         #endregion

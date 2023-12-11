@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: SlashRecovery
+  m_EditorClassIdentifier: 
+  frameRate: 10
+  offset: {x: 0, y: 0}
+  sprites:
+  - {fileID: 21300000, guid: 181c66c034bace44bb8f6932810ed36a, type: 3}
+  - {fileID: 21300000, guid: 079c44cdf9598bf42b60270ffd334983, type: 3}
+  - {fileID: 21300000, guid: 4d3dcde9ee2ebd24689584d458d90ec7, type: 3}
+  - {fileID: 21300000, guid: 1d8a1b5baefc95748878009a5deb86fa, type: 3}
+  - {fileID: 21300000, guid: 67d27c08a330a1943856f1dc2d9e8137, type: 3}
+  - {fileID: 21300000, guid: bc49214b47f1aaf4bb56fc5f68ccc17f, type: 3}
+  - {fileID: 21300000, guid: 19db856d4eac04c40a64e2ad24ed9890, type: 3}
+  - {fileID: 21300000, guid: 1f9105abaee86bd42addcd5c10b33841, type: 3}
+  - {fileID: 21300000, guid: c268cabc0f84469468f610a9f3d3caff, type: 3}
