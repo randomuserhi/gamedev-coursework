@@ -88,6 +88,28 @@ public class CharacterController2D : DeepMonoBehaviour {
         box = GetComponent<BoxCollider2D>();
     }
 
+    public RaycastHit2D groundHit() {
+        float width = size.x;
+        RaycastHit2D hit = new RaycastHit2D();
+        for (int i = 0; i < groundHits.Length; ++i) {
+            Vector3 point = transform.position + new Vector3(
+                -width / 2f + width / Mathf.Max(2, groundHits.Length - 1) * i,
+                0f
+                );
+            groundHits[i] = Physics2D.Raycast(point, Vector2.down, stickyHeight, surfaceLayerMask);
+            if (Vector3.Dot(Vector2.up, groundHits[i].normal) >= maxSlopeCosAngle) {
+                if (hit.collider == null || (
+                    groundHits[i].collider != null &&
+                    groundHits[i].distance < hit.distance &&
+                    Vector3.Dot(Vector2.down, groundHits[i].normal) < 0)
+                ) {
+                    hit = groundHits[i];
+                }
+            }
+        }
+        return hit;
+    }
+
     private RaycastHit2D slipHit;
     private RaycastHit2D hit;
     private RaycastHit2D[] groundHits = new RaycastHit2D[5];

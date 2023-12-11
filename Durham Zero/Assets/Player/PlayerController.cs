@@ -58,12 +58,33 @@ namespace Player {
                 decelerationTimer -= dt;
             }
 
-            if (dash != 0 && canDash <= 0 && dashReleased) {
+            // Check dash cooldown reset when you land
+            RaycastHit2D groundHit = controller.groundHit();
+            if (groundHit.collider != null) {
+                if (groundHit.distance <= controller.hoverHeight + 0.05f) {
+                    if (Vector3.Dot(rb.velocity, groundHit.normal) <= 0) {
+                        dashGrounded = true;
+                    }
+                } else if (dashGrounded) {
+                    dashGrounded = false;
+                }
+            }
+            if (dashGrounded && dashGrounded != prevDashGrounded) {
+                canDash = 0;
+            }
+            prevDashGrounded = dashGrounded;
+
+            if (state != LocomotionState.Dash && dash != 0 && canDash <= 0 && dashReleased) {
                 EnterState(LocomotionState.Dash);
                 canDash = dashCooldown;
                 dashReleased = false;
             } else if (canDash > 0) {
                 canDash -= dt;
+                if (!dashGrounded) {
+                    if (canDash < 0.001) {
+                        canDash = 0.001f;
+                    }
+                }
             }
 
             switch (state) {
@@ -122,8 +143,8 @@ namespace Player {
         [SerializeField] private float maxSlopeCosAngle = 0.5f;
 
         [SerializeField] private float maxDashSlopeCosAngle = -0.5f;
-        [SerializeField] private float dashCooldown = 1f;
-        [SerializeField] private float dashDuration = 1f;
+        [SerializeField] private float dashCooldown = 0.7f;
+        [SerializeField] private float dashDuration = 0.17f;
         [SerializeField] private float dashSpeed = 5f;
         [SerializeField] private float maxAirSpeed = 13f;
 
@@ -134,6 +155,9 @@ namespace Player {
         [SerializeField] private Vector2 wallNormal = Vector2.zero;
         [SerializeField] private Vector2 dashDir = Vector2.zero;
         [SerializeField] private float canDash = 0;
+        [SerializeField] private bool dashGrounded = false;
+        [SerializeField] private bool prevDashGrounded = false;
+        [SerializeField] private bool canSuperDash = false;
         [SerializeField] private bool dashReleased = true;
         [SerializeField] private float dashTimer = 0;
         [SerializeField] private float decelerationTimer = 0;
@@ -181,6 +205,7 @@ namespace Player {
             }
 
             // Verify velocity doesnt clip
+            canSuperDash = (controller.Grounded && dashDir.y < 0) || !controller.Grounded;
             if (controller.Grounded && dashDir.y < 0) {
                 if (dashDir.x > 0) {
                     dashDir = Vector2.right;
@@ -215,8 +240,10 @@ namespace Player {
                 }
 
                 if (jump != 0 && canJump > 0 && jumpReleased) {
-                    decelerationTimer = 0;
-                    rb.velocity *= new Vector3(0.8f + 0.5f * (1f - dashTimer / dashDuration), 1f);
+                    if (canSuperDash) {
+                        decelerationTimer = 0;
+                        rb.velocity *= new Vector3(0.8f + 0.5f * (1f - dashTimer / dashDuration), 1f);
+                    }
 
                     Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
                     if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {

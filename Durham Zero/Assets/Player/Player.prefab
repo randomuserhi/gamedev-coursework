@@ -98,7 +98,7 @@ MonoBehaviour:
   maxJumpCosAngle: 0.17364
   maxSlopeCosAngle: 0.8
   maxDashSlopeCosAngle: -0.8
-  dashCooldown: 1
+  dashCooldown: 0.7
   dashDuration: 0.17
   dashSpeed: 20
   maxAirSpeed: 13
@@ -108,6 +108,9 @@ MonoBehaviour:
   wallNormal: {x: 0, y: 0}
   dashDir: {x: 0, y: 0}
   canDash: 0
+  dashGrounded: 0
+  prevDashGrounded: 0
+  canSuperDash: 0
   dashReleased: 1
   dashTimer: 0
   decelerationTimer: 0
