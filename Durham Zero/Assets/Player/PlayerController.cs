@@ -180,6 +180,15 @@ namespace Player {
                 }
             }
 
+            // Verify velocity doesnt clip
+            if (controller.Grounded && dashDir.y < 0) {
+                if (dashDir.x > 0) {
+                    dashDir = Vector2.right;
+                } else {
+                    dashDir = Vector2.left;
+                }
+            }
+
             controller.active = false;
         }
 
