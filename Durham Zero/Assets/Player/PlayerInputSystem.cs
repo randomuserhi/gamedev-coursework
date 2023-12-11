@@ -9,6 +9,8 @@ namespace Player {
         [NonSerialized] public InputAction jump;
         [NonSerialized] public InputAction dash;
 
+        private PlayerController controller;
+
         private void Start() {
             // TODO(randomuserhi): Load from config => otherwise generate default
 
@@ -30,6 +32,16 @@ namespace Player {
             dash.AddBinding("<Keyboard>/i");
 
             map.Enable();
+
+            controller = GetComponent<PlayerController>();
+        }
+
+        private void FixedUpdate() {
+            if (controller != null) {
+                controller.input = movement.ReadValue<Vector2>();
+                controller.jump = jump.ReadValue<float>();
+                controller.dash = dash.ReadValue<float>();
+            }
         }
 
         private void OnEnable() {

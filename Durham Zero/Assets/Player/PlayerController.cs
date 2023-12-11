@@ -35,12 +35,9 @@ namespace Player {
 
             controller.maxSlopeCosAngle = maxSlopeCosAngle;
 
-            input = inputSystem.movement.ReadValue<Vector2>();
-            jump = inputSystem.jump.ReadValue<float>();
             if (jump == 0) {
                 jumpReleased = true;
             }
-            dash = inputSystem.dash.ReadValue<float>();
             if (dash == 0) {
                 dashReleased = true;
             }
@@ -171,10 +168,9 @@ namespace Player {
         [SerializeField] private float decelerationTimer = 0;
 
         [Header("Inputs")]
-        [SerializeField] private Vector2 input;
-        [SerializeField] private float jump;
-        [SerializeField] private float dash;
-        [SerializeField] private float attack;
+        [SerializeField] public Vector2 input;
+        [SerializeField] public float jump;
+        [SerializeField] public float dash;
 
         private void ExitState() {
             switch (state) {
