@@ -7,6 +7,7 @@ namespace Player {
         [NonSerialized] public InputActionMap map;
         [NonSerialized] public InputAction movement;
         [NonSerialized] public InputAction jump;
+        [NonSerialized] public InputAction dash;
 
         private void Start() {
             // TODO(randomuserhi): Load from config => otherwise generate default
@@ -24,6 +25,9 @@ namespace Player {
 
             jump = map.AddAction("Jump");
             jump.AddBinding("<Keyboard>/space");
+
+            dash = map.AddAction("Dash");
+            dash.AddBinding("<Keyboard>/i");
 
             map.Enable();
         }

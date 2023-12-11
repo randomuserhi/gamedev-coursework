@@ -9,6 +9,8 @@ public class CharacterController2D : DeepMonoBehaviour {
     [NonSerialized] public Rigidbody2D rb;
     private BoxCollider2D box;
 
+    public bool active = true;
+
     // TODO(randomuserhi): Documentation on character controller:
     //                     - Sticky state -> character region below where they try to keep themselves stuck to the ground
     //                     - How sticky state and grounded state differ
@@ -206,7 +208,7 @@ public class CharacterController2D : DeepMonoBehaviour {
     public override void LateFixedUpdate() {
         dt = Time.fixedDeltaTime;
 
-        HandleGrounded();
+        if (active) HandleGrounded();
 
         // Calcuate bounding box size relative to ground
         Vector2 _size = size;

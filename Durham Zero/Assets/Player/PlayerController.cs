@@ -10,7 +10,8 @@ namespace Player {
             Airborne,
             Slide,
             Crouch,
-            WallSlide
+            WallSlide,
+            Dash
         }
 
         private PlayerInputSystem inputSystem;
@@ -33,8 +34,37 @@ namespace Player {
         private void FixedUpdate() {
             dt = Time.fixedDeltaTime;
 
+            controller.maxSlopeCosAngle = maxSlopeCosAngle;
+
             input = inputSystem.movement.ReadValue<Vector2>();
             jump = inputSystem.jump.ReadValue<float>();
+            if (jump == 0) {
+                jumpReleased = true;
+            }
+            dash = inputSystem.dash.ReadValue<float>();
+            if (dash == 0) {
+                dashReleased = true;
+            }
+            if (decelerationTimer > 0) {
+                if (!controller.Grounded) {
+                    // drag
+                    Vector2 speed = new Vector2(Mathf.Abs(rb.velocity.x), Mathf.Abs(rb.velocity.y));
+                    Vector2 drop = speed * new Vector2(20f, speed.y > maxAirSpeed ? 20f : 0f) * Time.fixedDeltaTime;
+                    rb.velocity *= new Vector2(
+                        rb.velocity.x != 0f ? Mathf.Max(speed.x - drop.x, 0) / speed.x : 1f,
+                        rb.velocity.y != 0f ? Mathf.Max(speed.y - drop.y, 0) / speed.y : 1f
+                    );
+                }
+                decelerationTimer -= dt;
+            }
+
+            if (dash != 0 && canDash <= 0 && dashReleased) {
+                EnterState(LocomotionState.Dash);
+                canDash = dashCooldown;
+                dashReleased = false;
+            } else if (canDash > 0) {
+                canDash -= dt;
+            }
 
             switch (state) {
                 case LocomotionState.Grounded:
@@ -71,6 +101,7 @@ namespace Player {
                 case LocomotionState.Airborne: Update_Airborne(); break;
                 case LocomotionState.Slide: Update_Slide(); break;
                 case LocomotionState.WallSlide: Update_WallSlide(); break;
+                case LocomotionState.Dash: Update_Dash(); break;
             }
         }
 
@@ -84,19 +115,33 @@ namespace Player {
 
         [SerializeField] private float gravity = 15f;
         [SerializeField] private float fallGravity = 20f;
+        [SerializeField] private float fallThreshold = 1f;
         [SerializeField] private float jumpVel = 7.5f;
         [SerializeField] private float cayoteTime = 0.2f;
         [SerializeField] private float maxJumpCosAngle = 0.17364f;
         [SerializeField] private float maxSlopeCosAngle = 0.5f;
 
+        [SerializeField] private float maxDashSlopeCosAngle = -0.5f;
+        [SerializeField] private float dashCooldown = 1f;
+        [SerializeField] private float dashDuration = 1f;
+        [SerializeField] private float dashSpeed = 5f;
+        [SerializeField] private float maxAirSpeed = 13f;
+
         [Header("State")]
         [SerializeField] private bool fromJump = false;
         [SerializeField] private float canJump = 0;
+        [SerializeField] private bool jumpReleased = true;
         [SerializeField] private Vector2 wallNormal = Vector2.zero;
+        [SerializeField] private Vector2 dashDir = Vector2.zero;
+        [SerializeField] private float canDash = 0;
+        [SerializeField] private bool dashReleased = true;
+        [SerializeField] private float dashTimer = 0;
+        [SerializeField] private float decelerationTimer = 0;
 
         [Header("Inputs")]
         [SerializeField] private Vector2 input;
         [SerializeField] private float jump;
+        [SerializeField] private float dash;
 
         private void ExitState() {
             switch (state) {
@@ -104,6 +149,7 @@ namespace Player {
                     controller.gravity = gravity;
                     break;
                 case LocomotionState.WallSlide: Exit_WallSlide(); break;
+                case LocomotionState.Dash: Exit_Dash(); break;
             }
         }
 
@@ -115,8 +161,82 @@ namespace Player {
 
             switch (state) {
                 case LocomotionState.Grounded: Enter_Grounded(); break;
+                case LocomotionState.Dash: Enter_Dash(); break;
             }
         }
+
+        #region Dash State
+
+        private void Enter_Dash() {
+            decelerationTimer = -1;
+            canDash = dashCooldown;
+            dashTimer = dashDuration;
+            dashDir = input;
+            if (dashDir == Vector2.zero) {
+                if (facingRight) {
+                    dashDir = Vector2.right;
+                } else {
+                    dashDir = Vector2.left;
+                }
+            }
+
+            controller.active = false;
+        }
+
+        private void Update_Dash() {
+            controller.gravity = 0;
+
+            if (dashTimer >= 0) {
+                RaycastHit2D hit = Physics2D.BoxCast(controller.center, controller.size, 0, rb.velocity.normalized, rb.velocity.magnitude * dt, controller.surfaceLayerMask);
+                if (hit.collider != null) {
+                    if (Vector2.Dot(rb.velocity.normalized, hit.normal) >= maxDashSlopeCosAngle) {
+                        dashDir = Vector3.Project(dashDir, Vector2.Perpendicular(hit.normal)).normalized;
+                        rb.position = hit.centroid - new Vector2(0, controller.size.y / 2f) + hit.normal * 0.05f;
+                        canJump = cayoteTime;
+                    }
+                }
+                if (dashDir == Vector2.up) {
+                    dashDir *= 0.7f;
+                }
+                rb.velocity = Mathf.Max(rb.velocity.magnitude, dashSpeed) * dashDir;
+                dashTimer -= dt;
+
+                if (canJump > 0) {
+                    canJump -= dt;
+                }
+
+                if (jump != 0 && canJump > 0 && jumpReleased) {
+                    decelerationTimer = 0;
+                    rb.velocity *= new Vector3(0.8f + 0.5f * (1f - dashTimer / dashDuration), 1f);
+
+                    Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
+                    if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
+                        rb.velocity *= new Vector2(1, 0);
+                        rb.velocity += jumpVel * Vector2.up;
+                        controller.Airborne = true;
+                        fromJump = true;
+                        canJump = 0;
+                        rb.position = controller.bottom;
+                        jumpReleased = false;
+                    }
+
+                    EnterState(LocomotionState.Airborne);
+                    return;
+                }
+            } else {
+                EnterState(LocomotionState.Airborne);
+            }
+        }
+
+        private void Exit_Dash() {
+            controller.gravity = fallGravity;
+            controller.active = true;
+            if (decelerationTimer < 0) {
+                decelerationTimer = 0.1f;
+            }
+        }
+
+        #endregion
 
         #region Slide State
 
@@ -165,7 +285,9 @@ namespace Player {
             }
 
             // Jumping
-            if (jump != 0 && canJump > 0) {
+            if (jump != 0 && canJump > 0 && jumpReleased) {
+                decelerationTimer = 0f;
+
                 Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
                 if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
                     rb.velocity *= new Vector2(1, 0);
@@ -174,6 +296,7 @@ namespace Player {
                     fromJump = true;
                     canJump = 0;
                     rb.position = controller.bottom;
+                    jumpReleased = false;
                 }
             }
         }
@@ -245,18 +368,25 @@ namespace Player {
             if (input.x != 0 && Mathf.Sign(input.x) != Mathf.Sign(rb.velocity.x)) {
                 a *= 2;
             }
-            rb.velocity += Vector2.right * input.x * a;
+            if (Mathf.Sign(input.x) != Mathf.Sign(rb.velocity.x) || Mathf.Abs(rb.velocity.x) < maxAirSpeed) {
+                rb.velocity += Vector2.right * input.x * a;
+            }
 
             // drag
             Vector2 speed = new Vector2(Mathf.Abs(rb.velocity.x), Mathf.Abs(rb.velocity.y));
-            Vector2 drop = speed * drag * Time.fixedDeltaTime;
+            float s = speed.x - maxAirSpeed;
+            Vector2 d = new Vector2(
+                speed.x > maxAirSpeed ? Mathf.Clamp(drag.x / (Mathf.Pow(s, 1.5f)), 0.5f, drag.x) : drag.x,
+                drag.y
+            );
+            Vector2 drop = speed * d * Time.fixedDeltaTime;
             rb.velocity *= new Vector2(
                 rb.velocity.x != 0f ? Mathf.Max(speed.x - drop.x, 0) / speed.x : 1f,
                 rb.velocity.y != 0f ? Mathf.Max(speed.y - drop.y, 0) / speed.y : 1f
             );
 
             // extend jump
-            if (rb.velocity.y > 0f && jump != 0 && fromJump) {
+            if (rb.velocity.y > fallThreshold && jump != 0 && fromJump) {
                 controller.gravity = gravity;
             } else {
                 controller.gravity = fallGravity;
@@ -267,11 +397,13 @@ namespace Player {
             }
 
             // cayote jump
-            if (jump != 0 && canJump > 0 && !fromJump && (
+            if (jump != 0 && canJump > 0 && !fromJump && jumpReleased && (
                 wallNormal == Vector2.zero ||
                 Vector2.Dot(new Vector2(input.x, 0).normalized, wallNormal) == 1
                 )
             ) {
+                decelerationTimer = 0f;
+
                 Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
                 if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
                     rb.velocity *= new Vector2(1, 0);
@@ -280,6 +412,7 @@ namespace Player {
                     fromJump = true;
                     canJump = 0;
                     rb.position = controller.bottom;
+                    jumpReleased = false;
                 }
             }
         }

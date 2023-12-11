@@ -254,7 +254,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 5.77, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -595,13 +595,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1736101519}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.52077425, w: 0.8536945}
-  m_LocalPosition: {x: 5.06, y: 3.43, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
+  m_LocalPosition: {x: 4.14, y: 3.63, z: 0}
   m_LocalScale: {x: 10, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 62.768}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
 --- !u!1 &1850633494
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,17 +870,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: WallSlideAnim
-      value: 
-      objectReference: {fileID: 11400000, guid: a4c327d74da00e94082fac15678aee50, type: 2}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.13
+      value: 0.47
       objectReference: {fileID: 0}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.63
+      value: 17.61
       objectReference: {fileID: 0}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.z

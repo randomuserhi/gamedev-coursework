@@ -1,4 +1,5 @@
 using Deep.Anim;
+using Deep.Math;
 using UnityEngine;
 
 namespace Player {
@@ -28,6 +29,7 @@ namespace Player {
             Slide,
             RunFlip,
             WalkFlip,
+            Dash,
         }
         [SerializeField] private AnimState _state = AnimState.Idle;
         private AnimState prevState = AnimState.Idle;
@@ -66,6 +68,27 @@ namespace Player {
         }
 
         public Anim test;
+
+        private SecondOrderDynamics2D scaleSpring = new SecondOrderDynamics2D(5f, 0.8f, 1.2f);
+
+        public void FixedUpdate() {
+            float topSpeed = 13;
+            Vector2 goalScale = new Vector2(1f, 1f);
+            if (Mathf.Abs(controller.rb.velocity.x) < Mathf.Abs(controller.rb.velocity.y)) {
+                float speed = Mathf.Abs(controller.rb.velocity.y);
+                if (speed > topSpeed) {
+                    speed -= topSpeed;
+                    float offset = 0.3f * Mathf.Clamp01(speed / topSpeed);
+                    goalScale = new Vector2(1f - offset, 1 + offset);
+                }
+            }
+            // TODO(randomuserhi): consider skew https://www.sector12games.com/skewshear-vertex-shader/
+
+            Vector2 scale = scaleSpring.Solve(Time.fixedDeltaTime, character.transform.localScale, goalScale);
+            character.transform.localScale = scale;
+            secondary.transform.localScale = scale;
+            sword.transform.localScale = scale;
+        }
 
         public void Update() {
             switch (state) {
@@ -136,12 +159,16 @@ namespace Player {
                     break;
             }
 
-            if (!controller.Grounded) {
-                if (player.state == PlayerController.LocomotionState.WallSlide) {
-                    Enter_WallSlide();
-                } else {
-                    Enter_Airborne();
+            if (player.state != PlayerController.LocomotionState.Dash) {
+                if (!controller.Grounded) {
+                    if (player.state == PlayerController.LocomotionState.WallSlide) {
+                        Enter_WallSlide();
+                    } else {
+                        Enter_Airborne();
+                    }
                 }
+            } else {
+                Enter_Dash();
             }
 
             Vector2 position = controller.bottom;
@@ -163,6 +190,7 @@ namespace Player {
                 case AnimState.RunFlip: Update_RunFlip(); break;
                 case AnimState.ToSlide: Update_ToSlide(); break;
                 case AnimState.Slide: Update_Slide(); break;
+                case AnimState.Dash: Update_Dash(); break;
             }
         }
 
@@ -586,5 +614,28 @@ namespace Player {
         }
 
         #endregion
+
+        #region Dash State
+
+        private void Enter_Dash() {
+            state = AnimState.Dash;
+            primaryAnim.Set(CrouchTransitionAnim);
+
+            character.enabled = true;
+            secondary.enabled = false;
+        }
+
+        private void Update_Dash() {
+            if (player.state != PlayerController.LocomotionState.Dash) {
+                Enter_Airborne();
+                return;
+            }
+
+            character.sprite = primaryAnim.sprite;
+        }
+
+        #endregion
+
+        public Anim CrouchTransitionAnim;
     }
 }

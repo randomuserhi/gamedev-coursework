@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92df8c1fa9e019949b9f79e194b32f7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  active: 1
   hoverHeight: 0.25
   stickyHeight: 1
   size: {x: 1, y: 1.6}
@@ -90,16 +91,29 @@ MonoBehaviour:
   friction: 20
   drag: {x: 20, y: 0}
   gravity: 15
-  fallGravity: 20
+  fallGravity: 25
+  fallThreshold: 3
   jumpVel: 10
-  cayoteTime: 0.2
+  cayoteTime: 0.5
   maxJumpCosAngle: 0.17364
-  maxSlopeCosAngle: 0.5
+  maxSlopeCosAngle: 0.8
+  maxDashSlopeCosAngle: -0.8
+  dashCooldown: 1
+  dashDuration: 0.17
+  dashSpeed: 20
+  maxAirSpeed: 13
   fromJump: 0
   canJump: 0
+  jumpReleased: 1
   wallNormal: {x: 0, y: 0}
+  dashDir: {x: 0, y: 0}
+  canDash: 0
+  dashReleased: 1
+  dashTimer: 0
+  decelerationTimer: 0
   input: {x: 0, y: 0}
   jump: 0
+  dash: 0
 --- !u!50 &619100368487661899
 Rigidbody2D:
   serializedVersion: 4
@@ -200,3 +214,4 @@ MonoBehaviour:
   WalkFlip: {fileID: 11400000, guid: 97def52dad31acd42bed477086ecedcd, type: 2}
   RunAnim: {fileID: 11400000, guid: 38f9b59a791e97f4e925026f91fa869c, type: 2}
   RunFlip: {fileID: 11400000, guid: 5cf7bc982de3cd140be0f9a84d8be801, type: 2}
+  CrouchTransitionAnim: {fileID: 11400000, guid: 06c70de72db01b74e831309f7d8e6820, type: 2}

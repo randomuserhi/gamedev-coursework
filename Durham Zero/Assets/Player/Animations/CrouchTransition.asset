@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: CrouchTransition
   m_EditorClassIdentifier: 
   frameRate: 10
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: 0.7}
   sprites:
   - {fileID: 21300000, guid: ee88835879166354984f067b7dc9ae56, type: 3}
