@@ -33,6 +33,17 @@ namespace Player {
         private void FixedUpdate() {
             dt = Time.fixedDeltaTime;
 
+            // Wall jump, lock x dir
+            if (lockDirX > 0) {
+                lockDirX -= dt;
+                if (wallNormal != Vector2.zero) {
+                    input.x = Mathf.Sign(wallNormal.x);
+                }
+                if (state != LocomotionState.Airborne && state != LocomotionState.WallSlide) {
+                    lockDirX = 0;
+                }
+            }
+
             controller.maxSlopeCosAngle = maxSlopeCosAngle;
 
             if (jump == 0) {
@@ -143,6 +154,8 @@ namespace Player {
         [SerializeField] private float maxJumpCosAngle = 0.17364f;
         [SerializeField] private float maxSlopeCosAngle = 0.5f;
 
+        [SerializeField] private float wallJumpDirLock = 0.25f;
+
         [SerializeField] private float maxDashSlopeCosAngle = -0.5f;
         [SerializeField] private float dashCooldown = 0.7f;
         [SerializeField] private float superDashCooldown = 0.3f;
@@ -155,6 +168,7 @@ namespace Player {
         [SerializeField] private float canJump = 0;
         [SerializeField] private bool jumpReleased = true;
         [SerializeField] private Vector2 wallNormal = Vector2.zero;
+        [SerializeField] private float lockDirX = 0f;
 
         [SerializeField] private float superDashTimer = 0f;
         [SerializeField] private Vector2 dashDir = Vector2.zero;
@@ -390,6 +404,23 @@ namespace Player {
             }
 
             rb.velocity += Vector2.down * gravity * 0.5f * dt;
+
+            // Jumping
+            if (jump != 0 && jumpReleased) {
+                decelerationTimer = 0f;
+
+                Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
+                if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
+                    lockDirX = wallJumpDirLock;
+                    rb.velocity *= new Vector2(1, 0);
+                    rb.velocity += jumpVel * Vector2.up;
+                    controller.Airborne = true;
+                    fromJump = true;
+                    canJump = 0;
+                    rb.position = controller.bottom;
+                    jumpReleased = false;
+                }
+            }
         }
 
         #endregion

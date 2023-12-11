@@ -88,6 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: 1
   acceleration: 5
+  crouchHeight: 0.7
   friction: 20
   drag: {x: 20, y: 0}
   gravity: 15
@@ -97,9 +98,10 @@ MonoBehaviour:
   cayoteTime: 0.5
   maxJumpCosAngle: 0.17364
   maxSlopeCosAngle: 0.8
+  wallJumpDirLock: 0.1
   maxDashSlopeCosAngle: -0.8
   dashCooldown: 0.7
-  superDashCooldown: 1.5
+  superDashCooldown: 0.3
   dashDuration: 0.17
   dashSpeed: 20
   maxAirSpeed: 13
@@ -107,6 +109,7 @@ MonoBehaviour:
   canJump: 0
   jumpReleased: 1
   wallNormal: {x: 0, y: 0}
+  lockDirX: 0
   superDashTimer: 0
   dashDir: {x: 0, y: 0}
   canDash: 0
@@ -119,7 +122,6 @@ MonoBehaviour:
   input: {x: 0, y: 0}
   jump: 0
   dash: 0
-  attack: 0
 --- !u!50 &619100368487661899
 Rigidbody2D:
   serializedVersion: 4
