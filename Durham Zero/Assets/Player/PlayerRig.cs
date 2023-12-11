@@ -19,6 +19,7 @@ namespace Player {
             IdleToChill,
             Idle,
             Airborne,
+            WallSlide,
             Land,
             ToWalkRun,
             Walk,
@@ -136,19 +137,24 @@ namespace Player {
             }
 
             if (!controller.Grounded) {
-                Enter_Airborne();
+                if (player.state == PlayerController.LocomotionState.WallSlide) {
+                    Enter_WallSlide();
+                } else {
+                    Enter_Airborne();
+                }
             }
 
             Vector2 position = controller.bottom;
-            character.transform.position = position + primaryAnim.offset;
-            secondary.transform.position = position + secondaryAnim.offset;
-            sword.transform.position = position + swordAnim.offset;
+            character.transform.position = position + primaryAnim.offset * new Vector2(character.flipX ? -1 : 1, 1);
+            secondary.transform.position = position + secondaryAnim.offset * new Vector2(secondary.flipX ? -1 : 1, 1);
+            sword.transform.position = position + swordAnim.offset * new Vector2(sword.flipX ? -1 : 1, 1);
 
             switch (state) {
                 case AnimState.IdleChill: Update_IdleChill(); break;
                 case AnimState.Idle: Update_Idle(); break;
                 case AnimState.IdleToChill: Update_IdleToChill(); break;
                 case AnimState.Airborne: Update_Airborne(); break;
+                case AnimState.WallSlide: Update_WallSlide(); break;
                 case AnimState.Land: Update_Land(); break;
                 case AnimState.ToWalkRun: Update_ToWalkRun(); break;
                 case AnimState.Walk: Update_Walk(); break;
@@ -261,6 +267,10 @@ namespace Player {
         }
 
         private void Update_Airborne() {
+            if (player.state == PlayerController.LocomotionState.WallSlide) {
+                Enter_WallSlide();
+                return;
+            }
             if (controller.Grounded) {
                 Enter_Land();
                 return;
@@ -276,6 +286,30 @@ namespace Player {
             } else {
                 primaryAnim.frame = 3;
             }
+            character.sprite = primaryAnim.sprite;
+        }
+
+        #endregion
+
+        #region WallSlide State
+
+        public Anim WallSlideAnim;
+
+        private void Enter_WallSlide() {
+            state = AnimState.WallSlide;
+            primaryAnim.Set(WallSlideAnim);
+
+            character.enabled = true;
+            secondary.enabled = false;
+        }
+
+        private void Update_WallSlide() {
+            if (player.state != PlayerController.LocomotionState.WallSlide) {
+                Enter_Airborne();
+                return;
+            }
+
+            primaryAnim.AutoIncrement();
             character.sprite = primaryAnim.sprite;
         }
 

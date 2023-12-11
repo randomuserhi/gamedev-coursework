@@ -17,7 +17,7 @@ namespace Player {
         private CharacterController2D controller;
         private Rigidbody2D rb;
 
-        [SerializeField] private LocomotionState state = LocomotionState.Airborne;
+        [SerializeField] public LocomotionState state = LocomotionState.Airborne;
 
         private void Start() {
             controller = GetComponent<CharacterController2D>();
@@ -92,6 +92,7 @@ namespace Player {
         [Header("State")]
         [SerializeField] private bool fromJump = false;
         [SerializeField] private float canJump = 0;
+        [SerializeField] private Vector2 wallNormal = Vector2.zero;
 
         [Header("Inputs")]
         [SerializeField] private Vector2 input;
@@ -102,6 +103,7 @@ namespace Player {
                 case LocomotionState.Airborne:
                     controller.gravity = gravity;
                     break;
+                case LocomotionState.WallSlide: Exit_WallSlide(); break;
             }
         }
 
@@ -113,7 +115,6 @@ namespace Player {
 
             switch (state) {
                 case LocomotionState.Grounded: Enter_Grounded(); break;
-                case LocomotionState.WallSlide: Enter_WallSlide(); break;
             }
         }
 
@@ -138,6 +139,7 @@ namespace Player {
 
         private void Enter_Grounded() {
             canJump = cayoteTime;
+            wallNormal = Vector2.zero;
         }
 
         private void Update_Grounded() {
@@ -158,7 +160,7 @@ namespace Player {
             // friction
             float speed = Vector3.Project(rb.velocity, perp).magnitude;
             if (speed != 0f) {
-                float drop = speed * friction * Time.fixedDeltaTime;
+                float drop = speed * friction * dt;
                 rb.velocity *= Mathf.Max(speed - drop, 0f) / speed; // Scale the velocity based on friction.
             }
 
@@ -180,7 +182,7 @@ namespace Player {
 
         #region WallSlide State
 
-        private void Enter_WallSlide() {
+        private void Exit_WallSlide() {
             canJump = cayoteTime;
         }
 
@@ -190,13 +192,12 @@ namespace Player {
             filter.SetLayerMask(controller.surfaceLayerMask);
             int numberOfContacts = rb.GetContacts(filter, contacts);
             bool inWallSlide = false;
-            Vector2 normal = new Vector2(-input.x, 0).normalized;
             for (var i = 0; i < numberOfContacts; i++) {
                 ContactPoint2D contact = contacts[i];
 
                 if (Vector2.Dot(new Vector2(input.x, 0).normalized, contact.normal) == -1) {
                     inWallSlide = true;
-                    normal = contact.normal;
+                    wallNormal = contact.normal;
                     break;
                 }
             }
@@ -209,9 +210,11 @@ namespace Player {
             // friction
             float speed = rb.velocity.y;
             if (speed != 0f) {
-                float drop = speed * friction * Time.fixedDeltaTime;
+                float drop = speed * friction * dt;
                 rb.velocity *= Mathf.Max(speed - drop, 0f) / speed;
             }
+
+            rb.velocity += Vector2.down * gravity * 0.5f * dt;
         }
 
         #endregion
@@ -230,8 +233,6 @@ namespace Player {
                 int numberOfContacts = rb.GetContacts(filter, contacts);
                 for (var i = 0; i < numberOfContacts; i++) {
                     ContactPoint2D contact = contacts[i];
-
-                    Debug.DrawLine(contact.point, contact.point + contact.normal, Color.red);
 
                     if (Vector2.Dot(new Vector2(input.x, 0).normalized, contact.normal) == -1) {
                         EnterState(LocomotionState.WallSlide);
@@ -266,7 +267,11 @@ namespace Player {
             }
 
             // cayote jump
-            if (jump != 0 && canJump > 0 && !fromJump) {
+            if (jump != 0 && canJump > 0 && !fromJump && (
+                wallNormal == Vector2.zero ||
+                Vector2.Dot(new Vector2(input.x, 0).normalized, wallNormal) == 1
+                )
+            ) {
                 Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
                 if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
                     rb.velocity *= new Vector2(1, 0);

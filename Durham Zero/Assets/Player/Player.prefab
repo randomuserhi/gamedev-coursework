@@ -92,10 +92,12 @@ MonoBehaviour:
   gravity: 15
   fallGravity: 20
   jumpVel: 10
+  cayoteTime: 0.2
   maxJumpCosAngle: 0.17364
   maxSlopeCosAngle: 0.5
   fromJump: 0
   canJump: 0
+  wallNormal: {x: 0, y: 0}
   input: {x: 0, y: 0}
   jump: 0
 --- !u!50 &619100368487661899
@@ -191,6 +193,7 @@ MonoBehaviour:
   IdleToChillAnim: {fileID: 11400000, guid: f84e0d0d2acec294aa74fe148dc45667, type: 2}
   IdleAnim: {fileID: 11400000, guid: 0c22f852984a3a940a4f193c5bf61ba1, type: 2}
   JumpFallAnim: {fileID: 11400000, guid: 359f5b9c569770e41aa0515bb53944c3, type: 2}
+  WallSlideAnim: {fileID: 11400000, guid: a4c327d74da00e94082fac15678aee50, type: 2}
   LandAnim: {fileID: 11400000, guid: 7a428b94291e502449eda96da4dc48d8, type: 2}
   ToWalkRunAnim: {fileID: 11400000, guid: 2dead531fb2cec747ae7913d071de222, type: 2}
   WalkAnim: {fileID: 11400000, guid: e0420a6f4de625442acc2b99024aa5cf, type: 2}
