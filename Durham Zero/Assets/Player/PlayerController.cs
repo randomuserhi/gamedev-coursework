@@ -138,6 +138,8 @@ namespace Player {
                 } else if (dashGrounded) {
                     dashGrounded = false;
                 }
+            } else {
+                dashGrounded = false;
             }
             if (dashGrounded && dashGrounded != prevDashGrounded) {
                 canDash = 0;
