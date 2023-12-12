@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: IdleChill
+  m_EditorClassIdentifier: 
+  frameRate: 10
+  offset: {x: 0, y: 0.96}
+  sprites:
+  - sprite: {fileID: 21300000, guid: 18ae43e4410acce44b3d96d3bd04cd86, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: e7e701f049538424c952e56a962b8844, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 24ca975dce8ed6947bc09f40f8ed0200, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 5089180f6e864e04c9df4f605c4a7b46, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: c16e643bec8ccf342bf11a59e24ab1bb, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 14d454e48f8783d40abde19e03ad02e7, type: 3}
+    Scalf: {x: 0, y: 0}

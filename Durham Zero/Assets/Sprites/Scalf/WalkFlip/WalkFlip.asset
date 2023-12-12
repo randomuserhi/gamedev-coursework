@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: WalkFlip
+  m_EditorClassIdentifier: 
+  frameRate: 10
+  offset: {x: 0, y: 0.95}
+  sprites:
+  - sprite: {fileID: 21300000, guid: 966a9e194db90ed46b0007f84fd03479, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 14ac64517b42fa942a65f1d738a65076, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: c62384f0d0dc2df4a9f1857c60ae2236, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: f85348f1cb4602e4e9d778a63b30186d, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: cfedbb9adeeef3e429aed7bb89b92ba5, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: d5f22cb1845abf448ad4084591892070, type: 3}
+    Scalf: {x: 0, y: 0}

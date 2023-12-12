@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: ToWalkRun
+  m_EditorClassIdentifier: 
+  frameRate: 10
+  offset: {x: 0, y: 0.79}
+  sprites:
+  - sprite: {fileID: 21300000, guid: 0706d1902716d6647848de7793a3a16e, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 59656d42204b0b84890eadf1e26062b5, type: 3}
+    Scalf: {x: 0, y: 0}

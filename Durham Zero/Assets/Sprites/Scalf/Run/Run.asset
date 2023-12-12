@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: Run
+  m_EditorClassIdentifier: 
+  frameRate: 10
+  offset: {x: 0, y: 0.76}
+  sprites:
+  - sprite: {fileID: 21300000, guid: f3a19b3f701b36e439acb51f8320956c, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 1d4aa8fdc44df5245ad3de436456becb, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 1b92238eb9f7d8142a3bc037624d0f76, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 78f23607b0339a24ab9f26dcc2f96d69, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: a41759f54627775419ab9ee84cdc2d68, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: adcf54fd0bf42764799a43f4d2d3469d, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 824f95a1d8d7cf44b8b3321c067fa7cb, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: c93c20c4194e92b4e9b0ada4e6063db3, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: cdb0bbf198a75e74992c30cf1862b172, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: e4c6a92317aeec84aae9d0d7fd58c811, type: 3}
+    Scalf: {x: 0, y: 0}
