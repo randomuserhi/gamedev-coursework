@@ -635,7 +635,6 @@ namespace Player {
 
         private void Enter_Dash() {
             state = AnimState.Dash;
-            primaryAnim.Set(CrouchTransitionAnim);
 
             character.enabled = true;
             secondary.enabled = false;
@@ -648,7 +647,13 @@ namespace Player {
                 return;
             }
 
-            character.sprite = primaryAnim.sprite;
+            if (player.isCrouching) {
+                primaryAnim.Set(ToCrouchAnim, ToCrouchAnim.sprites.Length - 1);
+                character.sprite = primaryAnim.sprite;
+            } else {
+                primaryAnim.Set(CrouchTransitionAnim);
+                character.sprite = primaryAnim.sprite;
+            }
         }
 
         #endregion

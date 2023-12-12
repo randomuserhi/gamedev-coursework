@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Player {
@@ -154,7 +153,6 @@ namespace Player {
         [SerializeField] private float friction = 20f;
         [SerializeField] private float crouchFriction = 1f;
         [SerializeField] private Vector2 drag = new Vector2(1f, 1f);
-        [NonSerialized] public bool facingRight = true;
 
         [SerializeField] private float gravity = 15f;
         [SerializeField] private float fallGravity = 20f;
@@ -174,6 +172,7 @@ namespace Player {
         [SerializeField] private float maxAirSpeed = 13f;
 
         [Header("State")]
+        [SerializeField] public bool facingRight = true;
         [SerializeField] public bool isCrouching = false;
 
         [SerializeField] private bool fromJump = false;
@@ -224,7 +223,17 @@ namespace Player {
         #region Dash State
 
         private void Enter_Dash() {
-            controller.size.y = 1.3f; // TODO(randomuserhi): Make a setting variable
+            // crouch dash
+            isCrouching = controller.Grounded &&
+                ((facingRight && input.x > 0) ||
+                (!facingRight && input.x < 0) ||
+                input.x == 0) &&
+                input.y < 0f;
+            if (isCrouching) {
+                controller.size.y = crouchHeight;
+            } else {
+                controller.size.y = 1.3f; // TODO(randomuserhi): Make a setting variable
+            }
 
             canDash = dashCooldown;
             dashTimer = dashDuration;
@@ -246,10 +255,18 @@ namespace Player {
             // Verify velocity doesnt clip
             canSuperDash = superDashTimer <= 0 && ((controller.Grounded && dashDir.y < 0) || !controller.Grounded);
             if (controller.Grounded && dashDir.y < 0) {
-                if (dashDir.x > 0) {
-                    dashDir = Vector2.right;
+                if (dashDir.x != 0) {
+                    if (dashDir.x > 0) {
+                        dashDir = Vector2.right;
+                    } else {
+                        dashDir = Vector2.left;
+                    }
                 } else {
-                    dashDir = Vector2.left;
+                    if (facingRight) {
+                        dashDir = Vector2.right;
+                    } else {
+                        dashDir = Vector2.left;
+                    }
                 }
             }
 
@@ -302,12 +319,14 @@ namespace Player {
                     return;
                 }
             } else {
-                EnterState(LocomotionState.Airborne);
+                EnterState(LocomotionState.Grounded);
             }
         }
 
         private void Exit_Dash() {
-            controller.size.y = 1.5f;
+            if (!isCrouching) {
+                controller.size.y = 1.5f;
+            }
             controller.gravity = fallGravity;
             controller.active = true;
             if (decelerationTimer < 0) {

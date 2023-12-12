@@ -106,6 +106,7 @@ MonoBehaviour:
   dashDuration: 0.17
   dashSpeed: 20
   maxAirSpeed: 13
+  facingRight: 1
   isCrouching: 0
   fromJump: 0
   canJump: 0
