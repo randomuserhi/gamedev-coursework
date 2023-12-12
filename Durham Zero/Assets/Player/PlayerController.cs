@@ -31,12 +31,20 @@ namespace Player {
 
         public Vector3 respawnPoint;
 
+        private HashSet<GameObject> active = new HashSet<GameObject>();
         private HashSet<GameObject> used = new HashSet<GameObject>();
         private void OnTriggerEnter2D(Collider2D collision) {
             int layer = 1 << collision.gameObject.layer;
-            if (layer == LayerMask.GetMask("hurtbox")) {
+            if (layer == LayerMask.GetMask("end")) {
+
+            } else if (layer == LayerMask.GetMask("checkpoint")) {
+                if (!active.Contains(collision.gameObject)) {
+                    respawnPoint = collision.transform.GetChild(0).transform.position;
+                    active.Add(collision.gameObject);
+                }
+            } else if (layer == LayerMask.GetMask("hurtbox")) {
                 Dead();
-            } else if (layer == LayerMask.GetMask("dashcharge") && !used.Contains(collision.gameObject)) {
+            } else if (state != LocomotionState.Grounded && layer == LayerMask.GetMask("dashcharge") && !used.Contains(collision.gameObject)) {
                 canDash = 0;
                 used.Add(collision.gameObject);
                 EffectLibrary.SpawnEffect(9, collision.transform.position);

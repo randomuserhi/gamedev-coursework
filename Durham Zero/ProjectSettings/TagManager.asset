@@ -31,8 +31,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - end
+  - checkpoint
   - dashcharge
   - hurtbox
   - player
