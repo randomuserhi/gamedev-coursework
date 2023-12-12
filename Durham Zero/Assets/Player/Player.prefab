@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _state: 2
-  test: {fileID: 11400000, guid: e0420a6f4de625442acc2b99024aa5cf, type: 2}
+  test: {fileID: 0}
   moveThresh: 0.5
   walkThresh: 4
   isChill: 1
@@ -246,5 +246,5 @@ MonoBehaviour:
   spacing: 0.06
   gravity: 15
   friction: 0.09
-  offset: {x: 0, y: 0.5}
+  offset: {x: 0, y: 0}
   neck: {x: 0, y: 0}

@@ -16,26 +16,26 @@ MonoBehaviour:
   offset: {x: 0, y: 0.8}
   sprites:
   - sprite: {fileID: 21300000, guid: 6f367e6325dd0044bba15d60bbc190fa, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.197, y: 0.312}
   - sprite: {fileID: 21300000, guid: 03732314e8f625c47899ac58da4d5429, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.164, y: 0.34}
   - sprite: {fileID: 21300000, guid: 8af47f79f37a1054ab6e9e2f1b89a3bf, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.127, y: 0.35}
   - sprite: {fileID: 21300000, guid: 4007bd011cf99b44bacb1cf7e245fa9e, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.067, y: 0.33}
   - sprite: {fileID: 21300000, guid: d81b517b8bbc86445abcfa274ab54823, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.03, y: 0.32}
   - sprite: {fileID: 21300000, guid: a8ceb6532c5a52d4693eb46d2b552845, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.03, y: 0.32}
   - sprite: {fileID: 21300000, guid: 1d97c7f48d8b97348b19fe2837c3d413, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.068, y: 0.312}
   - sprite: {fileID: 21300000, guid: 984ed98b65ad64a4dad1e803fb3e5077, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.1, y: 0.359}
   - sprite: {fileID: 21300000, guid: 0827fcc5934c36548868519e34843262, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.174, y: 0.359}
   - sprite: {fileID: 21300000, guid: 91683d26f48988a44b90e62da19a45e1, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.248, y: 0.331}
   - sprite: {fileID: 21300000, guid: 7ab3cabf3adf94340b4b15c2e9f9331a, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.252, y: 0.308}
   - sprite: {fileID: 21300000, guid: 016db9242a93d7743b7b1a63bc6a3c88, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.257, y: 0.299}

@@ -16,16 +16,16 @@ MonoBehaviour:
   offset: {x: 0, y: 0.96}
   sprites:
   - sprite: {fileID: 21300000, guid: 0ce0b99ddbc7532419deb7a907d746ca, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.12, y: 0.168}
   - sprite: {fileID: 21300000, guid: 54423cf64188e484aafb9dd268cb907a, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.123, y: 0.184}
   - sprite: {fileID: 21300000, guid: 88fb521b0465ad54294c951b7cfc54a5, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.113, y: 0.2}
   - sprite: {fileID: 21300000, guid: 105a9d36421833d44aedfb4b35d47e73, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.058, y: 0.372}
   - sprite: {fileID: 21300000, guid: 6f249d6863918c445ac42982c6eddde6, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.06, y: 0.411}
   - sprite: {fileID: 21300000, guid: 3d37945c4addbcb4ea1c5859aba601c8, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.06, y: 0.447}
   - sprite: {fileID: 21300000, guid: c7ed3e1eaa3633e47922760e51efff53, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: -0.062, y: 0.454}

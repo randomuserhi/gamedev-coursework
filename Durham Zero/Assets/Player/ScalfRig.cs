@@ -3,6 +3,7 @@ using UnityEngine;
 namespace Player {
     [RequireComponent(typeof(PlayerController))]
     [RequireComponent(typeof(CharacterController2D))]
+    [RequireComponent(typeof(PlayerRig))]
     public class ScalfRig : MonoBehaviour {
         private struct Verlet {
             public Vector2 position;
@@ -16,6 +17,7 @@ namespace Player {
 
         private PlayerController player;
         private CharacterController2D controller;
+        private PlayerRig rig;
 
         [Header("Settings")]
         [SerializeField] private GameObject point;
@@ -36,6 +38,7 @@ namespace Player {
         private void Start() {
             player = GetComponent<PlayerController>();
             controller = GetComponent<CharacterController2D>();
+            rig = GetComponent<PlayerRig>();
 
             neck = transform.position;
 
@@ -56,7 +59,7 @@ namespace Player {
 
         // Update is called once per frame
         private void FixedUpdate() {
-            neck = controller.center + offset;
+            neck = controller.bottom + rig.primaryAnim.offset + ((player.facingRight ? new Vector2(1f, 1f) : new Vector2(-1f, 1f)) * rig.primaryAnim.current.Scalf) + offset;
 
             verlets[0].position = neck;
 

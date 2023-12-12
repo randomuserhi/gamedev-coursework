@@ -30,6 +30,10 @@ namespace Deep.Anim {
             get { return anim != null ? anim.sprites[Mathf.Abs(frame % _anim.sprites.Length)].sprite : null; }
         }
 
+        public FrameData current {
+            get { return anim != null ? anim.sprites[Mathf.Abs(frame % _anim.sprites.Length)] : new FrameData(); }
+        }
+
         public static implicit operator AnimDriver(Anim anim) {
             AnimDriver driver = new AnimDriver();
             driver.anim = anim;

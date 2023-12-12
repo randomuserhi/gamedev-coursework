@@ -16,6 +16,6 @@ MonoBehaviour:
   offset: {x: 0, y: 0.7}
   sprites:
   - sprite: {fileID: 21300000, guid: 59e5a90331d214244a852e23d4884aa7, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: 0.05, y: 0.151}
   - sprite: {fileID: 21300000, guid: 0d18b7364fc337c4cb19d8d92a89cfa5, type: 3}
-    Scalf: {x: 0, y: 0}
+    Scalf: {x: 0.011, y: 0.239}

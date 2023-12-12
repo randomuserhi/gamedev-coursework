@@ -1,5 +1,6 @@
 using Deep.Anim;
 using Deep.Math;
+using System;
 using UnityEngine;
 
 namespace Player {
@@ -215,7 +216,7 @@ namespace Player {
         [Header("State")]
         [SerializeField] private bool isChill = true;
 
-        private AnimDriver primaryAnim = new AnimDriver();
+        [NonSerialized] public AnimDriver primaryAnim = new AnimDriver();
         private AnimDriver secondaryAnim = new AnimDriver();
         private AnimDriver swordAnim = new AnimDriver();
 
