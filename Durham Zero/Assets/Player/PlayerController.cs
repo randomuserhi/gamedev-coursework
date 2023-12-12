@@ -299,6 +299,7 @@ namespace Player {
 
         #region Dash State
 
+        private bool cantDashTimer = false;
         private void Enter_Dash() {
             dashGrounded = false;
 
@@ -343,6 +344,7 @@ namespace Player {
             }
 
             // Verify velocity doesnt clip
+            cantDashTimer = superDashTimer > 0;
             canSuperDash = superDashTimer <= 0 && ((controller.Grounded && dashDir.y < 0) || !controller.Grounded);
             if (controller.Grounded && dashDir.y < 0) {
                 if (dashDir.x != 0) {
@@ -394,7 +396,7 @@ namespace Player {
                         superDashTimer = superDashCooldown;
                         decelerationTimer = 0;
                         rb.velocity *= new Vector3(0.8f + 0.8f * (1f - dashTimer / dashDuration), 1f);
-                    } else {
+                    } else if (cantDashTimer) {
                         sweat = EffectLibrary.SpawnEffect(8, controller.center + new Vector2(0, 0.7f));
                         canDash = dashCooldown;
                     }
