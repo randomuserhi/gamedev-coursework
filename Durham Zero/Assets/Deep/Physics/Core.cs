@@ -7,7 +7,8 @@ namespace Deep.Physics {
 
         [RuntimeInitializeOnLoadMethod]
         private static void Initialize() {
-            if (instance != null) return;
+            Core exists = FindAnyObjectByType<Core>();
+            if (exists != null) return;
 
             GameObject go = new GameObject();
             go.name = "Core";

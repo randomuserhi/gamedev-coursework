@@ -34,7 +34,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - hurtbox
   - player
   - surface
   m_SortingLayers:

@@ -95,8 +95,32 @@ namespace Player {
 
         private bool prevCrouchState = false;
 
+        public Anim DeathAnim;
+        private bool wasDead = false;
+
         public void Update() {
             float dt = Time.deltaTime;
+
+            if (player.state == PlayerController.LocomotionState.Dead) {
+                if (!wasDead) {
+                    wasDead = true;
+                    scalf.enabled = false;
+                    character.enabled = true;
+                    primaryAnim.Set(DeathAnim);
+                }
+
+                if (primaryAnim.AutoIncrement()) {
+                    player.Alive();
+
+                    AnimatedEffect e = EffectLibrary.SpawnEffect(0, player.respawnPoint);
+                    e.color = character.color;
+                }
+                character.sprite = primaryAnim.sprite;
+
+                return;
+            } else {
+                wasDead = false;
+            }
 
             switch (state) {
                 case AnimState.WalkFlip:
@@ -204,7 +228,11 @@ namespace Player {
                         break;
                 }
             }
-            scalf.color = Color.Lerp(scalf.color, goal, colorTransitionSpeed * dt);
+            if (colorTransitionSpeed != 0) {
+                scalf.color = Color.Lerp(scalf.color, goal, colorTransitionSpeed * dt);
+            } else {
+                scalf.color = goal;
+            }
 
             switch (state) {
                 case AnimState.IdleChill: Update_IdleChill(); break;

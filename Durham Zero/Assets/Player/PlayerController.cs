@@ -2,35 +2,70 @@ using UnityEngine;
 
 namespace Player {
     [RequireComponent(typeof(CharacterController2D))]
-    [RequireComponent(typeof(PlayerInputSystem))]
+    [RequireComponent(typeof(ScalfRig))]
     public class PlayerController : MonoBehaviour {
         public enum LocomotionState {
             Grounded,
             Airborne,
             Slide,
             WallSlide,
-            Dash
+            Dash,
+            Dead,
+            Respawning,
         }
 
-        private PlayerInputSystem inputSystem;
         private CharacterController2D controller;
         private Rigidbody2D rb;
+        private ScalfRig scalf;
 
         [SerializeField] public LocomotionState state = LocomotionState.Airborne;
 
         private void Start() {
             controller = GetComponent<CharacterController2D>();
-            inputSystem = GetComponent<PlayerInputSystem>();
+            scalf = GetComponent<ScalfRig>();
             rb = GetComponent<Rigidbody2D>();
-
-            controller.gravity = gravity;
         }
 
         private ContactPoint2D[] contacts = new ContactPoint2D[16];
 
+        public Vector3 respawnPoint;
+
+        private void OnTriggerEnter2D(Collider2D collision) {
+            if (1 << collision.gameObject.layer == LayerMask.GetMask("hurtbox")) {
+                Dead();
+            }
+        }
+
+        public void Alive() {
+            state = LocomotionState.Airborne;
+
+            transform.position = respawnPoint;
+            scalf.SetPosition(respawnPoint);
+            controller.gravity = gravity;
+            controller.active = true;
+            controller.rb.velocity = Vector2.zero;
+        }
+
+        public void Dead() {
+            state = LocomotionState.Dead;
+            controller.active = false;
+            controller.rb.velocity = Vector2.zero;
+            controller.gravity = 0;
+        }
+
+        private bool initialized = false;
         private float dt;
         private void FixedUpdate() {
+            if (!initialized) {
+                initialized = true;
+                Alive();
+            }
+
             dt = Time.fixedDeltaTime;
+
+            if (state == LocomotionState.Dead) {
+                return;
+            }
 
             // Wall jump, lock x dir
             if (lockDirX > 0) {

@@ -31,10 +31,22 @@ namespace Player {
         [Header("State")]
         [SerializeField] private Vector2 neck;
         SpriteRenderer[] points;
-        Verlet[] verlets;
-        VerletLinks[] links;
+        private Verlet[] verlets;
+        private VerletLinks[] links;
 
-        // Start is called before the first frame update
+        public void SetPosition(Vector2 position) {
+            neck = position + rig.primaryAnim.offset + ((player.facingRight ? new Vector2(1f, 1f) : new Vector2(-1f, 1f)) * rig.primaryAnim.current.Scalf) + offset;
+
+            for (int i = 0; i < numPoints; ++i) {
+                Vector2 pos = neck + Vector2.down * i * spacing;
+                verlets[i].position = pos;
+                verlets[i].prev = pos;
+                verlets[i].acceleration = Vector3.zero;
+            }
+
+            Render();
+        }
+
         private void Start() {
             player = GetComponent<PlayerController>();
             controller = GetComponent<CharacterController2D>();
@@ -58,7 +70,6 @@ namespace Player {
             }
         }
 
-        // Update is called once per frame
         private void FixedUpdate() {
             neck = controller.bottom + rig.primaryAnim.offset + ((player.facingRight ? new Vector2(1f, 1f) : new Vector2(-1f, 1f)) * rig.primaryAnim.current.Scalf) + offset;
 
@@ -102,9 +113,14 @@ namespace Player {
                 }
             }
 
+            Render();
+        }
+
+        private void Render() {
             for (int i = 0; i < numPoints; ++i) {
                 points[i].transform.position = new Vector3(verlets[i].position.x, verlets[i].position.y, 30);
                 points[i].color = rig.scalf.color;
+                points[i].enabled = rig.scalf.enabled;
             }
         }
     }
