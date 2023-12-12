@@ -101,6 +101,11 @@ namespace Player {
         public void Update() {
             float dt = Time.deltaTime;
 
+            CameraFollow.offset = Vector2.Lerp(CameraFollow.offset, new Vector2(
+                player.facingRight ? 3 : -3,
+                2
+                ), 1 * dt);
+
             if (player.state == PlayerController.LocomotionState.Dead) {
                 if (!wasDead) {
                     wasDead = true;
@@ -112,6 +117,7 @@ namespace Player {
 
                 if (primaryAnim.AutoIncrement()) {
                     player.Alive();
+                    Enter_Airborne();
 
                     AnimatedEffect e = EffectLibrary.SpawnEffect(0, player.respawnPoint);
                     e.color = Color.white;
@@ -216,6 +222,9 @@ namespace Player {
             bool canDash = player.canDash <= 0;
             if (canDash && prevDashReady != canDash) {
                 scalfDashReadyTimer = scalfDashReadyTime;
+            }
+            if (!canDash && prevDashReady != canDash) {
+                scalfDashReadyTimer = 0;
             }
             prevDashReady = canDash;
 

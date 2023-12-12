@@ -53,6 +53,7 @@ namespace Player {
             controller.gravity = 0;
         }
 
+        private AnimatedEffect sweat;
         private bool initialized = false;
         private float dt;
         private void FixedUpdate() {
@@ -62,6 +63,12 @@ namespace Player {
             }
 
             dt = Time.fixedDeltaTime;
+
+            if (sweat != null) {
+                float dir = facingRight ? 1 : -1;
+                sweat.transform.position = controller.center + new Vector2(0, 0.7f);
+                sweat.flip = !facingRight;
+            }
 
             if (state == LocomotionState.Dead) {
                 return;
@@ -369,6 +376,7 @@ namespace Player {
                         decelerationTimer = 0;
                         rb.velocity *= new Vector3(0.8f + 0.5f * (1f - dashTimer / dashDuration), 1f);
                     } else {
+                        sweat = EffectLibrary.SpawnEffect(8, controller.center + new Vector2(0, 0.7f));
                         canDash = dashCooldown;
                     }
 
