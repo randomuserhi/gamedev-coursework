@@ -9,7 +9,7 @@ namespace Player {
     [RequireComponent(typeof(CharacterController2D))]
     public class PlayerRig : MonoBehaviour {
         private SpriteRenderer character;
-        private SpriteRenderer secondary;
+        private SpriteRenderer scalf;
 
         private CharacterController2D controller;
         private PlayerInputSystem inputSystem;
@@ -53,14 +53,14 @@ namespace Player {
             GameObject _character = new GameObject();
             character = _character.AddComponent<SpriteRenderer>();
             character.transform.parent = transform;
-            character.transform.localPosition = Vector3.zero;
+            character.transform.localPosition = new Vector3(0, 0, 20);
             character.enabled = true;
 
             GameObject _secondary = new GameObject();
-            secondary = _secondary.AddComponent<SpriteRenderer>();
-            secondary.transform.parent = transform;
-            secondary.transform.localPosition = Vector3.zero;
-            secondary.enabled = false;
+            scalf = _secondary.AddComponent<SpriteRenderer>();
+            scalf.transform.parent = transform;
+            scalf.transform.localPosition = new Vector3(0, 0, 10);
+            scalf.enabled = true;
 
             Enter_Idle();
         }
@@ -84,7 +84,7 @@ namespace Player {
 
             Vector2 scale = scaleSpring.Solve(Time.fixedDeltaTime, character.transform.localScale, goalScale);
             character.transform.localScale = scale;
-            secondary.transform.localScale = scale;
+            scalf.transform.localScale = scale;
         }
 
         private bool prevCrouchState = false;
@@ -95,19 +95,19 @@ namespace Player {
                 case AnimState.RunFlip:
                     if (player.facingRight) {
                         character.flipX = true;
-                        secondary.flipX = true;
+                        scalf.flipX = true;
                     } else {
                         character.flipX = false;
-                        secondary.flipX = false;
+                        scalf.flipX = false;
                     }
                     break;
                 default:
                     if (player.facingRight) {
                         character.flipX = false;
-                        secondary.flipX = false;
+                        scalf.flipX = false;
                     } else {
                         character.flipX = true;
-                        secondary.flipX = true;
+                        scalf.flipX = true;
                     }
                     break;
             }
@@ -183,8 +183,10 @@ namespace Player {
             }
 
             Vector2 position = controller.bottom;
-            character.transform.position = position + primaryAnim.offset * new Vector2(character.flipX ? -1 : 1, 1);
-            secondary.transform.position = position + secondaryAnim.offset * new Vector2(secondary.flipX ? -1 : 1, 1);
+            Vector2 characterPos = position + primaryAnim.offset * new Vector2(character.flipX ? -1 : 1, 1);
+            character.transform.position = new Vector3(characterPos.x, characterPos.y, character.transform.position.z);
+            Vector2 scalfPos = position + scalfAnim.offset * new Vector2(scalf.flipX ? -1 : 1, 1);
+            scalf.transform.position = new Vector3(scalfPos.x, scalfPos.y, scalf.transform.position.z);
 
             switch (state) {
                 case AnimState.IdleChill: Update_IdleChill(); break;
@@ -217,7 +219,7 @@ namespace Player {
         [SerializeField] private bool isChill = true;
 
         [NonSerialized] public AnimDriver primaryAnim = new AnimDriver();
-        private AnimDriver secondaryAnim = new AnimDriver();
+        private AnimDriver scalfAnim = new AnimDriver();
         private AnimDriver swordAnim = new AnimDriver();
 
         [Header("Library")]
@@ -227,19 +229,23 @@ namespace Player {
         #region IdleChill State
 
         public Anim IdleChillAnim;
+        public Anim ScalfIdleChillAnim;
 
         private void Enter_IdleChill() {
             state = AnimState.IdleChill;
             primaryAnim.Set(IdleChillAnim);
+            scalfAnim.Set(ScalfIdleChillAnim);
             isChill = true;
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_IdleChill() {
             primaryAnim.AutoIncrement();
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoIncrement();
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -247,13 +253,15 @@ namespace Player {
         #region IdleToChill
 
         public Anim IdleToChillAnim;
+        public Anim ScalfIdleToChillAnim;
 
         private void Enter_IdleToChill() {
             state = AnimState.IdleToChill;
             primaryAnim.Set(IdleToChillAnim);
+            scalfAnim.Set(ScalfIdleToChillAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_IdleToChill() {
@@ -262,6 +270,8 @@ namespace Player {
                 return;
             }
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoIncrement();
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -270,14 +280,16 @@ namespace Player {
 
         private float idleTimer = 0;
         public Anim IdleAnim;
+        public Anim ScalfIdleAnim;
 
         private void Enter_Idle() {
             state = AnimState.Idle;
             primaryAnim.Set(IdleAnim);
+            scalfAnim.Set(ScalfIdleAnim);
             isChill = false;
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
 
             idleTimer = 3f;
         }
@@ -285,6 +297,8 @@ namespace Player {
         private void Update_Idle() {
             bool looped = primaryAnim.AutoIncrement();
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoIncrement();
+            scalf.sprite = scalfAnim.sprite;
             if (idleTimer <= 0 && looped) {
                 Enter_IdleToChill();
                 return;
@@ -298,13 +312,15 @@ namespace Player {
         #region Airborne State
 
         public Anim JumpFallAnim;
+        public Anim ScalfJumpFallAnim;
 
         private void Enter_Airborne() {
             state = AnimState.Airborne;
             primaryAnim.Set(JumpFallAnim);
+            scalfAnim.Set(ScalfJumpFallAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_Airborne() {
@@ -320,14 +336,19 @@ namespace Player {
             float vy = controller.rb.velocity.y;
             if (vy > 3) {
                 primaryAnim.frame = 0;
+                scalfAnim.frame = 0;
             } else if (vy > 0) {
                 primaryAnim.frame = 1;
+                scalfAnim.frame = 1;
             } else if (vy > -3) {
                 primaryAnim.frame = 2;
+                scalfAnim.frame = 2;
             } else {
                 primaryAnim.frame = 3;
+                scalfAnim.frame = 3;
             }
             character.sprite = primaryAnim.sprite;
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -335,13 +356,15 @@ namespace Player {
         #region WallSlide State
 
         public Anim WallSlideAnim;
+        public Anim ScalfWallSlideAnim;
 
         private void Enter_WallSlide() {
             state = AnimState.WallSlide;
             primaryAnim.Set(WallSlideAnim);
+            scalfAnim.Set(ScalfWallSlideAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_WallSlide() {
@@ -352,6 +375,8 @@ namespace Player {
 
             primaryAnim.AutoIncrement();
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoIncrement();
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -359,13 +384,15 @@ namespace Player {
         #region Land State
 
         public Anim LandAnim;
+        public Anim ScalfLandAnim;
 
         private void Enter_Land() {
             state = AnimState.Land;
             primaryAnim.Set(LandAnim);
+            scalfAnim.Set(ScalfLandAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_Land() {
@@ -379,6 +406,8 @@ namespace Player {
                 return;
             }
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoIncrement();
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -386,13 +415,15 @@ namespace Player {
         #region ToWalkRun State
 
         public Anim ToWalkRunAnim;
+        public Anim ScalfToWalkRunAnim;
 
         private void Enter_ToWalkRun() {
             state = AnimState.ToWalkRun;
             primaryAnim.Set(ToWalkRunAnim);
+            scalfAnim.Set(ScalfToWalkRunAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_ToWalkRun() {
@@ -413,6 +444,8 @@ namespace Player {
                 return;
             }
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoIncrement();
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -420,13 +453,15 @@ namespace Player {
         #region Walk State
 
         public Anim WalkAnim;
+        public Anim ScalfWalkAnim;
 
         private void Enter_Walk() {
             state = AnimState.Walk;
             primaryAnim.Set(WalkAnim);
+            scalfAnim.Set(ScalfWalkAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_Walk() {
@@ -445,6 +480,8 @@ namespace Player {
                 }
                 primaryAnim.AutoIncrement();
                 character.sprite = primaryAnim.sprite;
+                scalfAnim.AutoIncrement();
+                scalf.sprite = scalfAnim.sprite;
                 if (speed > walkThresh) {
                     Enter_Run();
                     return;
@@ -460,13 +497,15 @@ namespace Player {
         #region WalkFlip State
 
         public Anim WalkFlip;
+        public Anim ScalfWalkFlip;
 
         private void Enter_WalkFlip() {
             state = AnimState.WalkFlip;
             primaryAnim.Set(WalkFlip);
+            scalfAnim.Set(ScalfWalkFlip);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_WalkFlip() {
@@ -492,6 +531,8 @@ namespace Player {
                 return;
             }
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoIncrement();
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -499,13 +540,15 @@ namespace Player {
         #region Run State
 
         public Anim RunAnim;
+        public Anim ScalfRunAnim;
 
         private void Enter_Run() {
             state = AnimState.Run;
             primaryAnim.Set(RunAnim);
+            scalfAnim.Set(ScalfRunAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_Run() {
@@ -523,6 +566,8 @@ namespace Player {
                 }
                 primaryAnim.AutoIncrement();
                 character.sprite = primaryAnim.sprite;
+                scalfAnim.AutoIncrement();
+                scalf.sprite = scalfAnim.sprite;
                 if (speed < walkThresh) {
                     Enter_Walk();
                     return;
@@ -538,13 +583,15 @@ namespace Player {
         #region RunFlip State
 
         public Anim RunFlip;
+        public Anim ScalfRunFlip;
 
         private void Enter_RunFlip() {
             state = AnimState.RunFlip;
             primaryAnim.Set(RunFlip);
+            scalfAnim.Set(ScalfRunFlip);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_RunFlip() {
@@ -566,6 +613,8 @@ namespace Player {
                 return;
             }
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoIncrement();
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -575,9 +624,10 @@ namespace Player {
         private void Enter_ToSlide() {
             state = AnimState.ToSlide;
             primaryAnim.Set(ToWalkRunAnim, ToWalkRunAnim.sprites.Length);
+            scalfAnim.Set(ScalfToWalkRunAnim, ScalfToWalkRunAnim.sprites.Length);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_ToSlide() {
@@ -599,6 +649,8 @@ namespace Player {
                 return;
             }
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoDecrement();
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -608,9 +660,10 @@ namespace Player {
         private void Enter_Slide() {
             state = AnimState.Slide;
             primaryAnim.Set(IdleAnim);
+            scalfAnim.Set(ScalfIdleAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_Slide() {
@@ -628,6 +681,7 @@ namespace Player {
                 }
             }
             character.sprite = primaryAnim.sprite;
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -638,23 +692,24 @@ namespace Player {
             state = AnimState.Dash;
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_Dash() {
             if (player.state != PlayerController.LocomotionState.Dash) {
-                if (isChill) Enter_IdleChill();
-                else Enter_Idle();
+                Enter_Crouch();
                 return;
             }
 
             if (player.isCrouching) {
                 primaryAnim.Set(ToCrouchAnim, ToCrouchAnim.sprites.Length - 1);
-                character.sprite = primaryAnim.sprite;
+                scalfAnim.Set(ScalfToCrouchAnim, ScalfToCrouchAnim.sprites.Length - 1);
             } else {
                 primaryAnim.Set(CrouchTransitionAnim);
-                character.sprite = primaryAnim.sprite;
+                scalfAnim.Set(ScalfCrouchTransitionAnim);
             }
+            character.sprite = primaryAnim.sprite;
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion
@@ -664,9 +719,10 @@ namespace Player {
         private void Enter_Crouch() {
             state = AnimState.Crouch;
             primaryAnim.Set(ToCrouchAnim);
+            scalfAnim.Set(ScalfToCrouchAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_Crouch() {
@@ -675,16 +731,19 @@ namespace Player {
                 return;
             }
             character.sprite = primaryAnim.anim.sprites[primaryAnim.Length - 1].sprite;
+            scalf.sprite = scalfAnim.anim.sprites[scalfAnim.Length - 1].sprite;
         }
 
         public Anim ToCrouchAnim;
+        public Anim ScalfToCrouchAnim;
 
         private void Enter_ToCrouch() {
             state = AnimState.ToCrouch;
             primaryAnim.Set(ToCrouchAnim);
+            scalfAnim.Set(ScalfToCrouchAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_ToCrouch() {
@@ -697,16 +756,20 @@ namespace Player {
                 return;
             }
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoIncrement();
+            scalf.sprite = scalfAnim.sprite;
         }
 
         public Anim CrouchTransitionAnim;
+        public Anim ScalfCrouchTransitionAnim;
 
         private void Enter_FromCrouch() {
             state = AnimState.FromCrouch;
             primaryAnim.Set(CrouchTransitionAnim);
+            scalfAnim.Set(ScalfCrouchTransitionAnim);
 
             character.enabled = true;
-            secondary.enabled = false;
+            scalf.enabled = true;
         }
 
         private void Update_FromCrouch() {
@@ -716,6 +779,8 @@ namespace Player {
                 return;
             }
             character.sprite = primaryAnim.sprite;
+            scalfAnim.AutoIncrement();
+            scalf.sprite = scalfAnim.sprite;
         }
 
         #endregion

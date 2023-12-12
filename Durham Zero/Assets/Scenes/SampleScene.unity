@@ -924,10 +924,58 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 628755904950163788, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: offset.y
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfRunAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: bcfc52ed91ef077429364c281e886427, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfRunFlip
+      value: 
+      objectReference: {fileID: 11400000, guid: 4e02ca814a73be94ba20c808ee434cdd, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfIdleAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: 34273e652df2f95429f10a2850e5e71b, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfLandAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: 0b9006c6c406dd245bbbafe97970be9a, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfWalkAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: c9f85a5777935964eb5def7f17e05e6a, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfWalkFlip
+      value: 
+      objectReference: {fileID: 11400000, guid: 0650972b695ea284f80081b7c73bc11b, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfJumpFallAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: b79ad94b6378a21489f126a2adc9ecc5, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfToCrouchAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: c0e70b966cf43e546800e8472c30b608, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfIdleChillAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: 071af6bd43646504ba242242c11d320f, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfToWalkRunAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: ed1f4a6ab94bc9d4b8900980616f54aa, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfWallSlideAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: c11a480304667d24fbdef2c7923e3323, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfIdleToChillAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: f21cc1eb55a3cf642a281c1361b6e447, type: 2}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: ScalfCrouchTransitionAnim
+      value: 
+      objectReference: {fileID: 11400000, guid: 7fac286f1fb32af4db5331816bbb2d41, type: 2}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 17.3

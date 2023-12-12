@@ -216,18 +216,31 @@ MonoBehaviour:
   walkThresh: 4
   isChill: 1
   IdleChillAnim: {fileID: 11400000, guid: 466349beb8a5f314e9fa3a822361d86d, type: 2}
+  ScalfIdleChillAnim: {fileID: 11400000, guid: 071af6bd43646504ba242242c11d320f, type: 2}
   IdleToChillAnim: {fileID: 11400000, guid: 07c7e2d565f31cc45b0662bfd048acb5, type: 2}
+  ScalfIdleToChillAnim: {fileID: 11400000, guid: f21cc1eb55a3cf642a281c1361b6e447, type: 2}
   IdleAnim: {fileID: 11400000, guid: 826b4fde0b161d344be4486d6e9f6cc2, type: 2}
+  ScalfIdleAnim: {fileID: 11400000, guid: 34273e652df2f95429f10a2850e5e71b, type: 2}
   JumpFallAnim: {fileID: 11400000, guid: 9ab692154f225e84998c030d9030046f, type: 2}
+  ScalfJumpFallAnim: {fileID: 11400000, guid: b79ad94b6378a21489f126a2adc9ecc5, type: 2}
   WallSlideAnim: {fileID: 11400000, guid: 1f4e36bfb743abf44870ab27ad16cf08, type: 2}
+  ScalfWallSlideAnim: {fileID: 11400000, guid: c11a480304667d24fbdef2c7923e3323, type: 2}
   LandAnim: {fileID: 11400000, guid: 283e7f0d85f468b4c91f05c836a9ec8e, type: 2}
+  ScalfLandAnim: {fileID: 11400000, guid: 0b9006c6c406dd245bbbafe97970be9a, type: 2}
   ToWalkRunAnim: {fileID: 11400000, guid: b7e2201912856cc41945ae085cc59840, type: 2}
+  ScalfToWalkRunAnim: {fileID: 11400000, guid: ed1f4a6ab94bc9d4b8900980616f54aa, type: 2}
   WalkAnim: {fileID: 11400000, guid: f4937913e98ab7a478b456ef03b638ac, type: 2}
+  ScalfWalkAnim: {fileID: 11400000, guid: c9f85a5777935964eb5def7f17e05e6a, type: 2}
   WalkFlip: {fileID: 11400000, guid: 67ed109977eea434ca1d5cc309c50ffd, type: 2}
+  ScalfWalkFlip: {fileID: 11400000, guid: 0650972b695ea284f80081b7c73bc11b, type: 2}
   RunAnim: {fileID: 11400000, guid: 072f1e5e4367503438a80170a6c05a4c, type: 2}
+  ScalfRunAnim: {fileID: 11400000, guid: bcfc52ed91ef077429364c281e886427, type: 2}
   RunFlip: {fileID: 11400000, guid: e896351d94b93d84d8e5a7b7db48678d, type: 2}
+  ScalfRunFlip: {fileID: 11400000, guid: 4e02ca814a73be94ba20c808ee434cdd, type: 2}
   ToCrouchAnim: {fileID: 11400000, guid: 5677ae4e59fc5a54a81935e4192ac39a, type: 2}
+  ScalfToCrouchAnim: {fileID: 11400000, guid: c0e70b966cf43e546800e8472c30b608, type: 2}
   CrouchTransitionAnim: {fileID: 11400000, guid: 331460db3cf2b744a89a136e3a13fe5b, type: 2}
+  ScalfCrouchTransitionAnim: {fileID: 11400000, guid: 7fac286f1fb32af4db5331816bbb2d41, type: 2}
 --- !u!114 &628755904950163788
 MonoBehaviour:
   m_ObjectHideFlags: 0

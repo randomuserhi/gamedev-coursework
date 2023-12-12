@@ -102,7 +102,7 @@ namespace Player {
             }
 
             for (int i = 0; i < numPoints; ++i) {
-                points[i].transform.position = verlets[i].position;
+                points[i].transform.position = new Vector3(verlets[i].position.x, verlets[i].position.y, 30);
             }
         }
     }
