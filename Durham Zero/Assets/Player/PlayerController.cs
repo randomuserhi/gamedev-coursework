@@ -390,8 +390,8 @@ namespace Player {
                         LandSmoke();
                     }
                 }
-                if (dashDir == Vector2.up) {
-                    dashDir *= 0.7f;
+                if (dashDir == Vector2.up && rb.velocity.magnitude < dashSpeed) {
+                    dashDir.y *= 0.7f;
                 }
                 rb.velocity = Mathf.Max(rb.velocity.magnitude, dashSpeed) * dashDir;
                 dashTimer -= dt;
@@ -609,7 +609,7 @@ namespace Player {
             float s = Mathf.Clamp(speed.x - maxAirSpeed, 0, float.PositiveInfinity);
             Vector2 d = new Vector2(
                 Mathf.Clamp(drag.x / s, 0.5f, drag.x),
-                drag.y
+                rb.velocity.y > dashSpeed * 0.5f ? (rb.velocity.y - dashSpeed * 0.5f) * drag.y : 0
             );
             Vector2 drop = speed * d * Time.fixedDeltaTime;
             rb.velocity *= new Vector2(
