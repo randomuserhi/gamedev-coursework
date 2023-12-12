@@ -103,7 +103,7 @@ MonoBehaviour:
   loop: 1
   reverse: 0
   flip: 0
-  color: {r: 1, g: 1, b: 1, a: 1}
+  color: {r: 1, g: 1, b: 1, a: 0.6666667}
 --- !u!58 &8220514559515302702
 CircleCollider2D:
   m_ObjectHideFlags: 0
