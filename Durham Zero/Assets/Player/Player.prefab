@@ -215,19 +215,19 @@ MonoBehaviour:
   moveThresh: 0.5
   walkThresh: 4
   isChill: 1
-  IdleChillAnim: {fileID: 11400000, guid: f7be1a6aba815e1459e4fdfe5ccb99c3, type: 2}
-  IdleToChillAnim: {fileID: 11400000, guid: f84e0d0d2acec294aa74fe148dc45667, type: 2}
-  IdleAnim: {fileID: 11400000, guid: 0c22f852984a3a940a4f193c5bf61ba1, type: 2}
-  JumpFallAnim: {fileID: 11400000, guid: 359f5b9c569770e41aa0515bb53944c3, type: 2}
-  WallSlideAnim: {fileID: 11400000, guid: a4c327d74da00e94082fac15678aee50, type: 2}
-  LandAnim: {fileID: 11400000, guid: 7a428b94291e502449eda96da4dc48d8, type: 2}
-  ToWalkRunAnim: {fileID: 11400000, guid: 2dead531fb2cec747ae7913d071de222, type: 2}
-  WalkAnim: {fileID: 11400000, guid: e0420a6f4de625442acc2b99024aa5cf, type: 2}
-  WalkFlip: {fileID: 11400000, guid: 97def52dad31acd42bed477086ecedcd, type: 2}
-  RunAnim: {fileID: 11400000, guid: 38f9b59a791e97f4e925026f91fa869c, type: 2}
-  RunFlip: {fileID: 11400000, guid: 5cf7bc982de3cd140be0f9a84d8be801, type: 2}
-  ToCrouchAnim: {fileID: 11400000, guid: 8cd783c27edbe2f4ab147c5bb048be22, type: 2}
-  CrouchTransitionAnim: {fileID: 11400000, guid: 06c70de72db01b74e831309f7d8e6820, type: 2}
+  IdleChillAnim: {fileID: 11400000, guid: 466349beb8a5f314e9fa3a822361d86d, type: 2}
+  IdleToChillAnim: {fileID: 11400000, guid: 07c7e2d565f31cc45b0662bfd048acb5, type: 2}
+  IdleAnim: {fileID: 11400000, guid: 826b4fde0b161d344be4486d6e9f6cc2, type: 2}
+  JumpFallAnim: {fileID: 11400000, guid: 9ab692154f225e84998c030d9030046f, type: 2}
+  WallSlideAnim: {fileID: 11400000, guid: 1f4e36bfb743abf44870ab27ad16cf08, type: 2}
+  LandAnim: {fileID: 11400000, guid: 283e7f0d85f468b4c91f05c836a9ec8e, type: 2}
+  ToWalkRunAnim: {fileID: 11400000, guid: b7e2201912856cc41945ae085cc59840, type: 2}
+  WalkAnim: {fileID: 11400000, guid: f4937913e98ab7a478b456ef03b638ac, type: 2}
+  WalkFlip: {fileID: 11400000, guid: 67ed109977eea434ca1d5cc309c50ffd, type: 2}
+  RunAnim: {fileID: 11400000, guid: 072f1e5e4367503438a80170a6c05a4c, type: 2}
+  RunFlip: {fileID: 11400000, guid: e896351d94b93d84d8e5a7b7db48678d, type: 2}
+  ToCrouchAnim: {fileID: 11400000, guid: 5677ae4e59fc5a54a81935e4192ac39a, type: 2}
+  CrouchTransitionAnim: {fileID: 11400000, guid: 331460db3cf2b744a89a136e3a13fe5b, type: 2}
 --- !u!114 &628755904950163788
 MonoBehaviour:
   m_ObjectHideFlags: 0

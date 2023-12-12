@@ -673,7 +673,7 @@ namespace Player {
                 Enter_FromCrouch();
                 return;
             }
-            character.sprite = primaryAnim.anim.sprites[primaryAnim.Length - 1];
+            character.sprite = primaryAnim.anim.sprites[primaryAnim.Length - 1].sprite;
         }
 
         public Anim ToCrouchAnim;

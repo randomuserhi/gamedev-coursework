@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -26,7 +27,7 @@ namespace Deep.Anim {
         }
 
         public Sprite sprite {
-            get { return anim != null ? anim.sprites[Mathf.Abs(frame % _anim.sprites.Length)] : null; }
+            get { return anim != null ? anim.sprites[Mathf.Abs(frame % _anim.sprites.Length)].sprite : null; }
         }
 
         public static implicit operator AnimDriver(Anim anim) {
@@ -76,15 +77,26 @@ namespace Deep.Anim {
         }
     }
 
+    [Serializable]
+    public struct FrameData {
+        [SerializeField] public Sprite sprite;
+        [SerializeField] public Vector2 Scalf;
+    }
+
     [CreateAssetMenu(fileName = "Animation", menuName = "Deep/Animation")]
     public class Anim : ScriptableObject {
         public int frameRate = 10;
         public Vector2 offset = Vector2.zero;
-        public Sprite[] sprites = new Sprite[0];
+        [SerializeField] public FrameData[] sprites = new FrameData[0];
 
         public static Anim Create(Sprite[] frames) {
             Anim instance = CreateInstance<Anim>();
-            instance.sprites = frames;
+            instance.sprites = new FrameData[frames.Length];
+            for (int i = 0; i < frames.Length; ++i) {
+                FrameData f = new FrameData();
+                f.sprite = frames[i];
+                instance.sprites[i] = f;
+            }
             return instance;
         }
     }

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: RunFlip
+  m_EditorClassIdentifier: 
+  frameRate: 13
+  offset: {x: 0, y: 0.76}
+  sprites:
+  - sprite: {fileID: 21300000, guid: 159f9f1d07151e24fa6e30574d9c0f75, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 1f4c9ef19f9f6a4429be29f2fe231a74, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 366a006ba123d1f4699ff128411462fa, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 77a02e7ae2754a949aad984192659e49, type: 3}
+    Scalf: {x: 0, y: 0}
