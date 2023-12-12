@@ -30,7 +30,7 @@ namespace Player {
 
         [Header("State")]
         [SerializeField] private Vector2 neck;
-        GameObject[] points;
+        SpriteRenderer[] points;
         Verlet[] verlets;
         VerletLinks[] links;
 
@@ -42,9 +42,10 @@ namespace Player {
 
             neck = transform.position;
 
-            points = new GameObject[numPoints];
+            points = new SpriteRenderer[numPoints];
             for (int i = 0; i < numPoints; ++i) {
-                points[i] = Instantiate(point, transform);
+                GameObject go = Instantiate(point, transform);
+                points[i] = go.GetComponent<SpriteRenderer>();
             }
             verlets = new Verlet[numPoints];
             links = new VerletLinks[numPoints - 1];
@@ -103,6 +104,7 @@ namespace Player {
 
             for (int i = 0; i < numPoints; ++i) {
                 points[i].transform.position = new Vector3(verlets[i].position.x, verlets[i].position.y, 30);
+                points[i].color = rig.scalf.color;
             }
         }
     }

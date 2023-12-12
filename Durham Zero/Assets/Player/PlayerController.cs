@@ -183,7 +183,7 @@ namespace Player {
 
         [SerializeField] private float superDashTimer = 0f;
         [SerializeField] private Vector2 dashDir = Vector2.zero;
-        [SerializeField] private float canDash = 0;
+        [SerializeField] public float canDash = 0;
         [SerializeField] private bool dashGrounded = false;
         [SerializeField] private bool prevDashGrounded = false;
         [SerializeField] private bool canSuperDash = false;

@@ -9,11 +9,18 @@ namespace Player {
     [RequireComponent(typeof(CharacterController2D))]
     public class PlayerRig : MonoBehaviour {
         private SpriteRenderer character;
-        private SpriteRenderer scalf;
+        [NonSerialized] public SpriteRenderer scalf;
 
         private CharacterController2D controller;
         private PlayerInputSystem inputSystem;
         private PlayerController player;
+
+        [Header("Colors")]
+        [SerializeField] private float colorTransitionSpeed = 20f;
+        public Color characterColor = Color.black;
+        public Color scalfColor = Color.red;
+        public Color scalfDashColor = Color.blue;
+        public Color scalfDashReadyColor = Color.white;
 
         public enum AnimState {
             IdleChill,
@@ -55,6 +62,7 @@ namespace Player {
             character.transform.parent = transform;
             character.transform.localPosition = new Vector3(0, 0, 20);
             character.enabled = true;
+            character.color = characterColor;
 
             GameObject _secondary = new GameObject();
             scalf = _secondary.AddComponent<SpriteRenderer>();
@@ -64,8 +72,6 @@ namespace Player {
 
             Enter_Idle();
         }
-
-        public Anim test;
 
         private SecondOrderDynamics2D scaleSpring = new SecondOrderDynamics2D(5f, 0.8f, 1.2f);
 
@@ -90,6 +96,8 @@ namespace Player {
         private bool prevCrouchState = false;
 
         public void Update() {
+            float dt = Time.deltaTime;
+
             switch (state) {
                 case AnimState.WalkFlip:
                 case AnimState.RunFlip:
@@ -111,17 +119,6 @@ namespace Player {
                     }
                     break;
             }
-
-            /*Vector2 position = controller.bottom;
-            character.transform.position = position + primaryAnim.offset;
-            secondary.transform.position = position + secondaryAnim.offset;
-            sword.transform.position = position + swordAnim.offset;
-
-            primaryAnim.anim = test;
-            primaryAnim.AutoIncrement();
-            character.sprite = primaryAnim.sprite;
-
-            return;*/
 
             switch (state) {
                 case AnimState.Idle:
@@ -182,11 +179,32 @@ namespace Player {
                 Enter_Dash();
             }
 
+            // Positioning sprites
             Vector2 position = controller.bottom;
             Vector2 characterPos = position + primaryAnim.offset * new Vector2(character.flipX ? -1 : 1, 1);
             character.transform.position = new Vector3(characterPos.x, characterPos.y, character.transform.position.z);
             Vector2 scalfPos = position + scalfAnim.offset * new Vector2(scalf.flipX ? -1 : 1, 1);
             scalf.transform.position = new Vector3(scalfPos.x, scalfPos.y, scalf.transform.position.z);
+
+            // colors
+            bool canDash = player.canDash <= 0;
+            if (canDash && prevDashReady != canDash) {
+                scalfDashReadyTimer = scalfDashReadyTime;
+            }
+            prevDashReady = canDash;
+
+            Color goal = scalfColor;
+            if (scalfDashReadyTimer > 0) {
+                goal = scalfDashReadyColor;
+                scalfDashReadyTimer -= dt;
+            } else {
+                switch (state) {
+                    case AnimState.Dash:
+                        goal = scalfDashColor;
+                        break;
+                }
+            }
+            scalf.color = Color.Lerp(scalf.color, goal, colorTransitionSpeed * dt);
 
             switch (state) {
                 case AnimState.IdleChill: Update_IdleChill(); break;
@@ -213,10 +231,14 @@ namespace Player {
         public float moveThresh = 0.5f;
         public float walkThresh = 2f;
 
+        public float scalfDashReadyTime = 0.2f;
+
         #region Global State
 
         [Header("State")]
         [SerializeField] private bool isChill = true;
+        [SerializeField] private bool prevDashReady = true;
+        [SerializeField] private float scalfDashReadyTimer = 0;
 
         [NonSerialized] public AnimDriver primaryAnim = new AnimDriver();
         private AnimDriver scalfAnim = new AnimDriver();
