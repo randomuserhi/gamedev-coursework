@@ -22,16 +22,39 @@ namespace Player {
                 .With("Down", "<Keyboard>/s")
                 .With("Left", "<Keyboard>/a")
                 .With("Right", "<Keyboard>/d");
-            //movement.AddBinding("<Gamepad>/dpad");
-            //movement.AddBinding("<Gamepad>/leftStick");
+            movement.AddBinding("<Gamepad>/dpad");
+            movement.AddBinding("<Gamepad>/leftStick");
+            movement.AddBinding("<Joystick>/stick");
 
             jump = map.AddAction("Jump");
             jump.AddBinding("<Keyboard>/space");
+            jump.AddBinding("<HID::RetroFlag Wired Controller>/button2");
 
             dash = map.AddAction("Dash");
             dash.AddBinding("<Keyboard>/i");
+            dash.AddBinding("<HID::RetroFlag Wired Controller>/button4");
 
             map.Enable();
+
+            /*InputActionRebindingExtensions.RebindingOperation rebindOperation = null;
+            rebindOperation = movement.PerformInteractiveRebinding()
+                // To avoid accidental input from mouse motion
+                .WithControlsExcluding("Mouse")
+                .OnMatchWaitForAnother(0.1f)
+                .WithCancelingThrough("<Keyboard>/escape")
+                .OnCancel(operation => {
+                    if (rebindOperation != null) {
+                        rebindOperation.Dispose();
+                    }
+                })
+                .OnComplete(operation => {
+                    //map.Enable();
+                    if (rebindOperation != null) {
+                        rebindOperation.Dispose();
+                    }
+                    Debug.Log(movement.bindings[0].effectivePath);
+                });
+            rebindOperation.Start();*/
 
             controller = GetComponent<PlayerController>();
         }
@@ -39,6 +62,12 @@ namespace Player {
         private void FixedUpdate() {
             if (controller != null) {
                 controller.input = movement.ReadValue<Vector2>();
+                if (Math.Abs(controller.input.x) < 0.01f) {
+                    controller.input.x = 0;
+                }
+                if (Math.Abs(controller.input.y) < 0.01f) {
+                    controller.input.y = 0;
+                }
                 controller.jump = jump.ReadValue<float>();
                 controller.dash = dash.ReadValue<float>();
             }

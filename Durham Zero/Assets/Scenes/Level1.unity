@@ -224,8 +224,8 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.58264464
-    width: 0.9173442
+    y: 0.19008265
+    width: 1
     height: 0.6198347
   near clip plane: 0.3
   far clip plane: 1000
@@ -6163,6 +6163,54 @@ PrefabInstance:
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Id
+      value: 03f4dbf5-07d4-4a1d-b53f-aa67b3366cf0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Name
+      value: Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Actions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Bindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Actions.Array.data[0].m_Id
+      value: 85c4ebe3-2826-498a-8c5d-75f13096df09
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Bindings.Array.data[0].m_Id
+      value: 951fe3e0-d2b0-4ae3-ac67-a4b69ee8efa5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Actions.Array.data[0].m_Name
+      value: New action
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Actions.Array.data[0].m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Bindings.Array.data[0].m_Path
+      value: <Gamepad>/leftStick
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Bindings.Array.data[0].m_Action
+      value: New action
+      objectReference: {fileID: 0}
+    - target: {fileID: 5377496912845498384, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: map.m_Actions.Array.data[0].m_ExpectedControlType
+      value: Vector2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: cayoteTime
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: maxAirSpeed

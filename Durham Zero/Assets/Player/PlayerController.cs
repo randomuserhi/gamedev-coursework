@@ -480,6 +480,7 @@ namespace Player {
             }
             used.Clear();
             wallNormal = Vector2.zero;
+            dashGrounded = true;
 
             LandSmoke();
         }
