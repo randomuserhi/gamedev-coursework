@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Player {
@@ -30,14 +31,28 @@ namespace Player {
 
         public Vector3 respawnPoint;
 
+        private HashSet<GameObject> used = new HashSet<GameObject>();
         private void OnTriggerEnter2D(Collider2D collision) {
-            if (1 << collision.gameObject.layer == LayerMask.GetMask("hurtbox")) {
+            int layer = 1 << collision.gameObject.layer;
+            if (layer == LayerMask.GetMask("hurtbox")) {
                 Dead();
+            } else if (layer == LayerMask.GetMask("dashcharge") && !used.Contains(collision.gameObject)) {
+                canDash = 0;
+                used.Add(collision.gameObject);
+                EffectLibrary.SpawnEffect(9, collision.transform.position);
+                collision.gameObject.SetActive(false);
             }
         }
 
         public void Alive() {
             state = LocomotionState.Airborne;
+
+            foreach (GameObject go in used) {
+                go.SetActive(true);
+                AnimatedEffect e = EffectLibrary.SpawnEffect(9, go.transform.position);
+                e.reverse = true;
+            }
+            used.Clear();
 
             transform.position = respawnPoint;
             scalf.SetPosition(respawnPoint);
@@ -283,6 +298,8 @@ namespace Player {
         #region Dash State
 
         private void Enter_Dash() {
+            dashGrounded = false;
+
             // crouch dash
             isCrouching = controller.Grounded &&
                 ((facingRight && input.x > 0) ||
@@ -374,7 +391,7 @@ namespace Player {
                     if (canSuperDash) {
                         superDashTimer = superDashCooldown;
                         decelerationTimer = 0;
-                        rb.velocity *= new Vector3(0.8f + 0.5f * (1f - dashTimer / dashDuration), 1f);
+                        rb.velocity *= new Vector3(0.8f + 0.8f * (1f - dashTimer / dashDuration), 1f);
                     } else {
                         sweat = EffectLibrary.SpawnEffect(8, controller.center + new Vector2(0, 0.7f));
                         canDash = dashCooldown;
@@ -443,6 +460,12 @@ namespace Player {
 
         private void Enter_Grounded() {
             canJump = cayoteTime;
+            foreach (GameObject go in used) {
+                go.SetActive(true);
+                AnimatedEffect e = EffectLibrary.SpawnEffect(9, go.transform.position);
+                e.reverse = true;
+            }
+            used.Clear();
             wallNormal = Vector2.zero;
 
             LandSmoke();
@@ -503,8 +526,8 @@ namespace Player {
             bool inWallSlide = false;
             for (var i = 0; i < numberOfContacts; i++) {
                 ContactPoint2D contact = contacts[i];
-
-                if (Vector2.Dot(new Vector2(input.x, 0).normalized, contact.normal) == -1) {
+                float height = contact.point.y - controller.center.y;
+                if (height > 0.3f && Vector2.Dot(new Vector2(input.x, 0).normalized, contact.normal) == -1) {
                     inWallSlide = true;
                     wallNormal = contact.normal;
                     break;
@@ -551,8 +574,8 @@ namespace Player {
                 int numberOfContacts = rb.GetContacts(filter, contacts);
                 for (var i = 0; i < numberOfContacts; i++) {
                     ContactPoint2D contact = contacts[i];
-
-                    if (Vector2.Dot(new Vector2(input.x, 0).normalized, contact.normal) == -1) {
+                    float height = contact.point.y - controller.center.y;
+                    if (height > 0.3f && Vector2.Dot(new Vector2(input.x, 0).normalized, contact.normal) == -1) {
                         EnterState(LocomotionState.WallSlide);
                     }
                 }
@@ -611,8 +634,11 @@ namespace Player {
             if (dashDir.x != 0 && dashDir.y != 0) {
                 AnimatedEffect e = EffectLibrary.SpawnEffect(4, controller.center);
                 e.flip = !((dashDir.x > 0 && dashDir.y > 0) || (dashDir.x < 0 && dashDir.y < 0));
-            } else {
+            } else if (dashDir.x != 0) {
                 EffectLibrary.SpawnEffect(3, controller.center);
+            } else {
+                AnimatedEffect e = EffectLibrary.SpawnEffect(3, controller.center);
+                e.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
             }
         }
 

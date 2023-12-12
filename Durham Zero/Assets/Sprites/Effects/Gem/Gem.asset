@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: Gem
+  m_EditorClassIdentifier: 
+  frameRate: 10
+  offset: {x: 0, y: 0}
+  sprites:
+  - sprite: {fileID: 21300000, guid: 00a0813e98eccd84ca2ba291e7fa1786, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 81bcd53b3c31dcd469ffe12059833078, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 5f6a048d87cf5664e8282803e34d3885, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: e86775861cfdf0e468e1fb8bd8587256, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 150d329f533367c41b5254e490935d69, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 32fe56187b7fef54f82847ca39a9c956, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 07606beb5b60ef042a20d2309eabfbfc, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 60ede293aabc430438b848ca0624bc86, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 26f8496acb07158469203368e99c78f0, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 5d8286cf1351f4545afddcec6e135e10, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: cc70227fa2ed278469eb1284a3d095f1, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: c030fd1f7387fcd488221f47c5e12a75, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 1a96f3e03145a924c8edaebb03d80736, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 89d974287fbe4fe43af8c978a17730ed, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 93d344f715fe3b14fae052858740d306, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: d83267694ca9b6447971e30c14be79b1, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: bb54897df8fb4a44f9404d4387b55041, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 7e673493f9f3b204ba220e63cc4bd9fe, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 148fff1e7d9cafd428f64d67bd2a6f12, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: a121485aaa23e0c43895f3242ce000d6, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: a27faae05fb88f24b81bf232daf0fd75, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 41d7ebaf9d4a78c44bdf05f5a671c44c, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 6896548141a346140ae4fc55b0aefe46, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: f841102e53f77ec49b893596dd058360, type: 3}
+    Scalf: {x: 0, y: 0}

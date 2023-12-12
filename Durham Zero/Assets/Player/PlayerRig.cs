@@ -385,7 +385,7 @@ namespace Player {
 
 
             lastDashEffect = controller.center;
-            if (controller.rb.velocity.y > 2 && Math.Abs(controller.rb.velocity.x) > player.maxAirSpeed && player.decelerationTimer == 0) {
+            if (controller.rb.velocity.y > 2 && Math.Abs(controller.rb.velocity.x) > player.maxAirSpeed * 1.3f && player.decelerationTimer == 0) {
                 ColorTransition e = EffectLibrary.SpawnEffect<ColorTransition>(7, lastDashEffect);
                 e.flip = controller.rb.velocity.x < 0;
             }
@@ -401,7 +401,7 @@ namespace Player {
                 return;
             }
 
-            if (controller.rb.velocity.y > 2 && Math.Abs(controller.rb.velocity.x) > player.maxAirSpeed && player.decelerationTimer == 0) {
+            if (controller.rb.velocity.y > 2 && Math.Abs(controller.rb.velocity.x) > player.maxAirSpeed * 1.3f && player.decelerationTimer == 0) {
                 if (Vector3.Distance(controller.center, lastDashEffect) > 4f) {
                     lastDashEffect = controller.center;
                     ColorTransition e = EffectLibrary.SpawnEffect<ColorTransition>(7, lastDashEffect);
