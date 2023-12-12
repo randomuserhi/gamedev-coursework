@@ -19,6 +19,7 @@ namespace Player {
 
         [Header("Settings")]
         [SerializeField] private GameObject point;
+        [SerializeField] private int subSteps = 3;
         [SerializeField] private int numPoints = 3;
         [SerializeField] private float spacing = 0.1f;
         [SerializeField] private float gravity = 1f;
@@ -60,37 +61,40 @@ namespace Player {
             verlets[0].position = neck;
 
             // integrate
-            for (int i = 1; i < numPoints; ++i) {
-                ref Verlet v = ref verlets[i];
-                Vector2 velocity = v.position - v.prev;
-                v.prev = v.position;
-                v.position = v.position + velocity * Mathf.Clamp01(1f - friction) + v.acceleration * Time.deltaTime * Time.deltaTime;
-                v.acceleration = Vector2.zero;
-            }
-
-            // gravity + drag
-            for (int i = 1; i < numPoints; ++i) {
-                ref Verlet v = ref verlets[i];
-                v.acceleration += Vector2.down * gravity;
-            }
-
-            // links
-            for (int i = 0; i < links.Length; ++i) {
-                VerletLinks link = links[i];
-                ref Verlet a = ref verlets[link.a];
-                ref Verlet b = ref verlets[link.b];
-                Vector2 axis = a.position - b.position;
-                if (a.position == b.position) {
-                    axis = Vector2.right * 0.01f;
+            float dt = Time.fixedDeltaTime / subSteps;
+            for (int j = 0; j < subSteps; ++j) {
+                for (int i = 1; i < numPoints; ++i) {
+                    ref Verlet v = ref verlets[i];
+                    Vector2 velocity = v.position - v.prev;
+                    v.prev = v.position;
+                    v.position = v.position + velocity * Mathf.Clamp01(1f - friction) + v.acceleration * dt * dt;
+                    v.acceleration = Vector2.zero;
                 }
-                float dist = axis.magnitude;
-                Vector2 n = axis / dist;
-                float delta = spacing - dist;
-                if (link.a != 0) {
-                    a.position += 0.5f * delta * n;
-                    b.position -= 0.5f * delta * n;
-                } else {
-                    b.position -= delta * n;
+
+                // gravity + drag
+                for (int i = 1; i < numPoints; ++i) {
+                    ref Verlet v = ref verlets[i];
+                    v.acceleration += Vector2.down * gravity;
+                }
+
+                // links
+                for (int i = 0; i < links.Length; ++i) {
+                    VerletLinks link = links[i];
+                    ref Verlet a = ref verlets[link.a];
+                    ref Verlet b = ref verlets[link.b];
+                    Vector2 axis = a.position - b.position;
+                    if (a.position == b.position) {
+                        axis = Vector2.right * 0.01f;
+                    }
+                    float dist = axis.magnitude;
+                    Vector2 n = axis / dist;
+                    float delta = spacing - dist;
+                    if (link.a != 0) {
+                        a.position += 0.5f * delta * n;
+                        b.position -= 0.5f * delta * n;
+                    } else {
+                        b.position -= delta * n;
+                    }
                 }
             }
 

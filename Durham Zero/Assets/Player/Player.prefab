@@ -241,9 +241,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   point: {fileID: 7257010295427982977, guid: b7fdc3c4a8bfe5f4db2d19984e34d673, type: 3}
-  numPoints: 5
-  spacing: 1
-  gravity: 10
-  friction: 0.001
-  offset: {x: 0, y: 1}
+  subSteps: 3
+  numPoints: 10
+  spacing: 0.06
+  gravity: 15
+  friction: 0.09
+  offset: {x: 0, y: 0.5}
   neck: {x: 0, y: 0}

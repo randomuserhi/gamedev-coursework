@@ -741,20 +741,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 628755904950163788, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: gravity
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 628755904950163788, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: spacing
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 628755904950163788, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: friction
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 628755904950163788, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: offset.y
-      value: 0.5
+      value: 0.09
       objectReference: {fileID: 0}
     - target: {fileID: 1801370067085503593, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_LocalPosition.x
