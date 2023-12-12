@@ -44,6 +44,13 @@ namespace Player {
                 }
             }
 
+            // crouching
+            if (isCrouching) {
+                controller.size.y = crouchHeight;
+            } else {
+                controller.size.y = 1.5f;
+            }
+
             controller.maxSlopeCosAngle = maxSlopeCosAngle;
 
             if (jump == 0) {
@@ -103,10 +110,12 @@ namespace Player {
             switch (state) {
                 case LocomotionState.Grounded:
                 case LocomotionState.Airborne:
-                    if (input.x < 0f) {
-                        facingRight = false;
-                    } else if (input.x > 0f) {
-                        facingRight = true;
+                    if (!isCrouching) {
+                        if (input.x < 0f) {
+                            facingRight = false;
+                        } else if (input.x > 0f) {
+                            facingRight = true;
+                        }
                     }
                     break;
             }
@@ -142,7 +151,8 @@ namespace Player {
         [SerializeField] private float crouchHeight = 0.7f;
 
         // TODO(randomuserhi): Tie friction to a surface
-        [SerializeField] private float friction = 1f;
+        [SerializeField] private float friction = 20f;
+        [SerializeField] private float crouchFriction = 1f;
         [SerializeField] private Vector2 drag = new Vector2(1f, 1f);
         [NonSerialized] public bool facingRight = true;
 
@@ -164,6 +174,8 @@ namespace Player {
         [SerializeField] private float maxAirSpeed = 13f;
 
         [Header("State")]
+        [SerializeField] public bool isCrouching = false;
+
         [SerializeField] private bool fromJump = false;
         [SerializeField] private float canJump = 0;
         [SerializeField] private bool jumpReleased = true;
@@ -193,6 +205,7 @@ namespace Player {
                     break;
                 case LocomotionState.WallSlide: Exit_WallSlide(); break;
                 case LocomotionState.Dash: Exit_Dash(); break;
+                case LocomotionState.Grounded: Exit_Grounded(); break;
             }
         }
 
@@ -323,6 +336,10 @@ namespace Player {
 
         #region Grounded State
 
+        private void Exit_Grounded() {
+            isCrouching = false;
+        }
+
         private void Enter_Grounded() {
             canJump = cayoteTime;
             wallNormal = Vector2.zero;
@@ -331,22 +348,31 @@ namespace Player {
         private void Update_Grounded() {
             Vector2 perp = -Vector2.Perpendicular(controller.SurfaceNormal).normalized;
 
+            // crouching
+            isCrouching =
+                ((facingRight && input.x > 0) ||
+                (!facingRight && input.x < 0) ||
+                input.x == 0) &&
+                input.y < 0f;
+
             // Check slope
             if (Vector3.Dot(Vector2.up, controller.SurfaceNormal) < maxSlopeCosAngle) {
                 EnterState(LocomotionState.Slide);
             }
 
             // horizontal movement
-            float a = acceleration;
-            if (input.x != 0 && Mathf.Sign(input.x) != Mathf.Sign(rb.velocity.x)) {
-                a *= 2;
+            if (!isCrouching) {
+                float a = acceleration;
+                if (input.x != 0 && Mathf.Sign(input.x) != Mathf.Sign(rb.velocity.x)) {
+                    a *= 2;
+                }
+                rb.velocity += input.x * a * perp;
             }
-            rb.velocity += input.x * a * perp;
 
             // friction
             float speed = Vector3.Project(rb.velocity, perp).magnitude;
             if (speed != 0f) {
-                float drop = speed * friction * dt;
+                float drop = speed * (isCrouching ? crouchFriction : friction) * dt;
                 rb.velocity *= Mathf.Max(speed - drop, 0f) / speed; // Scale the velocity based on friction.
             }
 

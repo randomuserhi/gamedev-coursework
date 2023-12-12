@@ -781,12 +781,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: wallJumpDirLock
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: superDashCooldown
-      value: 0.3
+      propertyPath: crouchFriction
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8504293235514421217, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_Name

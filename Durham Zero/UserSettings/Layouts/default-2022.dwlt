@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 2560
     height: 1347
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Inspector
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 110
+  controlID: 49
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -439,9 +439,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: ae710000
+      m_SelectedIDs: 60710000
       m_LastClickedID: 0
-      m_ExpandedIDs: 14fbffff16fbffff
+      m_ExpandedIDs: 16fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -847,9 +847,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 25.286112, y: 6.6798973, z: -1.3412336}
+    m_Target: {x: 16.18841, y: 9.413841, z: -1.2317137}
     speed: 2
-    m_Value: {x: 25.286112, y: 6.6798973, z: -1.3412336}
+    m_Value: {x: 16.18841, y: 9.413841, z: -1.2317137}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -899,9 +899,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 27.298836
+    m_Target: 4.369477
     speed: 2
-    m_Value: 27.298836
+    m_Value: 4.369477
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1022,7 +1022,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: fa720000
     m_LastClickedID: 29434
-    m_ExpandedIDs: 00000000f8720000fa720000fc72000000ca9a3b
+    m_ExpandedIDs: 00000000f8720000fa720000fc720000d884000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1075,10 +1075,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: ae710000
-    m_LastClickedInstanceID: 29102
-    m_HadKeyboardFocusLastEvent: 0
-    m_ExpandedInstanceIDs: c6230000d6840000d28c0000d48c0000fe9d00008a720000
+    m_SelectedInstanceIDs: ac710000
+    m_LastClickedInstanceID: 29100
+    m_HadKeyboardFocusLastEvent: 1
+    m_ExpandedInstanceIDs: c6230000d6840000d28c0000d48c0000fe9d00008a72000056850000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1207,9 +1207,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1877
+    x: 1883
     y: 75
-    width: 682
+    width: 676
     height: 1276
   m_SerializedDataModeController:
     m_DataMode: 0

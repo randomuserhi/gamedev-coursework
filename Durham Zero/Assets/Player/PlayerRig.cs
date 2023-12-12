@@ -9,7 +9,6 @@ namespace Player {
     public class PlayerRig : MonoBehaviour {
         private SpriteRenderer character;
         private SpriteRenderer secondary;
-        private SpriteRenderer sword;
 
         private CharacterController2D controller;
         private PlayerInputSystem inputSystem;
@@ -31,6 +30,9 @@ namespace Player {
             WalkFlip,
             Dash,
             Stance,
+            ToCrouch,
+            Crouch,
+            FromCrouch,
         }
         [SerializeField] private AnimState _state = AnimState.Idle;
         private AnimState prevState = AnimState.Idle;
@@ -59,12 +61,6 @@ namespace Player {
             secondary.transform.localPosition = Vector3.zero;
             secondary.enabled = false;
 
-            GameObject _sword = new GameObject();
-            sword = _sword.AddComponent<SpriteRenderer>();
-            sword.transform.parent = transform;
-            sword.transform.localPosition = Vector3.zero;
-            sword.enabled = false;
-
             Enter_Idle();
         }
 
@@ -88,8 +84,9 @@ namespace Player {
             Vector2 scale = scaleSpring.Solve(Time.fixedDeltaTime, character.transform.localScale, goalScale);
             character.transform.localScale = scale;
             secondary.transform.localScale = scale;
-            sword.transform.localScale = scale;
         }
+
+        private bool prevCrouchState = false;
 
         public void Update() {
             switch (state) {
@@ -98,22 +95,18 @@ namespace Player {
                     if (player.facingRight) {
                         character.flipX = true;
                         secondary.flipX = true;
-                        sword.flipX = true;
                     } else {
                         character.flipX = false;
                         secondary.flipX = false;
-                        sword.flipX = false;
                     }
                     break;
                 default:
                     if (player.facingRight) {
                         character.flipX = false;
                         secondary.flipX = false;
-                        sword.flipX = false;
                     } else {
                         character.flipX = true;
                         secondary.flipX = true;
-                        sword.flipX = true;
                     }
                     break;
             }
@@ -128,6 +121,22 @@ namespace Player {
             character.sprite = primaryAnim.sprite;
 
             return;*/
+
+            switch (state) {
+                case AnimState.Idle:
+                case AnimState.IdleChill:
+                case AnimState.IdleToChill:
+                case AnimState.Walk:
+                case AnimState.Run:
+                case AnimState.ToWalkRun:
+                    if (player.isCrouching) {
+                        Enter_ToCrouch();
+                    } else if (prevCrouchState != player.isCrouching && !player.isCrouching) {
+                        Enter_FromCrouch();
+                    }
+                    break;
+            }
+            prevCrouchState = player.isCrouching;
 
             switch (state) {
                 case AnimState.Idle:
@@ -175,7 +184,6 @@ namespace Player {
             Vector2 position = controller.bottom;
             character.transform.position = position + primaryAnim.offset * new Vector2(character.flipX ? -1 : 1, 1);
             secondary.transform.position = position + secondaryAnim.offset * new Vector2(secondary.flipX ? -1 : 1, 1);
-            sword.transform.position = position + swordAnim.offset * new Vector2(sword.flipX ? -1 : 1, 1);
 
             switch (state) {
                 case AnimState.IdleChill: Update_IdleChill(); break;
@@ -192,6 +200,9 @@ namespace Player {
                 case AnimState.ToSlide: Update_ToSlide(); break;
                 case AnimState.Slide: Update_Slide(); break;
                 case AnimState.Dash: Update_Dash(); break;
+                case AnimState.ToCrouch: Update_ToCrouch(); break;
+                case AnimState.FromCrouch: Update_FromCrouch(); break;
+                case AnimState.Crouch: Update_Crouch(); break;
             }
         }
 
@@ -357,6 +368,10 @@ namespace Player {
         }
 
         private void Update_Land() {
+            if (player.isCrouching) {
+                Enter_ToCrouch();
+                return;
+            }
             if (primaryAnim.AutoIncrement()) {
                 if (isChill) Enter_IdleChill();
                 else Enter_Idle();
@@ -638,6 +653,65 @@ namespace Player {
 
         #endregion
 
+        #region Crouch State
+
+        private void Enter_Crouch() {
+            state = AnimState.Crouch;
+            primaryAnim.Set(ToCrouchAnim);
+
+            character.enabled = true;
+            secondary.enabled = false;
+        }
+
+        private void Update_Crouch() {
+            if (!player.isCrouching) {
+                Enter_FromCrouch();
+                return;
+            }
+            character.sprite = primaryAnim.anim.sprites[primaryAnim.Length - 1];
+        }
+
+        public Anim ToCrouchAnim;
+
+        private void Enter_ToCrouch() {
+            state = AnimState.ToCrouch;
+            primaryAnim.Set(ToCrouchAnim);
+
+            character.enabled = true;
+            secondary.enabled = false;
+        }
+
+        private void Update_ToCrouch() {
+            if (!player.isCrouching) {
+                Enter_FromCrouch();
+                return;
+            }
+            if (primaryAnim.AutoIncrement()) {
+                Enter_Crouch();
+                return;
+            }
+            character.sprite = primaryAnim.sprite;
+        }
+
         public Anim CrouchTransitionAnim;
+
+        private void Enter_FromCrouch() {
+            state = AnimState.FromCrouch;
+            primaryAnim.Set(CrouchTransitionAnim);
+
+            character.enabled = true;
+            secondary.enabled = false;
+        }
+
+        private void Update_FromCrouch() {
+            if (primaryAnim.AutoIncrement()) {
+                if (isChill) Enter_IdleChill();
+                else Enter_Idle();
+                return;
+            }
+            character.sprite = primaryAnim.sprite;
+        }
+
+        #endregion
     }
 }
