@@ -204,7 +204,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -791,6 +791,38 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: bf20ef82e5458ef4dbdd1241b114a9de, type: 2}
     - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: scalfColor.b
+      value: 0.13501245
+      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: scalfColor.g
+      value: 0.13501245
+      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: scalfColor.r
+      value: 0.6981132
+      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: characterColor.b
+      value: 0.3018868
+      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: characterColor.g
+      value: 0.27061987
+      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: characterColor.r
+      value: 0.252047
+      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: scalfDashColor.g
+      value: 0.6839622
+      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
+      propertyPath: scalfDashColor.r
+      value: 0.6839622
+      objectReference: {fileID: 0}
+    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: colorTransitionSpeed
       value: 0
       objectReference: {fileID: 0}
@@ -837,10 +869,6 @@ PrefabInstance:
     - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: respawnPoint.y
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: hurtlayer.m_Bits
-      value: 536870912
       objectReference: {fileID: 0}
     - target: {fileID: 8504293235514421217, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_Name

@@ -99,4 +99,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 11400000, guid: bf20ef82e5458ef4dbdd1241b114a9de, type: 2}
   loop: 0
+  reverse: 1
   color: {r: 1, g: 1, b: 1, a: 1}

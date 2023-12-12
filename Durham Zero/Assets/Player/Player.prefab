@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 1
+  respawnPoint: {x: 0, y: 10, z: 0}
   acceleration: 5
   crouchHeight: 0.7
   friction: 20
@@ -210,11 +211,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09017e541a33ef3459a6bfe187456a94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colorTransitionSpeed: 0
+  characterColor: {r: 0.21175429, g: 0.13915095, b: 0.5, a: 1}
+  scalfColor: {r: 0.6981132, g: 0.13501245, b: 0.13501245, a: 1}
+  scalfDashColor: {r: 0.6839622, g: 0.6839622, b: 1, a: 1}
+  scalfDashReadyColor: {r: 1, g: 1, b: 1, a: 1}
   _state: 2
-  test: {fileID: 0}
+  DeathAnim: {fileID: 11400000, guid: bf20ef82e5458ef4dbdd1241b114a9de, type: 2}
   moveThresh: 0.5
   walkThresh: 4
+  scalfDashReadyTime: 0.2
   isChill: 1
+  prevDashReady: 1
+  scalfDashReadyTimer: 0
   IdleChillAnim: {fileID: 11400000, guid: 466349beb8a5f314e9fa3a822361d86d, type: 2}
   ScalfIdleChillAnim: {fileID: 11400000, guid: 071af6bd43646504ba242242c11d320f, type: 2}
   IdleToChillAnim: {fileID: 11400000, guid: 07c7e2d565f31cc45b0662bfd048acb5, type: 2}
