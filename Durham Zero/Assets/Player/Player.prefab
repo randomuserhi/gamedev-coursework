@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 619100368487661899}
   - component: {fileID: 1566763693346139139}
   - component: {fileID: 223595009703136872}
+  - component: {fileID: 628755904950163788}
   m_Layer: 30
   m_Name: Player
   m_TagString: Untagged
@@ -227,3 +228,22 @@ MonoBehaviour:
   RunFlip: {fileID: 11400000, guid: 5cf7bc982de3cd140be0f9a84d8be801, type: 2}
   ToCrouchAnim: {fileID: 11400000, guid: 8cd783c27edbe2f4ab147c5bb048be22, type: 2}
   CrouchTransitionAnim: {fileID: 11400000, guid: 06c70de72db01b74e831309f7d8e6820, type: 2}
+--- !u!114 &628755904950163788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8504293235514421217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a439ca706ce732d4fb1299715699fc74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  point: {fileID: 7257010295427982977, guid: b7fdc3c4a8bfe5f4db2d19984e34d673, type: 3}
+  numPoints: 5
+  spacing: 1
+  gravity: 10
+  friction: 0.001
+  offset: {x: 0, y: 1}
+  neck: {x: 0, y: 0}

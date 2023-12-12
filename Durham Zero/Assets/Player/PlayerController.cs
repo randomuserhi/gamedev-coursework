@@ -324,6 +324,11 @@ namespace Player {
         }
 
         private void Exit_Dash() {
+            isCrouching = controller.Grounded &&
+                ((facingRight && input.x > 0) ||
+                (!facingRight && input.x < 0) ||
+                input.x == 0) &&
+                input.y < 0f;
             if (!isCrouching) {
                 controller.size.y = 1.5f;
             }
@@ -502,9 +507,9 @@ namespace Player {
 
             // drag
             Vector2 speed = new Vector2(Mathf.Abs(rb.velocity.x), Mathf.Abs(rb.velocity.y));
-            float s = speed.x - maxAirSpeed;
+            float s = Mathf.Clamp(speed.x - maxAirSpeed, 0, float.PositiveInfinity);
             Vector2 d = new Vector2(
-                speed.x > maxAirSpeed ? Mathf.Clamp(drag.x / (Mathf.Pow(s, 1.5f)), 0.5f, drag.x) : drag.x,
+                Mathf.Clamp(drag.x / (Mathf.Pow(s, 1.5f)), 0.5f, drag.x),
                 drag.y
             );
             Vector2 drop = speed * d * Time.fixedDeltaTime;
