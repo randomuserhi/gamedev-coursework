@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Player {
     [RequireComponent(typeof(CharacterController2D))]
@@ -36,7 +37,7 @@ namespace Player {
         private void OnTriggerEnter2D(Collider2D collision) {
             int layer = 1 << collision.gameObject.layer;
             if (layer == LayerMask.GetMask("end")) {
-
+                SceneManager.LoadScene(0);
             } else if (layer == LayerMask.GetMask("checkpoint")) {
                 if (!active.Contains(collision.gameObject)) {
                     respawnPoint = collision.transform.GetChild(0).transform.position;

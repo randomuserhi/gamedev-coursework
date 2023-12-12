@@ -105,6 +105,7 @@ namespace Deep.Anim {
         }
     }
 
+#if UNITY_EDITOR
     [CustomEditor(typeof(Anim))]
     public class AnimEditor : Editor {
         [MenuItem("Assets/Create/Deep/Animation (From Textures)", false, 400)]
@@ -141,4 +142,5 @@ namespace Deep.Anim {
             return Selection.GetFiltered<Texture2D>(SelectionMode.Assets).Length > 0;
         }
     }
+#endif
 }
