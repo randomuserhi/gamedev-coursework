@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: JumpSmoke
+  m_EditorClassIdentifier: 
+  frameRate: 20
+  offset: {x: 0, y: 0}
+  sprites:
+  - sprite: {fileID: 21300000, guid: 144d10616f98488418a129da0fed7594, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: d5c1a8d3bee34bf4685ea5fbe0451da4, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 76b9aa5ef1543b443b3fa7282b085c61, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 2a6247be732b1e040ae69d3c1cbc7086, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: c588e6ed654051749bbb2e95acd0f489, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 7cb207a02c09ba44393b5546a90ee2c2, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 03958a4fd5ca5f24b9a832f764c49a61, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: f1c8b68bfe6bfd14a880b1814fea1903, type: 3}
+    Scalf: {x: 0, y: 0}

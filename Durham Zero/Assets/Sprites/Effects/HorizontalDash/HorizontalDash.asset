@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: HorizontalDash
+  m_EditorClassIdentifier: 
+  frameRate: 25
+  offset: {x: 0, y: 0}
+  sprites:
+  - sprite: {fileID: 21300000, guid: bea41c25c08c56341bd536e7216b006a, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 3a950e9e98368f14a94394d705efc3bc, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 0d9ba0026d7212740ab4ec5e02dca5fd, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 2e3e02165d75ee042b65c38a566966b7, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 9b18655f18367e249b9746237c8d0b3a, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: e5c4cdcf6ff4b3f4abb3493fa2662f67, type: 3}
+    Scalf: {x: 0, y: 0}

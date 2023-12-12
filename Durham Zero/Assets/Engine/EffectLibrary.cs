@@ -21,6 +21,12 @@ public class EffectLibrary : MonoBehaviour {
         return e.GetComponent<AnimatedEffect>();
     }
 
+    public static T SpawnEffect<T>(int effect, Vector2 position, float z = 0) {
+        GameObject e = Instantiate(instance.library[effect]);
+        e.transform.position = new Vector3(position.x, position.y, z);
+        return e.GetComponent<T>();
+    }
+
     public void Start() {
         if (instance == null) {
             instance = this;

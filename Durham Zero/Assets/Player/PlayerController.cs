@@ -204,7 +204,7 @@ namespace Player {
         [SerializeField] private float superDashCooldown = 0.3f;
         [SerializeField] private float dashDuration = 0.17f;
         [SerializeField] private float dashSpeed = 5f;
-        [SerializeField] private float maxAirSpeed = 13f;
+        [SerializeField] public float maxAirSpeed = 13f;
 
         [Header("State")]
         [SerializeField] public bool facingRight = true;
@@ -225,12 +225,30 @@ namespace Player {
         [SerializeField] private bool dashReleased = true;
         [SerializeField] private float dashTimer = 0;
 
-        [SerializeField] private float decelerationTimer = 0;
+        [SerializeField] public float decelerationTimer = 0;
 
         [Header("Inputs")]
         [SerializeField] public Vector2 input;
         [SerializeField] public float jump;
         [SerializeField] public float dash;
+
+        private bool TriggerJump() {
+            bool success = false;
+            Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
+            if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
+                success = true;
+                rb.velocity *= new Vector2(1, 0);
+                rb.velocity += jumpVel * Vector2.up;
+                controller.Airborne = true;
+                fromJump = true;
+                canJump = 0;
+                rb.position = controller.bottom;
+                jumpReleased = false;
+            }
+
+            JumpSmoke();
+            return success;
+        }
 
         private void ExitState() {
             switch (state) {
@@ -272,7 +290,18 @@ namespace Player {
 
             canDash = dashCooldown;
             dashTimer = dashDuration;
-            dashDir = input.normalized;
+            dashDir = Vector2.zero;
+            if (input.x > 0f) {
+                dashDir.x = 1;
+            } else if (input.x < 0f) {
+                dashDir.x = -1;
+            }
+            if (input.y > 0f) {
+                dashDir.y = 1;
+            } else if (input.y < 0f) {
+                dashDir.y = -1;
+            }
+            dashDir.Normalize();
             if (dashDir == Vector2.zero) {
                 if (facingRight) {
                     dashDir = Vector2.right;
@@ -306,6 +335,8 @@ namespace Player {
             }
 
             controller.active = false;
+
+            DashEffect(dashDir);
         }
 
         private void Update_Dash() {
@@ -318,6 +349,8 @@ namespace Player {
                         dashDir = Vector3.Project(dashDir, Vector2.Perpendicular(hit.normal)).normalized;
                         rb.position = hit.centroid - new Vector2(0, controller.size.y / 2f) + hit.normal * 0.05f;
                         canJump = cayoteTime;
+
+                        LandSmoke();
                     }
                 }
                 if (dashDir == Vector2.up) {
@@ -339,22 +372,23 @@ namespace Player {
                         canDash = dashCooldown;
                     }
 
-                    Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
-                    if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
-                        rb.velocity *= new Vector2(1, 0);
-                        rb.velocity += jumpVel * Vector2.up;
-                        controller.Airborne = true;
-                        fromJump = true;
-                        canJump = 0;
-                        rb.position = controller.bottom;
-                        jumpReleased = false;
-                    }
+                    TriggerJump();
 
                     EnterState(LocomotionState.Airborne);
                     return;
                 }
             } else {
-                EnterState(LocomotionState.Grounded);
+                RaycastHit2D groundHit = controller.groundHit();
+                if (groundHit.collider != null) {
+                    if (groundHit.distance <= controller.hoverHeight + 0.05f) {
+                        if (Vector3.Dot(rb.velocity, groundHit.normal) <= 0) {
+                            EnterState(LocomotionState.Grounded);
+                            return;
+                        }
+                    }
+                }
+                EnterState(LocomotionState.Airborne);
+                return;
             }
         }
 
@@ -402,6 +436,8 @@ namespace Player {
         private void Enter_Grounded() {
             canJump = cayoteTime;
             wallNormal = Vector2.zero;
+
+            LandSmoke();
         }
 
         private void Update_Grounded() {
@@ -439,16 +475,7 @@ namespace Player {
             if (jump != 0 && canJump > 0 && jumpReleased) {
                 decelerationTimer = 0f;
 
-                Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
-                if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
-                    rb.velocity *= new Vector2(1, 0);
-                    rb.velocity += jumpVel * Vector2.up;
-                    controller.Airborne = true;
-                    fromJump = true;
-                    canJump = 0;
-                    rb.position = controller.bottom;
-                    jumpReleased = false;
-                }
+                TriggerJump();
             }
         }
 
@@ -494,16 +521,8 @@ namespace Player {
             if (jump != 0 && jumpReleased) {
                 decelerationTimer = 0f;
 
-                Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
-                if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
+                if (TriggerJump()) {
                     lockDirX = wallJumpDirLock;
-                    rb.velocity *= new Vector2(1, 0);
-                    rb.velocity += jumpVel * Vector2.up;
-                    controller.Airborne = true;
-                    fromJump = true;
-                    canJump = 0;
-                    rb.position = controller.bottom;
-                    jumpReleased = false;
                 }
             }
         }
@@ -544,7 +563,7 @@ namespace Player {
             Vector2 speed = new Vector2(Mathf.Abs(rb.velocity.x), Mathf.Abs(rb.velocity.y));
             float s = Mathf.Clamp(speed.x - maxAirSpeed, 0, float.PositiveInfinity);
             Vector2 d = new Vector2(
-                Mathf.Clamp(drag.x / (Mathf.Pow(s, 1.5f)), 0.5f, drag.x),
+                Mathf.Clamp(drag.x / s, 0.5f, drag.x),
                 drag.y
             );
             Vector2 drop = speed * d * Time.fixedDeltaTime;
@@ -572,15 +591,41 @@ namespace Player {
             ) {
                 decelerationTimer = 0f;
 
-                Vector3 newVelocity = rb.velocity * Vector2.right + jumpVel * Vector2.up;
-                if (Vector3.Dot(newVelocity.normalized, controller.SurfaceNormal) >= maxJumpCosAngle) {
-                    rb.velocity *= new Vector2(1, 0);
-                    rb.velocity += jumpVel * Vector2.up;
-                    controller.Airborne = true;
-                    fromJump = true;
-                    canJump = 0;
-                    rb.position = controller.bottom;
-                    jumpReleased = false;
+                TriggerJump();
+            }
+        }
+
+        #endregion
+
+        #region Effects
+
+        private void DashEffect(Vector2 dashDir) {
+            if (dashDir.x != 0 && dashDir.y != 0) {
+                AnimatedEffect e = EffectLibrary.SpawnEffect(4, controller.center);
+                e.flip = !((dashDir.x > 0 && dashDir.y > 0) || (dashDir.x < 0 && dashDir.y < 0));
+            } else {
+                EffectLibrary.SpawnEffect(3, controller.center);
+            }
+        }
+
+        private void LandSmoke() {
+            if (Mathf.Abs(rb.velocity.x) > 0.2) {
+                AnimatedEffect e = EffectLibrary.SpawnEffect(1, rb.position + new Vector2(facingRight ? -0.25f : 0.25f, 0f));
+                e.flip = !facingRight;
+            } else {
+                EffectLibrary.SpawnEffect(2, rb.position);
+            }
+        }
+
+        private void JumpSmoke() {
+            if (state != LocomotionState.WallSlide) {
+                EffectLibrary.SpawnEffect(2, rb.position);
+            } else {
+                if (wallNormal.x > 0) {
+                    AnimatedEffect e = EffectLibrary.SpawnEffect(1, rb.position + new Vector2(-0.4f, 0f));
+                    e.flip = true;
+                } else {
+                    EffectLibrary.SpawnEffect(1, rb.position + new Vector2(0.4f, 0f));
                 }
             }
         }

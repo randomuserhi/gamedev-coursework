@@ -107,13 +107,14 @@ namespace Player {
                     scalf.enabled = false;
                     character.enabled = true;
                     primaryAnim.Set(DeathAnim);
+                    character.color = Color.white;
                 }
 
                 if (primaryAnim.AutoIncrement()) {
                     player.Alive();
 
                     AnimatedEffect e = EffectLibrary.SpawnEffect(0, player.respawnPoint);
-                    e.color = character.color;
+                    e.color = Color.white;
                 }
                 character.sprite = primaryAnim.sprite;
 
@@ -121,6 +122,7 @@ namespace Player {
             } else {
                 wasDead = false;
             }
+            character.color = characterColor;
 
             switch (state) {
                 case AnimState.WalkFlip:
@@ -195,11 +197,11 @@ namespace Player {
                 if (!controller.Grounded) {
                     if (player.state == PlayerController.LocomotionState.WallSlide) {
                         Enter_WallSlide();
-                    } else {
+                    } else if (state != AnimState.Airborne) {
                         Enter_Airborne();
                     }
                 }
-            } else {
+            } else if (state != AnimState.Dash) {
                 Enter_Dash();
             }
 
@@ -371,6 +373,13 @@ namespace Player {
 
             character.enabled = true;
             scalf.enabled = true;
+
+
+            lastDashEffect = controller.center;
+            if (controller.rb.velocity.y > 2 && Math.Abs(controller.rb.velocity.x) > player.maxAirSpeed && player.decelerationTimer == 0) {
+                ColorTransition e = EffectLibrary.SpawnEffect<ColorTransition>(7, lastDashEffect);
+                e.flip = controller.rb.velocity.x < 0;
+            }
         }
 
         private void Update_Airborne() {
@@ -381,6 +390,14 @@ namespace Player {
             if (controller.Grounded) {
                 Enter_Land();
                 return;
+            }
+
+            if (controller.rb.velocity.y > 2 && Math.Abs(controller.rb.velocity.x) > player.maxAirSpeed && player.decelerationTimer == 0) {
+                if (Vector3.Distance(controller.center, lastDashEffect) > 4f) {
+                    lastDashEffect = controller.center;
+                    ColorTransition e = EffectLibrary.SpawnEffect<ColorTransition>(7, lastDashEffect);
+                    e.flip = controller.rb.velocity.x < 0;
+                }
             }
 
             float vy = controller.rb.velocity.y;
@@ -743,7 +760,11 @@ namespace Player {
 
             character.enabled = true;
             scalf.enabled = true;
+
+            lastDashEffect = controller.center;
         }
+
+        private Vector3 lastDashEffect = Vector3.zero;
 
         private void Update_Dash() {
             if (player.state != PlayerController.LocomotionState.Dash) {
@@ -760,6 +781,15 @@ namespace Player {
             }
             character.sprite = primaryAnim.sprite;
             scalf.sprite = scalfAnim.sprite;
+
+            if (Vector3.Distance(controller.center, lastDashEffect) > 0.75f) {
+                lastDashEffect = controller.center;
+                if (player.isCrouching) {
+                    EffectLibrary.SpawnEffect(6, lastDashEffect + new Vector3(0, 0.23f));
+                } else {
+                    EffectLibrary.SpawnEffect(5, lastDashEffect);
+                }
+            }
         }
 
         #endregion

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
+  m_Name: LandSmoke
+  m_EditorClassIdentifier: 
+  frameRate: 30
+  offset: {x: 0, y: 0}
+  sprites:
+  - sprite: {fileID: 21300000, guid: 90dd52fd623a0c2428934e2e8a0cc0ce, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 74f8b3990eda5914891739f27c7d5812, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 0bb825877a046b048b9255e50b14f882, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 729d1c735c720154eb1fade4018c5cda, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: f586bd179ca6f69499a7cc35f238a33e, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 408809bff05cee04ab9b28ffe8e1444c, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 7d5c8133f0cb89d47a7ba716f8b7c003, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: f20479142e2ea95439788a1721b3b1c6, type: 3}
+    Scalf: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 28bd4ddbf6933dd48bb6974bc1d13f4b, type: 3}
+    Scalf: {x: 0, y: 0}

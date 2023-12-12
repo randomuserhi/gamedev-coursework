@@ -6,6 +6,7 @@ public class AnimatedEffect : MonoBehaviour {
     [SerializeField] private Anim anim;
     public bool loop = false;
     public bool reverse = false;
+    public bool flip = false;
     public Color color = Color.white;
 
     private AnimDriver driver = new AnimDriver();
@@ -28,6 +29,7 @@ public class AnimatedEffect : MonoBehaviour {
             }
         }
         effect.sprite = driver.sprite;
+        effect.flipX = flip;
         effect.color = color;
     }
 
