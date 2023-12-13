@@ -387,18 +387,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8504293235514421217, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
   m_PrefabInstance: {fileID: 1511691776807301868}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1954940935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954940934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be2ca25da033e454eaf99fcad11846c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &206304255866278935
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6110,18 +6098,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: characterColor.b
-      value: 0.3018868
-      objectReference: {fileID: 0}
-    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: characterColor.g
-      value: 0.27061987
-      objectReference: {fileID: 0}
-    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: characterColor.r
-      value: 0.252047
-      objectReference: {fileID: 0}
-    - target: {fileID: 223595009703136872, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: scalfInActiveColor.b
       value: 0.053666778
       objectReference: {fileID: 0}
@@ -6177,18 +6153,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: drag.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: cayoteTime
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 6607812126351882411, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      propertyPath: respawnPoint.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8504293235514421217, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
       propertyPath: m_Name
       value: Player
@@ -6196,10 +6160,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8504293235514421217, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1954940935}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96e267c5b66521442a6f291d3edc66aa, type: 3}
 --- !u!1001 &3463069428324000264
 PrefabInstance:

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efbb746e430cac846a99b53e6274fdb5, type: 3}
   m_Name: Run
   m_EditorClassIdentifier: 
-  frameRate: 13
+  frameRate: 15
   offset: {x: 0, y: 0.76}
   sprites:
   - sprite: {fileID: 21300000, guid: f8f2f5f70a1c5cb47abe06ce4394d15a, type: 3}

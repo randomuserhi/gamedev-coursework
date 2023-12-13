@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1566763693346139139}
   - component: {fileID: 223595009703136872}
   - component: {fileID: 628755904950163788}
+  - component: {fileID: 2778389159699739896}
   m_Layer: 30
   m_Name: Player
   m_TagString: Untagged
@@ -70,7 +71,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8504293235514421217}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7fd3c1a8940a1043b4b8b7f571d0c72, type: 3}
   m_Name: 
@@ -214,7 +215,7 @@ MonoBehaviour:
   colorTransitionSpeed: 0
   characterColor: {r: 0.252047, g: 0.27061987, b: 0.3018868, a: 1}
   scalfColor: {r: 0.6981132, g: 0.13501245, b: 0.13501245, a: 1}
-  scalfInActiveColor: {r: 0.3018868, g: 0.09540761, b: 0.09540761, a: 1}
+  scalfInActiveColor: {r: 0.16981131, g: 0.053666778, b: 0.053666778, a: 1}
   scalfDashColor: {r: 0.6839622, g: 0.6839622, b: 1, a: 1}
   scalfDashReadyColor: {r: 1, g: 1, b: 1, a: 1}
   _state: 2
@@ -271,3 +272,15 @@ MonoBehaviour:
   friction: 0.09
   offset: {x: 0, y: 0}
   neck: {x: 0, y: 0}
+--- !u!114 &2778389159699739896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8504293235514421217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2ca25da033e454eaf99fcad11846c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
