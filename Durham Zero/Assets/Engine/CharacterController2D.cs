@@ -88,8 +88,16 @@ public class CharacterController2D : DeepMonoBehaviour {
         box = GetComponent<BoxCollider2D>();
     }
 
-    public RaycastHit2D groundHit() {
-        float width = size.x;
+    // NOTE(randomuserhi): To check for grounded, use sticky hit to check if player is sticky (will pull towards surface) then check if the player is below hover height
+    //                     since the player hovers above the surface rather than being grounded to it. (sticky is how far away the player needs to be from the ground to
+    //                     stick to it (e.g if they rise slightly, but stay within sticky range, the sticky spring pulls them down) and hover height is the height the sticky
+    //                     spring wants the player to be at, aka their grounded height (so less than or equal to hover height is grounded)
+    //                     reference: https://www.youtube.com/watch?v=qdskE8PJy6Q&ab_channel=ToyfulGames
+    public RaycastHit2D StickyHit() {
+        return StickyHit(out _, out _);
+    }
+    public RaycastHit2D StickyHit(out RaycastHit2D slipHit, out bool willBeSticky) {
+        /*float width = size.x;
         RaycastHit2D hit = new RaycastHit2D();
         for (int i = 0; i < groundHits.Length; ++i) {
             Vector3 point = transform.position + new Vector3(
@@ -107,12 +115,54 @@ public class CharacterController2D : DeepMonoBehaviour {
                 }
             }
         }
+        return hit;*/
+
+        slipHit = new RaycastHit2D();
+        RaycastHit2D hit = new RaycastHit2D();
+
+        // Will we be sticky in the future?
+        Vector2 dir = Vector2.down;
+        if (rb.velocity.x != 0 && rb.velocity.y < 0) {
+            dir = rb.velocity.normalized;
+        }
+        RaycastHit2D willBeStickyHit = Physics2D.BoxCast(rb.position, new Vector2(size.x, 0.01f), 0, dir, Mathf.Infinity, surfaceLayerMask);
+        willBeSticky = false;
+        if (willBeStickyHit.collider != null) {
+            willBeStickyHit.distance = Mathf.Abs(rb.position.y - willBeStickyHit.point.y);
+            if (willBeStickyHit.distance < stickyHeight && Vector3.Dot(Vector2.down, willBeStickyHit.normal) < 0) {
+                if (Vector3.Dot(Vector2.up, willBeStickyHit.normal) >= maxSlopeCosAngle) {
+                    willBeSticky = true;
+                }
+            }
+        }
+
+        // Are we sticky right now?
+        RaycastHit2D stickyHit = Physics2D.BoxCast(rb.position, new Vector2(size.x, 0.01f), 0, Vector2.down, stickyHeight, surfaceLayerMask);
+        if (stickyHit.collider != null) {
+            if (stickyHit.distance < stickyHeight && Vector3.Dot(Vector2.down, stickyHit.normal) < 0) {
+                if (Vector3.Dot(Vector2.up, stickyHit.normal) >= maxSlopeCosAngle) {
+                    hit = stickyHit;
+                } else {
+                    slipHit = stickyHit;
+                }
+            }
+        }
+
         return hit;
     }
 
-    private RaycastHit2D slipHit;
-    private RaycastHit2D hit;
-    private RaycastHit2D[] groundHits = new RaycastHit2D[5];
+#if UNITY_EDITOR
+    private void DebugBox(Vector2 center, Vector2 size, Color color) {
+        size /= 2f;
+        Debug.DrawLine(center + new Vector2(size.x, size.y), center + new Vector2(size.x, -size.y), color);
+        Debug.DrawLine(center + new Vector2(size.x, -size.y), center + new Vector2(-size.x, -size.y), color);
+        Debug.DrawLine(center + new Vector2(-size.x, -size.y), center + new Vector2(-size.x, size.y), color);
+        Debug.DrawLine(center + new Vector2(-size.x, size.y), center + new Vector2(size.x, size.y), color);
+    }
+#endif
+
+    private RaycastHit2D cachedSlipHit;
+    private RaycastHit2D cachedGroundHit;
     private void HandleGrounded() {
         Vector2 gravity = Vector2.down * this.gravity;
         if (gravity == Vector2.zero) {
@@ -132,44 +182,19 @@ public class CharacterController2D : DeepMonoBehaviour {
 
         float width = size.x;
 
-        slipHit = new RaycastHit2D();
-        hit = new RaycastHit2D();
-        for (int i = 0; i < groundHits.Length; ++i) {
-            Vector3 point = transform.position + new Vector3(
-                -width / 2f + width / Mathf.Max(2, groundHits.Length - 1) * i,
-                0f
-                );
-            groundHits[i] = Physics2D.Raycast(point, gravity, stickyHeight, surfaceLayerMask);
-            if (Vector3.Dot(Vector2.up, groundHits[i].normal) >= maxSlopeCosAngle) {
-                if (hit.collider == null || (
-                    groundHits[i].collider != null &&
-                    groundHits[i].distance < hit.distance &&
-                    Vector3.Dot(gravity, groundHits[i].normal) < 0)
-                ) {
-                    hit = groundHits[i];
-                }
-            } else {
-                if (slipHit.collider == null || (
-                    groundHits[i].collider != null &&
-                    groundHits[i].distance < slipHit.distance &&
-                    Vector3.Dot(gravity, groundHits[i].normal) < 0)
-                ) {
-                    slipHit = groundHits[i];
-                }
-            }
-        }
+        cachedGroundHit = StickyHit(out cachedSlipHit, out bool willBeSticky);
 
         // Update slip
-        if (slipHit.collider != null && slipHit.distance <= hoverHeight + 0.05f) {
+        if (cachedSlipHit.collider != null && cachedSlipHit.distance <= hoverHeight + 0.05f) {
             if (!slip) {
-                slip = Vector3.Dot(rb.velocity, slipHit.normal) <= 0;
+                slip = Vector3.Dot(rb.velocity, cachedSlipHit.normal) <= 0;
             }
         } else {
             slip = false;
         }
 
         // Update sticky state
-        sticky = hit.collider != null;
+        sticky = cachedGroundHit.collider != null;
         stickyTransition = prevSticky != sticky;
         prevSticky = sticky;
 
@@ -177,7 +202,7 @@ public class CharacterController2D : DeepMonoBehaviour {
         if (sticky) {
             if (!grounded) {
                 grounded =
-                    hit.distance <= hoverHeight + 0.05f &&
+                    cachedGroundHit.distance <= hoverHeight + 0.05f &&
                     Vector3.Dot(rb.velocity, surfaceNormal) <= 0
                     ;
             }
@@ -190,7 +215,7 @@ public class CharacterController2D : DeepMonoBehaviour {
 
         // Update normals
         if (slip || sticky) {
-            surfaceNormal = slip ? slipHit.normal : hit.normal;
+            surfaceNormal = slip ? cachedSlipHit.normal : cachedGroundHit.normal;
         } else {
             surfaceNormal = Vector2.up;
         }
@@ -210,19 +235,9 @@ public class CharacterController2D : DeepMonoBehaviour {
             }
         }
 
-        // When transitioning out of sticky state, clamp the Y-Velocity to prevent velocity from the
-        // downward pull of the sticky spring from launching the character downwards.
-        //
-        // Most notably a problem when falling off a downward slope:
-        // 1) Downward slope pulls character downwards to maintain hover height
-        // 2) When falling off slope, character maintains downward velocity from the aforementioned pull
-        // 3) Character is launched downwards
-        if ((!sticky && stickyTransition && Vector3.Dot(rb.velocity, gravity) > 0)) {
-            rb.velocity = new Vector3(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -1f, Mathf.Infinity));
-        }
-
-        if (sticky && !airborne) {
-            rb.velocity += new Vector2(0, hoverSpring.Solve(dt, hit.distance, rb.velocity.y, hoverHeight - 0.05f));
+        // Only stick to surface if player will remain sticky
+        if (willBeSticky && sticky && !airborne) {
+            rb.velocity += new Vector2(0, hoverSpring.Solve(dt, cachedGroundHit.distance, rb.velocity.y, hoverHeight - 0.05f));
         }
     }
 
@@ -235,7 +250,7 @@ public class CharacterController2D : DeepMonoBehaviour {
         // Calcuate bounding box size relative to ground
         Vector2 _size = size;
         if (grounded) {
-            _size.y -= hit.distance;
+            _size.y -= cachedGroundHit.distance;
         }
         box.size = _size;
         box.offset = new Vector2(0, _size.y / 2f);
@@ -243,7 +258,7 @@ public class CharacterController2D : DeepMonoBehaviour {
         // Calculate bottom relative to ground
         _bottom = transform.position;
         if (grounded) {
-            _bottom.y -= hit.distance;
+            _bottom.y -= cachedGroundHit.distance;
         }
 
         /*Debug.DrawLine(_bottom, _bottom + new Vector2(0, size.y), Color.red);

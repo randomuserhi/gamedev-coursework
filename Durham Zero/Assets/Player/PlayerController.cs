@@ -138,7 +138,7 @@ namespace Player {
             }
 
             // Check dash cooldown reset when you land
-            RaycastHit2D groundHit = controller.groundHit();
+            RaycastHit2D groundHit = controller.StickyHit();
             if (groundHit.collider != null) {
                 if (groundHit.distance <= controller.hoverHeight + 0.05f) {
                     if (Vector3.Dot(rb.velocity, groundHit.normal) <= 0) {
@@ -422,7 +422,7 @@ namespace Player {
                     return;
                 }
             } else {
-                RaycastHit2D groundHit = controller.groundHit();
+                RaycastHit2D groundHit = controller.StickyHit();
                 if (groundHit.collider != null) {
                     if (groundHit.distance <= controller.hoverHeight + 0.05f) {
                         if (Vector3.Dot(rb.velocity, groundHit.normal) <= 0) {
