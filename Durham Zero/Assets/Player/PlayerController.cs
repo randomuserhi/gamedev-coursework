@@ -400,7 +400,13 @@ namespace Player {
                     canJump -= dt;
                 }
 
-                if (jump != 0 && canJump > 0 && jumpReleased) {
+                // Check for roof so you cant jump mid crouch dash
+                bool roofed = false;
+                if (Physics2D.BoxCast(controller.center, new Vector2(controller.size.x, 0.01f), 0, Vector2.up, controller.size.y).collider != null) {
+                    roofed = true;
+                }
+
+                if (jump != 0 && canJump > 0 && jumpReleased && !roofed) {
                     if (canSuperDash) {
                         superDashTimer = superDashCooldown;
                         decelerationTimer = 0;
@@ -436,6 +442,11 @@ namespace Player {
                 (!facingRight && input.x < 0) ||
                 input.x == 0) &&
                 input.y < 0f;
+            // Check forced crouch due to roof -> NOTE(randomuserhi): maybe check for surfaceLayer so u dont always crouch when an object is on top of you
+            // TODO(randomuserhi): move to function since grounded does the same check
+            if (Physics2D.BoxCast(controller.center, new Vector2(controller.size.x, 0.01f), 0, Vector2.up, controller.size.y).collider != null) {
+                isCrouching = true;
+            }
             if (!isCrouching) {
                 controller.size.y = 1.5f;
             }
@@ -496,8 +507,10 @@ namespace Player {
                 input.y < 0f;
 
             // Check forced crouch due to roof -> NOTE(randomuserhi): maybe check for surfaceLayer so u dont always crouch when an object is on top of you
+            bool roofed = false;
             if (Physics2D.BoxCast(controller.center, new Vector2(controller.size.x, 0.01f), 0, Vector2.up, controller.size.y).collider != null) {
                 isCrouching = true;
+                roofed = true; // prevent players from jumping whilst roofed off
             }
 
             // Check slope
@@ -522,7 +535,7 @@ namespace Player {
             }
 
             // Jumping
-            if (jump != 0 && canJump > 0 && jumpReleased) {
+            if (jump != 0 && canJump > 0 && jumpReleased && !roofed) {
                 decelerationTimer = 0f;
 
                 TriggerJump();

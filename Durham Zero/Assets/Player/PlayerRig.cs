@@ -4,7 +4,6 @@ using System;
 using UnityEngine;
 
 namespace Player {
-    [RequireComponent(typeof(PlayerInputSystem))]
     [RequireComponent(typeof(PlayerController))]
     [RequireComponent(typeof(CharacterController2D))]
     public class PlayerRig : MonoBehaviour {
@@ -12,7 +11,6 @@ namespace Player {
         [NonSerialized] public SpriteRenderer scalf;
 
         private CharacterController2D controller;
-        private PlayerInputSystem inputSystem;
         private PlayerController player;
 
         [Header("Colors")]
@@ -55,7 +53,6 @@ namespace Player {
 
         private void Start() {
             controller = GetComponent<CharacterController2D>();
-            inputSystem = GetComponent<PlayerInputSystem>();
             player = GetComponent<PlayerController>();
 
             GameObject _character = new GameObject();
@@ -176,7 +173,7 @@ namespace Player {
                 case AnimState.Land:
                 case AnimState.Slide:
                 case AnimState.ToSlide:
-                    Vector2 input = inputSystem.movement.ReadValue<Vector2>();
+                    Vector2 input = player.input;
                     Vector2 velocity = controller.rb.velocity;
                     if (controller.Grounded) {
                         float speed = Mathf.Abs(velocity.x);
@@ -201,7 +198,7 @@ namespace Player {
             }
 
             if (player.state != PlayerController.LocomotionState.Dash) {
-                if (!controller.Grounded) {
+                if (player.state != PlayerController.LocomotionState.Grounded) {
                     if (player.state == PlayerController.LocomotionState.WallSlide) {
                         Enter_WallSlide();
                     } else if (state != AnimState.Airborne) {
@@ -504,7 +501,7 @@ namespace Player {
         }
 
         private void Update_ToWalkRun() {
-            Vector2 input = inputSystem.movement.ReadValue<Vector2>();
+            Vector2 input = player.input;
             Vector2 velocity = controller.rb.velocity;
             float speed = Mathf.Abs(velocity.x);
             if (speed < moveThresh) {
@@ -542,7 +539,7 @@ namespace Player {
         }
 
         private void Update_Walk() {
-            Vector2 input = inputSystem.movement.ReadValue<Vector2>();
+            Vector2 input = player.input;
             Vector2 velocity = controller.rb.velocity;
             float speed = Mathf.Abs(velocity.x);
             if (speed < moveThresh) {
@@ -586,7 +583,7 @@ namespace Player {
         }
 
         private void Update_WalkFlip() {
-            Vector2 input = inputSystem.movement.ReadValue<Vector2>();
+            Vector2 input = player.input;
             Vector2 velocity = controller.rb.velocity;
             float speed = Mathf.Abs(velocity.x);
             if (speed < moveThresh) {
@@ -629,7 +626,7 @@ namespace Player {
         }
 
         private void Update_Run() {
-            Vector2 input = inputSystem.movement.ReadValue<Vector2>();
+            Vector2 input = player.input;
             Vector2 velocity = controller.rb.velocity;
             float speed = Mathf.Abs(velocity.x);
             if (speed < moveThresh) {
@@ -672,7 +669,7 @@ namespace Player {
         }
 
         private void Update_RunFlip() {
-            Vector2 input = inputSystem.movement.ReadValue<Vector2>();
+            Vector2 input = player.input;
             Vector2 velocity = controller.rb.velocity;
             float speed = Mathf.Abs(velocity.x);
             if (speed < moveThresh) {
@@ -708,7 +705,7 @@ namespace Player {
         }
 
         private void Update_ToSlide() {
-            Vector2 input = inputSystem.movement.ReadValue<Vector2>();
+            Vector2 input = player.input;
             Vector2 velocity = controller.rb.velocity;
             float speed = Mathf.Abs(velocity.x);
             if (speed < moveThresh) {
@@ -744,7 +741,7 @@ namespace Player {
         }
 
         private void Update_Slide() {
-            Vector2 input = inputSystem.movement.ReadValue<Vector2>();
+            Vector2 input = player.input;
             Vector2 velocity = controller.rb.velocity;
             float speed = Mathf.Abs(velocity.x);
             if (speed < moveThresh) {
