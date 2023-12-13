@@ -495,7 +495,7 @@ namespace Player {
                 input.x == 0) &&
                 input.y < 0f;
 
-            // Check forced crouch due to roof
+            // Check forced crouch due to roof -> NOTE(randomuserhi): maybe check for surfaceLayer so u dont always crouch when an object is on top of you
             if (Physics2D.BoxCast(controller.center, new Vector2(controller.size.x, 0.01f), 0, Vector2.up, controller.size.y).collider != null) {
                 isCrouching = true;
             }
