@@ -19,6 +19,7 @@ namespace Player {
         [SerializeField] private float colorTransitionSpeed = 20f;
         public Color characterColor = Color.black;
         public Color scalfColor = Color.red;
+        public Color scalfInActiveColor = Color.red;
         public Color scalfDashColor = Color.blue;
         public Color scalfDashReadyColor = Color.white;
 
@@ -228,7 +229,7 @@ namespace Player {
             }
             prevDashReady = canDash;
 
-            Color goal = scalfColor;
+            Color goal = canDash ? scalfColor : scalfInActiveColor;
             if (scalfDashReadyTimer > 0) {
                 goal = scalfDashReadyColor;
                 scalfDashReadyTimer -= dt;

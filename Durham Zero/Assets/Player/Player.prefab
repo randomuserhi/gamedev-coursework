@@ -88,17 +88,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 1
-  respawnPoint: {x: 0, y: 10, z: 0}
+  respawnPoint: {x: 0, y: 0, z: 0}
   acceleration: 5
   crouchHeight: 0.7
   friction: 20
   crouchFriction: 10
-  drag: {x: 20, y: 0}
+  drag: {x: 20, y: 1}
   gravity: 15
   fallGravity: 25
   fallThreshold: 3
   jumpVel: 10
-  cayoteTime: 0.5
+  cayoteTime: 0.25
   maxJumpCosAngle: 0.17364
   maxSlopeCosAngle: 0.8
   wallJumpDirLock: 0.1
@@ -212,8 +212,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorTransitionSpeed: 0
-  characterColor: {r: 0.21175429, g: 0.13915095, b: 0.5, a: 1}
+  characterColor: {r: 0.252047, g: 0.27061987, b: 0.3018868, a: 1}
   scalfColor: {r: 0.6981132, g: 0.13501245, b: 0.13501245, a: 1}
+  scalfInActiveColor: {r: 0.3018868, g: 0.09540761, b: 0.09540761, a: 1}
   scalfDashColor: {r: 0.6839622, g: 0.6839622, b: 1, a: 1}
   scalfDashReadyColor: {r: 1, g: 1, b: 1, a: 1}
   _state: 2

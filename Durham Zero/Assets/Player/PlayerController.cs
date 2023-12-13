@@ -495,6 +495,11 @@ namespace Player {
                 input.x == 0) &&
                 input.y < 0f;
 
+            // Check forced crouch due to roof
+            if (Physics2D.BoxCast(controller.center, new Vector2(controller.size.x, 0.01f), 0, Vector2.up, controller.size.y).collider != null) {
+                isCrouching = true;
+            }
+
             // Check slope
             if (Vector3.Dot(Vector2.up, controller.SurfaceNormal) < maxSlopeCosAngle) {
                 EnterState(LocomotionState.Slide);
