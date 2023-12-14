@@ -292,12 +292,10 @@ namespace Player {
 
         private void ExitState() {
             switch (state) {
-                case LocomotionState.Airborne:
-                    controller.gravity = gravity;
-                    break;
                 case LocomotionState.WallSlide: Exit_WallSlide(); break;
                 case LocomotionState.Dash: Exit_Dash(); break;
                 case LocomotionState.Grounded: Exit_Grounded(); break;
+                case LocomotionState.Airborne: Exit_Airborne(); break;
             }
         }
 
@@ -456,7 +454,7 @@ namespace Player {
                 input.y < 0f;
             // Check forced crouch due to roof -> NOTE(randomuserhi): maybe check for surfaceLayer so u dont always crouch when an object is on top of you
             // TODO(randomuserhi): move to function since grounded does the same check
-            if (Physics2D.BoxCast(controller.center, new Vector2(controller.size.x, 0.01f), 0, Vector2.up, controller.size.y).collider != null) {
+            if (controller.Grounded && Physics2D.BoxCast(controller.center, new Vector2(controller.size.x, 0.01f), 0, Vector2.up, controller.size.y).collider != null) {
                 isCrouching = true;
             }
             if (!isCrouching) {
@@ -668,6 +666,11 @@ namespace Player {
 
                 TriggerJump();
             }
+        }
+
+        private void Exit_Airborne() {
+            controller.gravity = gravity;
+            fromJump = false;
         }
 
         #endregion
