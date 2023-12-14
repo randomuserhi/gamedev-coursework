@@ -8,12 +8,13 @@ public class AnimatedEffect : MonoBehaviour {
     public bool reverse = false;
     public bool flip = false;
     public Color color = Color.white;
+    public int startFrame = -1;
 
     private AnimDriver driver = new AnimDriver();
     private SpriteRenderer effect;
 
     private void Start() {
-        driver.Set(anim, reverse ? anim.sprites.Length : -1);
+        driver.Set(anim, startFrame != -1 ? startFrame : reverse ? anim.sprites.Length : -1);
         effect = GetComponent<SpriteRenderer>();
     }
 

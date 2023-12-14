@@ -20,6 +20,8 @@ namespace Player {
         public Color scalfInActiveColor = Color.red;
         public Color scalfDashColor = Color.blue;
         public Color scalfDashReadyColor = Color.white;
+        public Color boostedColor = Color.red;
+        public Color boostedDashColor = Color.white;
 
         public enum AnimState {
             IdleChill,
@@ -231,16 +233,29 @@ namespace Player {
                 goal = scalfDashReadyColor;
                 scalfDashReadyTimer -= dt;
             } else {
-                switch (state) {
-                    case AnimState.Dash:
-                        goal = scalfDashColor;
-                        break;
+                if (player.boosted) {
+                    goal = boostedColor;
+                } else {
+                    switch (state) {
+                        case AnimState.Dash:
+                            goal = scalfDashColor;
+                            break;
+                    }
                 }
             }
             if (colorTransitionSpeed != 0) {
                 scalf.color = Color.Lerp(scalf.color, goal, colorTransitionSpeed * dt);
             } else {
                 scalf.color = goal;
+            }
+
+            // smoke
+            if (smoke > 0) {
+                smoke -= dt;
+            } else if (player.boosted) {
+                smoke = smokeTimer;
+                AnimatedEffect e = EffectLibrary.SpawnEffect(10, controller.bottom + new Vector2(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f)));
+                e.startFrame = UnityEngine.Random.Range(0, 4);
             }
 
             switch (state) {
@@ -265,10 +280,11 @@ namespace Player {
         }
 
         [Header("Settings")]
-        public float moveThresh = 0.5f;
-        public float walkThresh = 2f;
+        [SerializeField] private float moveThresh = 0.5f;
+        [SerializeField] private float walkThresh = 2f;
 
-        public float scalfDashReadyTime = 0.2f;
+        [SerializeField] private float scalfDashReadyTime = 0.2f;
+        [SerializeField] private float smokeTimer = 0.1f;
 
         #region Global State
 
@@ -276,6 +292,7 @@ namespace Player {
         [SerializeField] private bool isChill = true;
         [SerializeField] private bool prevDashReady = true;
         [SerializeField] private float scalfDashReadyTimer = 0;
+        [SerializeField] private float smoke = 0;
 
         [NonSerialized] public AnimDriver primaryAnim = new AnimDriver();
         private AnimDriver scalfAnim = new AnimDriver();
@@ -791,10 +808,14 @@ namespace Player {
 
             if (Vector3.Distance(controller.center, lastDashEffect) > 0.75f) {
                 lastDashEffect = controller.center;
+                ColorTransition e;
                 if (player.isCrouching) {
-                    EffectLibrary.SpawnEffect(6, lastDashEffect + new Vector3(0, 0.23f));
+                    e = EffectLibrary.SpawnEffect<ColorTransition>(6, lastDashEffect + new Vector3(0, 0.23f));
                 } else {
-                    EffectLibrary.SpawnEffect(5, lastDashEffect);
+                    e = EffectLibrary.SpawnEffect<ColorTransition>(5, lastDashEffect);
+                }
+                if (player.boosted) {
+                    e.startColor = boostedDashColor;
                 }
             }
         }

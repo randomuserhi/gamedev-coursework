@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 1566763693346139139}
   - component: {fileID: 223595009703136872}
   - component: {fileID: 628755904950163788}
-  - component: {fileID: 2778389159699739896}
   m_Layer: 30
   m_Name: Player
   m_TagString: Untagged
@@ -71,7 +70,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8504293235514421217}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7fd3c1a8940a1043b4b8b7f571d0c72, type: 3}
   m_Name: 
@@ -109,6 +108,7 @@ MonoBehaviour:
   dashDuration: 0.17
   dashSpeed: 20
   maxAirSpeed: 13
+  boostThreshold: 10
   facingRight: 1
   isCrouching: 0
   fromJump: 0
@@ -124,6 +124,7 @@ MonoBehaviour:
   canSuperDash: 0
   dashReleased: 1
   dashTimer: 0
+  boosted: 0
   decelerationTimer: 0
   input: {x: 0, y: 0}
   jump: 0
@@ -153,7 +154,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &1566763693346139139
 BoxCollider2D:
@@ -218,14 +219,18 @@ MonoBehaviour:
   scalfInActiveColor: {r: 0.16981131, g: 0.053666778, b: 0.053666778, a: 1}
   scalfDashColor: {r: 0.6839622, g: 0.6839622, b: 1, a: 1}
   scalfDashReadyColor: {r: 1, g: 1, b: 1, a: 1}
+  boostedColor: {r: 0.77254903, g: 0.57254905, b: 0.23529412, a: 1}
+  boostedDashColor: {r: 0.8, g: 0.627451, b: 0.29803923, a: 0.7058824}
   _state: 2
   DeathAnim: {fileID: 11400000, guid: bf20ef82e5458ef4dbdd1241b114a9de, type: 2}
   moveThresh: 0.5
   walkThresh: 4
   scalfDashReadyTime: 0.2
+  smokeTimer: 0.01
   isChill: 1
   prevDashReady: 1
   scalfDashReadyTimer: 0
+  smoke: 0
   IdleChillAnim: {fileID: 11400000, guid: 466349beb8a5f314e9fa3a822361d86d, type: 2}
   ScalfIdleChillAnim: {fileID: 11400000, guid: 071af6bd43646504ba242242c11d320f, type: 2}
   IdleToChillAnim: {fileID: 11400000, guid: 07c7e2d565f31cc45b0662bfd048acb5, type: 2}
@@ -272,15 +277,3 @@ MonoBehaviour:
   friction: 0.09
   offset: {x: 0, y: 0}
   neck: {x: 0, y: 0}
---- !u!114 &2778389159699739896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8504293235514421217}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be2ca25da033e454eaf99fcad11846c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

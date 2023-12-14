@@ -98,6 +98,10 @@ namespace Player {
                 return;
             }
 
+            if (rb.velocity.magnitude < boostThreshold) {
+                boosted = false;
+            }
+
             // Wall jump, lock x dir
             if (lockDirX > 0) {
                 lockDirX -= dt;
@@ -239,6 +243,8 @@ namespace Player {
         [SerializeField] private float dashSpeed = 5f;
         [SerializeField] public float maxAirSpeed = 13f;
 
+        [SerializeField] private float boostThreshold = 10f;
+
         [Header("State")]
         [SerializeField] public bool facingRight = true;
         [SerializeField] public bool isCrouching = false;
@@ -257,6 +263,7 @@ namespace Player {
         [SerializeField] private bool canSuperDash = false;
         [SerializeField] private bool dashReleased = true;
         [SerializeField] private float dashTimer = 0;
+        [SerializeField] public bool boosted = false;
 
         [SerializeField] public float decelerationTimer = 0;
 
@@ -410,7 +417,12 @@ namespace Player {
                     if (canSuperDash) {
                         superDashTimer = superDashCooldown;
                         decelerationTimer = 0;
-                        rb.velocity *= new Vector3(0.8f + 0.8f * (1f - dashTimer / dashDuration), 1f);
+                        float power = (1f - dashTimer / dashDuration);
+                        if (power > 0.85) {
+                            power = 1f;
+                            boosted = true;
+                        }
+                        rb.velocity *= new Vector3(0.8f + 0.8f * power, 1f);
                     } else if (cantDashTimer) {
                         sweat = EffectLibrary.SpawnEffect(8, controller.center + new Vector2(0, 0.7f));
                         canDash = dashCooldown;
