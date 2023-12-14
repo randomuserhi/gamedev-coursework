@@ -233,15 +233,15 @@ namespace Player {
                 goal = scalfDashReadyColor;
                 scalfDashReadyTimer -= dt;
             } else {
-                if (player.boosted) {
+                /*if (player.boosted) {
                     goal = boostedColor;
-                } else {
-                    switch (state) {
-                        case AnimState.Dash:
-                            goal = scalfDashColor;
-                            break;
-                    }
+                } else {*/
+                switch (state) {
+                    case AnimState.Dash:
+                        goal = scalfDashColor;
+                        break;
                 }
+                //}
             }
             if (colorTransitionSpeed != 0) {
                 scalf.color = Color.Lerp(scalf.color, goal, colorTransitionSpeed * dt);
@@ -814,9 +814,9 @@ namespace Player {
                 } else {
                     e = EffectLibrary.SpawnEffect<ColorTransition>(5, lastDashEffect);
                 }
-                if (player.boosted) {
+                /*if (player.boosted) {
                     e.startColor = boostedDashColor;
-                }
+                }*/
             }
         }
 
