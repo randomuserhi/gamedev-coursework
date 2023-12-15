@@ -101,5 +101,5 @@ MonoBehaviour:
   loop: 0
   reverse: 0
   flip: 0
-  color: {r: 1, g: 1, b: 1, a: 0.46666667}
+  color: {r: 0.8207547, g: 0.47452837, b: 0.05032932, a: 0.70980394}
   startFrame: 0

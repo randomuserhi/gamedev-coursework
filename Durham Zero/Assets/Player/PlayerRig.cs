@@ -256,6 +256,16 @@ namespace Player {
                 smoke = smokeTimer;
                 AnimatedEffect e = EffectLibrary.SpawnEffect(10, controller.bottom + new Vector2(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f)));
                 e.startFrame = UnityEngine.Random.Range(0, 4);
+                float distribution = UnityEngine.Random.Range(0f, 1f);
+                if (distribution < 0.15f) {
+                    e.color = new Color(0.1921f, 0.3686f, 0.69f, UnityEngine.Random.Range(0.5f, 1f));
+                } else if (distribution < 0.35f) {
+                    e.color = new Color(0.8f, 0.2f, 0.2f, UnityEngine.Random.Range(0.5f, 1f));
+                } else if (distribution < 0.65f) {
+                    e.color = new Color(0.9f, 0.6f, 0.1f, UnityEngine.Random.Range(0.5f, 1f));
+                } else {
+                    e.color = new Color(1, 1, 1, UnityEngine.Random.Range(0.5f, 1f));
+                }
             }
 
             switch (state) {

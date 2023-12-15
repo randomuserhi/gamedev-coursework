@@ -226,7 +226,7 @@ MonoBehaviour:
   moveThresh: 0.5
   walkThresh: 4
   scalfDashReadyTime: 0.2
-  smokeTimer: 0.01
+  smokeTimer: 0.005
   isChill: 1
   prevDashReady: 1
   scalfDashReadyTimer: 0
