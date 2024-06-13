@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace Player {
     public class PlayerInputSystem : MonoBehaviour {
@@ -8,6 +9,7 @@ namespace Player {
         [NonSerialized] public InputAction movement;
         [NonSerialized] public InputAction jump;
         [NonSerialized] public InputAction dash;
+        [NonSerialized] public InputAction reset;
 
         private PlayerController controller;
 
@@ -33,6 +35,9 @@ namespace Player {
             dash = map.AddAction("Dash");
             dash.AddBinding("<Keyboard>/i");
             dash.AddBinding("<HID::RetroFlag Wired Controller>/button4");
+
+            reset = map.AddAction("Reset");
+            reset.AddBinding("<Keyboard>/r");
 
             map.Enable();
 
@@ -70,6 +75,10 @@ namespace Player {
                 }
                 controller.jump = jump.ReadValue<float>();
                 controller.dash = dash.ReadValue<float>();
+            }
+
+            if (reset.ReadValue<float>() > 0) {
+                SceneManager.LoadScene(0);
             }
         }
 
